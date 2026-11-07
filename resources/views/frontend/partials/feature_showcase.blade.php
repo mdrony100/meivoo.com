@@ -34,47 +34,71 @@
             </button>
             <div id="explore-scroller" class="mv-explore-viewport" data-explore-viewport role="tabpanel" aria-roledescription="carousel" aria-labelledby="explore-tab-all" aria-describedby="explore-tab-help">
                 <div class="mv-explore-track" data-explore-track>
-            <article class="mv-feature-card" data-explore-card data-category="tree" style="--card-bg:#efe8ff;">
-                <h3>Family tree</h3>
-                <p>Connect parents, spouses, and children, then follow the line across generations.</p>
-                <a href="{{ route('user.family-tree') }}">Open <span class="visually-hidden">family tree</span></a>
-                <img src="{{ asset('assets/images/family-legacy-mobile-app.png') }}" alt="Meivoo family tree on a phone" width="560" height="700">
-            </article>
+                    <article class="mv-feature-card" data-explore-card data-category="tree" style="--card-bg:#e7f0e4;">
+                        <div class="mv-feature-copy">
+                            <h3>Family tree</h3>
+                            <p>Connect parents, spouses, and children, then follow the line across generations.</p>
+                            <a href="{{ route('user.family-tree') }}">Open <span class="visually-hidden">family tree</span></a>
+                        </div>
+                        <div class="mv-feature-media">
+                            <img src="{{ asset('assets/images/explore/family-tree.jpg') }}" alt="Grandmother holding her granddaughter outdoors" width="900" height="1125" loading="lazy" decoding="async" style="object-position:center 42%;">
+                        </div>
+                    </article>
 
-            <article class="mv-feature-card" data-explore-card data-category="tree" style="--card-bg:#f4efe6;">
-                <h3>Family members</h3>
-                <p>A private directory of relatives, with a profile for each person in the family.</p>
-                <a href="{{ route('user.members') }}">Open <span class="visually-hidden">family members</span></a>
-                <img class="is-photo" src="{{ asset('assets/images/restored-photo.png') }}" alt="Restored family portrait" width="640" height="800">
-            </article>
+                    <article class="mv-feature-card" data-explore-card data-category="tree" style="--card-bg:#f8f3ee;">
+                        <div class="mv-feature-copy">
+                            <h3>Family members</h3>
+                            <p>A private directory of relatives, with a profile for each person in the family.</p>
+                            <a href="{{ route('user.members') }}">Open <span class="visually-hidden">family members</span></a>
+                        </div>
+                        <div class="mv-feature-media">
+                            <img src="{{ asset('assets/images/explore/family-members.jpg') }}" alt="Parents smiling with their son and baby" width="900" height="1125" loading="lazy" decoding="async" style="object-position:center 30%;">
+                        </div>
+                    </article>
 
-            <article class="mv-feature-card" data-explore-card data-category="together" style="--card-bg:#e7f0ff;">
-                <h3>Messages</h3>
-                <p>Private messages for your family, with photos, files, and voice notes attached.</p>
-                <a href="{{ route('user.messages') }}">Open <span class="visually-hidden">messages</span></a>
-                <img src="{{ asset('assets/images/family-chat-screen.png') }}" alt="Family conversation on a phone" width="560" height="700">
-            </article>
+                    <article class="mv-feature-card" data-explore-card data-category="together" style="--card-bg:#f3ece4;">
+                        <div class="mv-feature-copy">
+                            <h3>Messages</h3>
+                            <p>Private messages for your family, with photos, files, and voice notes attached.</p>
+                            <a href="{{ route('user.messages') }}">Open <span class="visually-hidden">messages</span></a>
+                        </div>
+                        <div class="mv-feature-media">
+                            <img src="{{ asset('assets/images/explore/messages.jpg') }}" alt="Grandmother and granddaughter talking together" width="900" height="1125" loading="lazy" decoding="async" style="object-position:center 28%;">
+                        </div>
+                    </article>
 
-            <article class="mv-feature-card" data-explore-card data-category="together" style="--card-bg:#e7f6ef;">
-                <h3>Events</h3>
-                <p>Plan reunions, birthdays, and anniversaries, and let relatives say if they are coming.</p>
-                <a href="{{ route('user.events') }}">Open <span class="visually-hidden">events</span></a>
-                <img class="is-photo" src="{{ asset('assets/images/hero-family-gathering.png') }}" alt="Family gathered outdoors" width="640" height="800">
-            </article>
+                    <article class="mv-feature-card" data-explore-card data-category="together" style="--card-bg:#f7f3ea;">
+                        <div class="mv-feature-copy">
+                            <h3>Events</h3>
+                            <p>Plan reunions, birthdays, and anniversaries, and let relatives say if they are coming.</p>
+                            <a href="{{ route('user.events') }}">Open <span class="visually-hidden">events</span></a>
+                        </div>
+                        <div class="mv-feature-media">
+                            <img src="{{ asset('assets/images/explore/events.jpg') }}" alt="Family gathered around a birthday cake" width="900" height="1125" loading="lazy" decoding="async" style="object-position:center 22%;">
+                        </div>
+                    </article>
 
-            <article class="mv-feature-card" data-explore-card data-category="memories" style="--card-bg:#fff4e4;">
-                <h3>Legacy names</h3>
-                <p>Keep a name, what it means, who chose it, and the story behind it.</p>
-                <a href="{{ route('user.legacy-names') }}">Open <span class="visually-hidden">legacy names</span></a>
-                <img class="is-photo" src="{{ asset('assets/images/memory-recording.png') }}" alt="Grandmother sharing a story on a tablet" width="640" height="800">
-            </article>
+                    <article class="mv-feature-card" data-explore-card data-category="memories" style="--card-bg:#f6f0e6;">
+                        <div class="mv-feature-copy">
+                            <h3>Legacy names</h3>
+                            <p>Keep a name, what it means, who chose it, and the story behind it.</p>
+                            <a href="{{ route('user.legacy-names') }}">Open <span class="visually-hidden">legacy names</span></a>
+                        </div>
+                        <div class="mv-feature-media">
+                            <img src="{{ asset('assets/images/explore/legacy-names.jpg') }}" alt="Grandmother and granddaughter smiling at each other" width="900" height="1125" loading="lazy" decoding="async" style="object-position:center 35%;">
+                        </div>
+                    </article>
 
-            <article class="mv-feature-card" data-explore-card data-category="memories" style="--card-bg:#f6e9ff;">
-                <h3>Photo restoration</h3>
-                <p>Restore, colorize, and clean up an old family photo, then keep the result.</p>
-                <a href="{{ route('user.ai-photo.index') }}">Open <span class="visually-hidden">photo restoration</span></a>
-                <img src="{{ asset('assets/images/ai-photo-restoration-mobile.png') }}" alt="Before and after photo restoration on a phone" width="560" height="700">
-            </article>
+                    <article class="mv-feature-card" data-explore-card data-category="memories" style="--card-bg:#f8eef3;">
+                        <div class="mv-feature-copy">
+                            <h3>Photo restoration</h3>
+                            <p>Restore, colorize, and clean up an old family photo, then keep the result.</p>
+                            <a href="{{ route('user.ai-photo.index') }}">Open <span class="visually-hidden">photo restoration</span></a>
+                        </div>
+                        <div class="mv-feature-media">
+                            <img src="{{ asset('assets/images/explore/photo-restoration.jpg') }}" alt="Hands sorting old family photographs" width="900" height="1125" loading="lazy" decoding="async" style="object-position:center 45%;">
+                        </div>
+                    </article>
                 </div>
             </div>
         </div>

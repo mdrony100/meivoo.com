@@ -1,0 +1,33 @@
+Photographs in this folder are stored in the repository. They are not loaded from a third-party URL at runtime.
+
+License: Pexels License, https://www.pexels.com/license/
+Pexels photos may be used and adapted free of charge, including for commercial pages. Attribution is not required. The people shown are not Meivoo users and are not presented as endorsing the product.
+
+family-tree.jpg
+  Pexels photo 16011524
+  Photographer: m4nitous os
+  https://www.pexels.com/photo/portrait-of-woman-holding-a-little-girl-16011524/
+
+family-members.jpg
+  Pexels photo 35858303
+  Photographer: Eric Moura
+  https://www.pexels.com/photo/happy-family-portrait-with-parents-and-children-35858303/
+
+messages.jpg
+  Pexels photo 11368513
+  Photographer: Anna Shvets
+  https://www.pexels.com/photo/grandmother-talking-to-her-granddaughter-while-holding-her-hand-11368513/
+
+events.jpg
+  Pexels photo 7921573
+  https://www.pexels.com/photo/a-happy-family-celebrating-a-birthday-7921573/
+
+legacy-names.jpg
+  Pexels photo 10174665
+  Photographer: Tran Le Tuan
+  https://www.pexels.com/photo/a-grandmother-and-a-granddaughter-looking-at-each-other-10174665/
+
+photo-restoration.jpg
+  Pexels photo 7545406
+  Photographer: SHVETS production
+  https://www.pexels.com/photo/close-up-of-woman-looking-through-old-pictures-7545406/

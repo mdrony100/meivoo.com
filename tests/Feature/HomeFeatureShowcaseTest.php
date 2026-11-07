@@ -38,8 +38,20 @@ class HomeFeatureShowcaseTest extends TestCase
         $response->assertSee(route('user.events'), false);
         $response->assertSee(route('user.legacy-names'), false);
         $response->assertSee(route('user.ai-photo.index'), false);
-        $response->assertSee('assets/images/family-chat-screen.png', false);
-        $response->assertSee('assets/images/ai-photo-restoration-mobile.png', false);
+        $response->assertSee('assets/images/explore/family-tree.jpg', false);
+        $response->assertSee('assets/images/explore/family-members.jpg', false);
+        $response->assertSee('assets/images/explore/messages.jpg', false);
+        $response->assertSee('assets/images/explore/events.jpg', false);
+        $response->assertSee('assets/images/explore/legacy-names.jpg', false);
+        $response->assertSee('assets/images/explore/photo-restoration.jpg', false);
+        $response->assertSee('loading="lazy"', false);
+        $html = $response->getContent();
+        $start = (int) strpos($html, 'id="explore"');
+        $end = (int) strpos($html, 'id="tree"');
+        $explore = substr($html, $start, $end - $start);
+        $this->assertStringNotContainsString('family-chat-screen.png', $explore);
+        $this->assertStringNotContainsString('ai-photo-restoration-mobile.png', $explore);
+        $this->assertStringNotContainsString('family-legacy-mobile-app.png', $explore);
         $response->assertDontSee('Apple Invites', false);
         $response->assertDontSee('FaceTime', false);
 

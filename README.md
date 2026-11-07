@@ -68,8 +68,29 @@ mysql -u root -p -e "CREATE DATABASE meivoo CHARACTER SET utf8mb4 COLLATE utf8mb
 cp .env.example .env
 # DB_CONNECTION=mysql, DB_DATABASE=meivoo, then set DB_USERNAME / DB_PASSWORD
 php artisan key:generate
-php artisan migrate --seed
+php artisan migrate --force
 ```
 
-The file named `sql` at the repository root is the original MySQL dump of the
-production schema, kept for reference. Migrations are the source of truth.
+On a database that already has families, messages, or tokens, stop after
+`php artisan migrate --force`. Do not run `migrate:fresh`, `migrate:refresh`,
+`db:wipe`, or `migrate --seed`. `DatabaseSeeder` is disabled when
+`APP_ENV=production`, and the demo family seeder will not delete an existing
+family. Sample content is for an empty local database only:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+Pending migrations are additive. If a table is already present they add only
+missing columns and copy null identifier pairs (`person_id` from `member_id`,
+and the reverse). They do not drop, rename, or replace tables, and their
+`down()` methods do not delete rows. Take a backup before migrating. The
+`relationship_type` column is widened in place from the old `wife|husband`
+enum to `VARCHAR(32) NULL` when that enum is still there; existing values and
+primary keys stay.
+
+The file named `sql` at the repository root is a partial MySQL reference, not
+a full production dump. Migrations are the source of truth. A live checkout
+that predates this repository was not given a column listing for every pending
+table; if `migrate` stops on one table, capture `SHOW CREATE TABLE` and
+`SHOW COLUMNS` for that table only and do not dump row data.

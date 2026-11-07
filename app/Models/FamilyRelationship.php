@@ -2,29 +2,31 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\GuardsMissingColumns;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class FamilyRelationship extends Model
 {
+    use GuardsMissingColumns;
+    use HasFactory;
+
     protected static function booted(): void
     {
         static::saving(function (self $rel) {
-            $rel->member_id = $rel->member_id ?: $rel->person_id;
-            $rel->related_member_id = $rel->related_member_id ?: $rel->related_person_id;
-            $rel->person_id = $rel->person_id ?: $rel->member_id;
-            $rel->related_person_id = $rel->related_person_id ?: $rel->related_member_id;
+            $rel->mirrorColumns([
+                ['member_id', 'person_id'],
+                ['related_member_id', 'related_person_id'],
+            ]);
         });
     }
 
-    use HasFactory;
-
     protected $fillable = [
-        'member_id',
-        'related_member_id',
         'family_id',
         'member_id',
         'related_member_id',
+        'person_id',
+        'related_person_id',
         'relation_type',
     ];
 
@@ -42,5 +44,4 @@ class FamilyRelationship extends Model
     {
         return $this->belongsTo(FamilyMember::class, 'related_member_id');
     }
-
 }

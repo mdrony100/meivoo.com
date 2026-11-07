@@ -8,9 +8,9 @@ use App\Models\FamilyMember;
 use App\Models\FamilyTree;
 use App\Models\FeedPost;
 use App\Models\Message;
-use App\Models\PostMedia;
 use App\Models\Role;
 use App\Models\User;
+use App\Support\MonthlyUserCounts;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -43,17 +43,7 @@ class DashboardController extends Controller
         $totalUser = User::count();
         $activeUsers = User::where('status', 1)->count();
 
-        // Monthly users
-        $chartRaw = User::selectRaw("CAST(strftime('%m', created_at) AS INTEGER) as month, COUNT(*) as total")
-            ->whereYear('created_at', date('Y'))
-            ->groupBy('month')
-            ->pluck('total', 'month')
-            ->toArray();
-
-        $chartUsers = [];
-        for ($i = 1; $i <= 12; $i++) {
-            $chartUsers[] = $chartRaw[$i] ?? 0;
-        }
+        $chartUsers = MonthlyUserCounts::forYear((int) date('Y'));
 
         $chartMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -186,11 +176,11 @@ class DashboardController extends Controller
     {
         try {
             Artisan::call('route:clear');
-        Artisan::call('view:clear');
-        Artisan::call('config:clear');
-        Artisan::call('clear-compiled');
-        Artisan::call('optimize:clear');
-        Artisan::call('storage:link');
+            Artisan::call('view:clear');
+            Artisan::call('config:clear');
+            Artisan::call('clear-compiled');
+            Artisan::call('optimize:clear');
+            Artisan::call('storage:link');
 
             Artisan::call('cache:forget', ['key' => 'spatie.permission.cache']);
 

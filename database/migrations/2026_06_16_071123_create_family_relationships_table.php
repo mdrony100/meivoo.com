@@ -16,10 +16,16 @@ return new class extends Migration
 
             $table->foreignId('family_id')->constrained()->onDelete('cascade');
 
-            $table->unsignedBigInteger('person_id');
-            $table->unsignedBigInteger('related_person_id');
+            // Both names are stored. Older rows used person_id; the app
+            // addresses the same people through member_id. Neither side is
+            // required so a legacy row missing one name can be backfilled.
+            $table->unsignedBigInteger('person_id')->nullable();
+            $table->unsignedBigInteger('related_person_id')->nullable();
+            $table->unsignedBigInteger('member_id')->nullable();
+            $table->unsignedBigInteger('related_member_id')->nullable();
 
-            $table->enum('relationship_type', ['wife', 'husband']);
+            $table->string('relation_type', 32)->nullable();
+            $table->string('relationship_type', 32)->nullable();
 
             $table->date('marriage_date')->nullable();
             $table->date('anniversary_date')->nullable();
@@ -29,6 +35,7 @@ return new class extends Migration
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      */

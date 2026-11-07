@@ -96,6 +96,8 @@
         </div>
     </section>
 
+    @include('frontend.partials.feature_showcase')
+
     <!-- ═══════════════════════════════════════════
                          FAMILY TREE SECTION
                       ═══════════════════════════════════════════ -->

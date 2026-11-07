@@ -40,14 +40,19 @@ applied before first paint to avoid a flash.
 - Members: `user1@example.com`, `user2@example.com`, `user3@example.com` with password `password`
 - "The Rahman Family": 4 generations, 12 members, posts, comments, likes, events, legacy names, message threads
 
-## Schema repairs (July 2026)
+## Schema repairs
 
-The repository shipped without migrations for `events` and `ai_photos`, and with
-three column-name mismatches between migrations and code. Added:
+Migrations that create `events`, `ai_photos`, tokens, attachments, family trees,
+and legacy names adopt a table that already exists. They add missing columns
+and do not drop or replace it.
 
-- `2026_07_14_100000_create_events_table`
-- `2026_07_14_100100_create_ai_photos_table`
-- `2026_07_14_100200_align_family_relationship_columns`
-- `2026_07_14_100300_rebuild_family_relationships_table`
-- `2026_07_14_100400_align_messages_table`
-- MySQL-only `MONTH()` calls replaced with driver-portable query methods
+`family_relationships` keeps its primary key and the `family_id` foreign key.
+Missing `member_id` / `person_id` (and the related-person pair) are added and
+backfilled only where the destination is null. `relation_type` is filled from
+`husband` / `wife` when it is null. The old rebuild, which copied the table and
+dropped the original, is gone.
+
+The admin dashboard counts signups with MySQL `MONTH(created_at)`.
+
+`php artisan migrate:fresh --seed` is for an empty local database. Production
+uses `php artisan migrate --force` and does not seed.

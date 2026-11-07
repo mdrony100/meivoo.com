@@ -11,21 +11,29 @@
             </p>
         </div>
 
-        <div class="mv-explore-tabs" role="tablist" aria-label="Feature categories">
-            <button type="button" class="mv-explore-tab" role="tab" id="explore-tab-all" aria-controls="explore-scroller" aria-selected="true" tabindex="0" data-category="all">All</button>
-            <button type="button" class="mv-explore-tab" role="tab" id="explore-tab-tree" aria-controls="explore-scroller" aria-selected="false" tabindex="-1" data-category="tree">Tree</button>
-            <button type="button" class="mv-explore-tab" role="tab" id="explore-tab-together" aria-controls="explore-scroller" aria-selected="false" tabindex="-1" data-category="together">Together</button>
-            <button type="button" class="mv-explore-tab" role="tab" id="explore-tab-memories" aria-controls="explore-scroller" aria-selected="false" tabindex="-1" data-category="memories">Memories</button>
+        <div class="mv-explore-toolbar">
+            <div class="mv-explore-tabs" role="tablist" aria-label="Feature categories">
+                <button type="button" class="mv-explore-tab" role="tab" id="explore-tab-all" aria-controls="explore-scroller" aria-selected="true" tabindex="0" data-category="all">All</button>
+                <button type="button" class="mv-explore-tab" role="tab" id="explore-tab-tree" aria-controls="explore-scroller" aria-selected="false" tabindex="-1" data-category="tree">Tree</button>
+                <button type="button" class="mv-explore-tab" role="tab" id="explore-tab-together" aria-controls="explore-scroller" aria-selected="false" tabindex="-1" data-category="together">Together</button>
+                <button type="button" class="mv-explore-tab" role="tab" id="explore-tab-memories" aria-controls="explore-scroller" aria-selected="false" tabindex="-1" data-category="memories">Memories</button>
+            </div>
+            <button type="button" class="mv-explore-toggle" data-explore-toggle aria-pressed="false">
+                <i class="fa-solid fa-pause" data-explore-toggle-icon aria-hidden="true"></i>
+                <span class="visually-hidden" data-explore-toggle-label>Pause automatic slides</span>
+            </button>
         </div>
-        <p class="visually-hidden" id="explore-tab-help">Use the left and right arrow keys to move between categories. The cards scroll sideways.</p>
-    </div>
+        <p class="visually-hidden" id="explore-tab-help">Slides advance from the first card toward the next. Pause automatic slides with the pause button, or by hovering or focusing the carousel.</p>
 
-    <div class="mv-explore-row">
-        <button type="button" class="mv-explore-nav mv-explore-nav-prev" data-explore-prev aria-label="Scroll features backward">
-            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-        </button>
-
-        <div id="explore-scroller" class="mv-explore-scroller" data-explore-scroller role="tabpanel" aria-labelledby="explore-tab-all" tabindex="0" aria-describedby="explore-tab-help">
+        <div class="mv-explore-frame">
+            <button type="button" class="mv-explore-nav mv-explore-nav-prev" data-explore-prev aria-label="Previous features">
+                <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="mv-explore-nav mv-explore-nav-next" data-explore-next aria-label="Next features">
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+            </button>
+            <div id="explore-scroller" class="mv-explore-viewport" data-explore-viewport role="tabpanel" aria-roledescription="carousel" aria-labelledby="explore-tab-all" aria-describedby="explore-tab-help">
+                <div class="mv-explore-track" data-explore-track>
             <article class="mv-feature-card" data-explore-card data-category="tree" style="--card-bg:#efe8ff;">
                 <h3>Family tree</h3>
                 <p>Connect parents, spouses, and children, then follow the line across generations.</p>
@@ -67,11 +75,9 @@
                 <a href="{{ route('user.ai-photo.index') }}">Open <span class="visually-hidden">photo restoration</span></a>
                 <img src="{{ asset('assets/images/ai-photo-restoration-mobile.png') }}" alt="Before and after photo restoration on a phone" width="560" height="700">
             </article>
+                </div>
+            </div>
         </div>
-
-        <button type="button" class="mv-explore-nav mv-explore-nav-next" data-explore-next aria-label="Scroll features forward">
-            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-        </button>
+        <p class="visually-hidden" data-explore-live aria-live="polite"></p>
     </div>
-    <p class="visually-hidden" data-explore-live aria-live="polite"></p>
 </section>

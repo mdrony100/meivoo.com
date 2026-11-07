@@ -29,6 +29,9 @@ class HomeFeatureShowcaseTest extends TestCase
         $response->assertSee('Family tree', false);
         $response->assertSee('Photo restoration', false);
         $response->assertSee('role="tablist"', false);
+        $response->assertSee('data-explore-viewport', false);
+        $response->assertSee('data-explore-toggle', false);
+        $response->assertSee('Pause automatic slides', false);
         $response->assertSee(route('user.family-tree'), false);
         $response->assertSee(route('user.members'), false);
         $response->assertSee(route('user.messages'), false);
@@ -39,5 +42,14 @@ class HomeFeatureShowcaseTest extends TestCase
         $response->assertSee('assets/images/ai-photo-restoration-mobile.png', false);
         $response->assertDontSee('Apple Invites', false);
         $response->assertDontSee('FaceTime', false);
+
+        $css = file_get_contents(public_path('assets/mv-site.css'));
+        $exploreCss = substr($css, (int) strpos($css, 'homepage feature carousel'));
+        $this->assertStringNotContainsString('100vw', $exploreCss);
+        $this->assertStringNotContainsString('overflow-x: auto', $exploreCss);
+
+        $script = file_get_contents(public_path('assets/explore.js'));
+        $this->assertStringContainsString('prefers-reduced-motion', $script);
+        $this->assertStringContainsString('translate3d', $script);
     }
 }

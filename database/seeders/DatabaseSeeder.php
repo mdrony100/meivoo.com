@@ -14,6 +14,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        if (app()->environment('production')) {
+            $this->command?->warn('DatabaseSeeder does not run in production. Existing rows were left untouched.');
+
+            return;
+        }
+
         $this->call([
             DefaultPagesSeeder::class,
             RichDemoSeeder::class,

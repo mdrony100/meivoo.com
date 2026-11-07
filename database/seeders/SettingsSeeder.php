@@ -9,7 +9,7 @@ class SettingsSeeder extends Seeder
 {
     public function run(): void
     {
-        Setting::updateOrCreate(
+        Setting::firstOrCreate(
             ['id' => 1],
             [
                 'site_name' => 'Meivoo',

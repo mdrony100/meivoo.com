@@ -134,6 +134,7 @@
             });
         });
     </script>
+    <script src="{{ asset('assets/explore.js') }}"></script>
     @stack('scripts')
     <script src="{{ asset('assets/dashboard/meivoo.js') }}"></script>
 </body>

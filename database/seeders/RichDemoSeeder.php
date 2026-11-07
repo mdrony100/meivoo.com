@@ -25,18 +25,14 @@ class RichDemoSeeder extends Seeder
     public function run(): void
     {
         $existing = Family::where('slug', 'rahman-family')->first();
-        if ($existing && FamilyRelationship::where('family_id', $existing->id)->exists() && FeedPost::where('family_id', $existing->id)->exists()) {
-            $this->command?->info('Demo family already present — skipping.');
+        if ($existing) {
+            $this->command?->info('Demo family already present — skipping. Existing rows were not deleted.');
 
             return;
         }
 
         $users = User::orderBy('id')->take(3)->get();
         $owner = $users->first();
-
-        if ($existing) {
-            $existing->delete();
-        }
 
         $family = Family::create([
             'name' => 'The Rahman Family',
@@ -137,7 +133,7 @@ class RichDemoSeeder extends Seeder
 
         // ---- feed -------------------------------------------------------
         $posts = [
-            [2, "The reunion photos are finally in! Three generations under one roof — thank you everyone for making the trip to Dhaka. Sharing the album this weekend.", 2],
+            [2, 'The reunion photos are finally in! Three generations under one roof — thank you everyone for making the trip to Dhaka. Sharing the album this weekend.', 2],
             [3, "Reminder: Ammu's birthday is coming up this month. I'm collecting for a surprise lunch at her favourite restaurant. Reply here if you're in.", 1],
             [6, 'Finished the family tree cleanup on my side of the branch. Four generations connected, with dates verified against the old photo albums.', 1],
             [7, 'New chapter for me: started at the architecture studio in Gulshan this week. Grateful for all the encouragement from this family.', 0],

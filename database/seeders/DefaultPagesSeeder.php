@@ -57,7 +57,12 @@ class DefaultPagesSeeder extends Seeder
         ];
 
         foreach ($pages as $page) {
-            CustomPage::updateOrCreate(['url_slug' => $page['url_slug']], $page + ['is_active' => 1]);
+            CustomPage::unguarded(function () use ($page) {
+                CustomPage::firstOrCreate(
+                    ['url_slug' => $page['url_slug']],
+                    $page + ['is_active' => 1]
+                );
+            });
         }
     }
 }

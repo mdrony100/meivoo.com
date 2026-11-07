@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Family Feed</title>
+
+    <link rel="icon" type="image/x-icon" href="./assets/img/fab-icon.ico">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <link href="./assets/style.css" rel="stylesheet">
+
+</head>
+
+<body class="notifications-page">
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="sidebar-brand-icon"><i class="fa-solid fa-tree"></i></div>
+            <span class="sidebar-brand-text">Family Legacy</span>
+            <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Collapse">
+                <i class="fa-solid fa-chevron-left fa-sm"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a class="nav-item-custom" href="./index.html">
+                <i class="fa-solid fa-table-cells-large"></i>
+                <span>Dashboard</span>
+            </a>
+            <a class="nav-item-custom" href="./family-tree.html">
+                <i class="fa-solid fa-code-branch"></i>
+                <span>Family Tree</span>
+            </a>
+            <a class="nav-item-custom" href="./feed.html">
+                <i class="fa-regular fa-newspaper"></i>
+                <span>Family Feed</span>
+            </a>
+            <a class="nav-item-custom" href="./members.html">
+                <i class="fa-solid fa-users"></i>
+                <span>Family Members</span>
+            </a>
+            <a class="nav-item-custom" href="./messages.html">
+                <i class="fa-regular fa-comment-dots"></i>
+                <span>Messages</span>
+                <span class="nav-badge">3</span>
+            </a>
+            <a class="nav-item-custom active" href="./notifications.html">
+                <i class="fa-regular fa-bell"></i>
+                <span>Notifications</span>
+                <span class="nav-badge">5</span>
+            </a>
+            <a class="nav-item-custom" href="./settings.html">
+                <i class="fa-solid fa-gear"></i>
+                <span>Profile Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-user">
+            <div class="sidebar-user-inner">
+                <div class="user-avatar"><img src="https://randomuser.me/api/portraits/women/44.jpg"
+                        alt="Sarah Johnson"></div>
+                <div style="flex:1;overflow:hidden;">
+                    <p class="user-name">Sarah Johnson</p>
+                    <p class="user-email">sarah@familylegacy.com</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main-wrapper" id="mainWrapper">
+        <header class="topbar">
+            <button class="d-lg-none topbar-bell" id="sidebarToggle" style="color:#1a1a2e;">
+                <i class="fa-solid fa-bars fa-lg"></i>
+            </button>
+
+            <div class="topbar-search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" class="topbar-search" placeholder="Search family members, memories...">
+            </div>
+
+            <div class="topbar-right">
+                <button class="btn-add-memory">
+                    <i class="fa-solid fa-plus fa-sm"></i>
+                    <span>Add Memory</span>
+                </button>
+                <a href="./notifications.html" class="topbar-bell text-decoration-none">
+                    <i class="fa-regular fa-bell" style="font-size:18px;"></i>
+                    <span class="bell-dot"></span>
+                </a>
+                <a href="./settings.html" class="topbar-avatar text-decoration-none"><img
+                        src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson"></a>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="notif-page p-0">
+                <div class="notif-inner">
+
+                    <!-- Page header -->
+                    <div class="notif-header">
+                    <div>
+                        <h1 class="notif-title">
+                        <i class="fa-regular fa-bell"></i>
+                        Notifications
+                        </h1>
+                        <p class="notif-sub" id="unreadCount">3 unread notifications</p>
+                    </div>
+                    <button class="btn-mark-read" onclick="markAllRead()">
+                        <i class="fa-solid fa-check"></i> Mark all read
+                    </button>
+                    </div>
+
+                    <!-- Notification items -->
+                    <div class="notif-list" id="notifList">
+
+                    <!-- 1. Unread – Like (pink heart) -->
+                    <div class="notif-item unread" onclick="markRead(this)">
+                        <div class="notif-icon icon-pink">
+                        <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <div class="notif-body">
+                        <p class="notif-text">Emma liked your post about the family journal</p>
+                        <p class="notif-time">2 min ago</p>
+                        </div>
+                        <div class="unread-dot"></div>
+                    </div>
+
+                    <!-- 2. Unread – New member (purple users) -->
+                    <div class="notif-item unread" onclick="markRead(this)">
+                        <div class="notif-icon icon-purple">
+                        <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="notif-body">
+                        <p class="notif-text">James Johnson joined your family tree</p>
+                        <p class="notif-time">1 hour ago</p>
+                        </div>
+                        <div class="unread-dot"></div>
+                    </div>
+
+                    <!-- 3. Unread – Voice memory (green message) -->
+                    <div class="notif-item unread" onclick="markRead(this)">
+                        <div class="notif-icon icon-green">
+                        <i class="fa-solid fa-message"></i>
+                        </div>
+                        <div class="notif-body">
+                        <p class="notif-text">Dorothy sent you a voice memory 🎙️</p>
+                        <p class="notif-time">3 hours ago</p>
+                        </div>
+                        <div class="unread-dot"></div>
+                    </div>
+
+                    <!-- 4. Read – Birthday (amber calendar) -->
+                    <div class="notif-item read" onclick="markRead(this)">
+                        <div class="notif-icon icon-amber">
+                        <i class="fa-regular fa-calendar-days"></i>
+                        </div>
+                        <div class="notif-body">
+                        <p class="notif-text">Dorothy Johnson's birthday is in 4 days 🎂</p>
+                        <p class="notif-time">5 hours ago</p>
+                        </div>
+                    </div>
+
+                    <!-- 5. Read – Photo restoration (emerald wand) -->
+                    <div class="notif-item read" onclick="markRead(this)">
+                        <div class="notif-icon icon-emerald">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <div class="notif-body">
+                        <p class="notif-text">Your photo restoration is complete and ready to download ✨</p>
+                        <p class="notif-time">1 day ago</p>
+                        </div>
+                    </div>
+
+                    <!-- 6. Read – Reactions (pink heart) -->
+                    <div class="notif-item read" onclick="markRead(this)">
+                        <div class="notif-icon icon-pink">
+                        <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <div class="notif-body">
+                        <p class="notif-text">Liam and 4 others reacted to your restored photo</p>
+                        <p class="notif-time">1 day ago</p>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <script src="./assets/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegacyTree - Family Tree</title>
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <!-- AOS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="./assets/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="tree-page">
+      <!-- Sidebar Overlay -->
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- ═══════════════════════════════════
+        SIDEBAR
+      ═══════════════════════════════════ -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+          <div class="sidebar-brand-icon"><i class="fa-solid fa-tree"></i></div>
+          <span class="brand-text">Family Legacy</span>
+          <button class="sidebar-collapse-btn" id="sidebarCollapseBtn">
+            <i class="fa-solid fa-chevron-left fa-sm"></i>
+          </button>
+        </div>
+        <nav class="sidebar-nav">
+          <a class="nav-item-custom" href="./index.html">
+            <i class="fa-solid fa-table-cells-large"></i>
+            <span>Dashboard</span>
+          </a>
+          <a class="nav-item-custom" href="./family-tree.html">
+            <i class="fa-solid fa-code-branch"></i>
+            <span>Family Tree</span>
+          </a>
+          <a class="nav-item-custom" href="./feed.html">
+            <i class="fa-regular fa-newspaper"></i>
+            <span>Family Feed</span>
+          </a>
+          <a class="nav-item-custom" href="./members.html">
+            <i class="fa-solid fa-users"></i>
+            <span>Family Members</span>
+          </a>
+          <a class="nav-item-custom" href="./messages.html">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span>Messages</span><span class="nav-badge">3</span>
+          </a>
+          <a class="nav-item-custom" href="./notifications.html">
+            <i class="fa-regular fa-bell"></i>
+            <span>Notifications</span><span class="nav-badge">5</span>
+          </a>
+          <a class="nav-item-custom" href="./settings.html">
+            <i class="fa-solid fa-gear"></i>
+            <span>Profile Settings</span>
+          </a>
+        </nav>
+        <div class="sidebar-user">
+          <div class="sidebar-user-inner">
+            <div class="user-avatar">SJ</div>
+            <div style="flex:1;overflow:hidden;">
+              <p class="user-name">Sarah Johnson</p>
+              <p class="user-email">sarah@familylegacy.com</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ══════════════════════════════
+          MAIN WRAPPER
+      ══════════════════════════════ -->
+      <div class="main-wrapper" id="mainWrapper">
+        <!-- TOPBAR -->
+        <header class="topbar">
+          <button class="d-lg-none topbar-bell" id="sidebarToggle" style="color:#1a1a2e;">
+            <i class="fa-solid fa-bars fa-lg"></i>
+          </button>
+          <div class="topbar-search-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" class="topbar-search" placeholder="Search family members, memories...">
+          </div>
+          <div class="topbar-right">
+            <button class="btn-add-memory">
+              <i class="fa-solid fa-plus fa-sm"></i>
+              <span>Add Memory</span>
+            </button>
+            <a href="./notifications.html" class="topbar-bell text-decoration-none">
+                <i class="fa-regular fa-bell" style="font-size:18px;"></i>
+                <span class="bell-dot"></span>
+            </a>
+            <a href="./settings.html" class="topbar-avatar text-decoration-none"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson"></a>
+          </div>
+        </header>
+
+          <!-- ══════════════════════════════
+              MAIN CONTENT – Member Profile
+          ══════════════════════════════ -->
+          <main style="flex:1;overflow-y:auto;">
+            <div class="profile-body">
+
+              <!-- Cover photo -->
+              <div class="profile-cover" style="background-image: url(https://cdn.tukioswebsites.com/d8ef3916-f335-4462-a848-03033854eda0/xl); background-size: cover; background-position: center;">
+                <a href="/members" class="cover-btn" style="position:absolute;top:16px;left:16px;">
+                  <i class="fa-solid fa-chevron-left fa-sm"></i> Back
+                </a>
+                <button class="cover-btn" style="position:absolute;top:16px;right:16px;">
+                  <i class="fa-regular fa-pen-to-square fa-sm"></i> Edit Cover
+                </button>
+              </div>
+
+              <!-- Avatar strip -->
+              <div class="profile-avatar-strip" data-aos="fade-up" data-aos-duration="400">
+                <div class="profile-av-box overflow-hidden">
+                  <img src="https://randomuser.me/api/portraits/men/21.jpg" alt="Robert Johnson" class="img-fluid">
+                </div>
+                <div class="profile-name-block">
+                  <h1 class="profile-name">Robert Johnson</h1>
+                  <p class="profile-sub">Grandfather &bull; Gen 1</p>
+                </div>
+                <div class="profile-action-btns d-none d-sm-flex">
+                  <button class="btn-outline-profile">
+                    <i class="fa-solid fa-microphone fa-sm"></i> Voice
+                  </button>
+                  <button class="btn-follow">
+                    <i class="fa-solid fa-heart fa-sm"></i> Follow
+                  </button>
+                </div>
+              </div>
+
+              <!-- Mobile action buttons -->
+              <div class="d-flex d-sm-none gap-2 px-4 mb-3">
+                <button class="btn-outline-profile flex-fill justify-content-center">
+                  <i class="fa-solid fa-microphone fa-sm"></i> Voice
+                </button>
+                <button class="btn-follow flex-fill justify-content-center">
+                  <i class="fa-solid fa-heart fa-sm"></i> Follow
+                </button>
+              </div>
+
+              <ul class="nav nav-tabs member-profile-tabs" id="profileTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#tab-about" type="button" role="tab" aria-controls="tab-about" aria-selected="true">About</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="memories-tab" data-bs-toggle="tab" data-bs-target="#tab-memories" type="button" role="tab" aria-controls="tab-memories" aria-selected="false">Memories</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="photos-tab" data-bs-toggle="tab" data-bs-target="#tab-photos" type="button" role="tab" aria-controls="tab-photos" aria-selected="false">Photos</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="videos-tab" data-bs-toggle="tab" data-bs-target="#tab-videos" type="button" role="tab" aria-controls="tab-videos" aria-selected="false">Videos</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="connections-tab" data-bs-toggle="tab" data-bs-target="#tab-connections" type="button" role="tab" aria-controls="tab-connections" aria-selected="false">Family Connections</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="events-tab" data-bs-toggle="tab" data-bs-target="#tab-events" type="button" role="tab" aria-controls="tab-events" aria-selected="false">Events</button>
+                </li>
+              </ul>
+
+              <div class="tab-content">
+                <!-- ABOUT -->
+                <div class="tab-pane fade show active profile-tab-content" id="tab-about" role="tabpanel" aria-labelledby="about-tab" tabindex="0" data-aos="fade-up">
+                  <div class="row g-3">
+                    <!-- Left col -->
+                    <div class="col-sm-6">
+                      <div class="info-card">
+                        <p class="info-card-title">Personal Info</p>
+                        <div class="info-row">
+                          <div class="info-icon"><i class="fa-regular fa-calendar"></i></div>
+                          <div><p class="info-label">Born</p><p class="info-val">1942</p></div>
+                        </div>
+                        <div class="info-row">
+                          <div class="info-icon"><i class="fa-solid fa-heart" style="color:#f43f5e;"></i></div>
+                          <div><p class="info-label">Passed</p><p class="info-val">2019</p></div>
+                        </div>
+                        <div class="info-row">
+                          <div class="info-icon"><i class="fa-solid fa-map-pin" style="color:var(--primary);"></i></div>
+                          <div><p class="info-label">Location</p><p class="info-val">Austin, Texas</p></div>
+                        </div>
+                        <div class="info-row">
+                          <div class="info-icon"><i class="fa-solid fa-users" style="color:var(--accent);"></i></div>
+                          <div><p class="info-label">Role</p><p class="info-val">Grandfather</p></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Right col -->
+                    <div class="col-sm-6">
+                      <div class="info-card mb-3">
+                        <p class="info-card-title">Biography</p>
+                        <p style="font-size:0.875rem;color:var(--muted);line-height:1.75;margin:0;">
+                          A beloved member of the Johnson family, known for their warmth, stories, and keeping the family together through generations. Their legacy lives on in every memory we preserve.
+                        </p>
+                      </div>
+                      <div class="info-card">
+                        <p class="info-card-title">Important Dates</p>
+                        <div class="important-dates-row">
+                          <span class="idr-label">Birthday</span>
+                          <span class="idr-val">Born 1942</span>
+                        </div>
+                        <div class="important-dates-row">
+                          <span class="idr-label">Anniversary</span>
+                          <span class="idr-val">June 12, 1968</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MEMORIES -->
+                <div class="tab-pane fade profile-tab-content" id="tab-memories" role="tabpanel" aria-labelledby="memories-tab" tabindex="0">
+                  <div class="empty-state" data-aos="fade-up">
+                    <span class="es-emoji">💝</span>
+                    <h3>No Memories Yet</h3>
+                    <p>Be the first to add memories for Robert Johnson</p>
+                    <button class="btn-add"><i class="fa-solid fa-plus fa-sm"></i> Add Memories</button>
+                  </div>
+                </div>
+
+                <!-- PHOTOS -->
+                <div class="tab-pane fade profile-tab-content" id="tab-photos" role="tabpanel" aria-labelledby="photos-tab" tabindex="0">
+                  <div class="photos-grid" data-aos="fade-up">
+                    <a class="photo-card" href="./assets/img/family-reunion-01.jpg" data-family-photo
+                      data-title="Family Reunion" data-caption="Sunday afternoon at the lake house">
+                      <img src="./assets/img/family-reunion-01.jpg" alt="Family reunion at the lake house" loading="lazy">
+                    </a>
+                    <a class="photo-card" href="./assets/img/grandparents-02.jpg" data-family-photo
+                      data-title="Grandparents Portrait" data-caption="A quiet moment with the grandparents">
+                      <img src="./assets/img/grandparents-02.jpg" alt="Grandparents portrait" loading="lazy">
+                    </a>
+                    <a class="photo-card" href="./assets/img/birthday-03.jpg" data-family-photo
+                      data-title="Birthday Celebration" data-caption="Cake, laughter, and a room full of cousins">
+                      <img src="./assets/img/birthday-03.jpg" alt="Family birthday celebration" loading="lazy">
+                    </a>
+                    <a class="photo-card" href="./assets/img/vintage-album-04.jpg" data-family-photo
+                      data-title="Vintage Album" data-caption="Old frames from the family archive">
+                      <img src="./assets/img/vintage-album-04.jpg" alt="Vintage family photo album" loading="lazy">
+                    </a>
+                    <a class="photo-card" href="./assets/img/siblings-05.jpg" data-family-photo
+                      data-title="Siblings Together" data-caption="A playful day with the younger generation">
+                      <img src="./assets/img/siblings-05.jpg" alt="Siblings together outdoors" loading="lazy">
+                    </a>
+                    <a class="photo-card" href="./assets/img/anniversary-06.jpg" data-family-photo
+                      data-title="Anniversary Dinner" data-caption="A special evening celebrating the long journey">
+                      <img src="./assets/img/anniversary-06.jpg" alt="Wedding anniversary dinner" loading="lazy">
+                    </a>
+                    <a class="photo-card" href="./assets/img/picnic-07.jpg" data-family-photo
+                      data-title="Family Picnic" data-caption="Sunday picnic in the park">
+                      <img src="./assets/img/picnic-07.jpg" alt="Family picnic in the park" loading="lazy">
+                    </a>
+                    <a class="photo-card" href="./assets/img/home-08.jpg" data-family-photo
+                      data-title="Kitchen Moments" data-caption="Everyday memories around the table">
+                      <img src="./assets/img/home-08.jpg" alt="Family gathering in the kitchen" loading="lazy">
+                    </a>
+                    <a class="photo-card" href="./assets/img/family-table-09.jpg" data-family-photo
+                      data-title="Table Talk" data-caption="Stories shared over a family meal">
+                      <img src="./assets/img/family-table-09.jpg" alt="Family gathered around the table" loading="lazy">
+                    </a>
+                  </div>
+                </div>
+
+                <!-- VIDEOS -->
+                <div class="tab-pane fade profile-tab-content" id="tab-videos" role="tabpanel" aria-labelledby="videos-tab" tabindex="0">
+                  <div class="empty-state" data-aos="fade-up">
+                    <span class="es-emoji">🎬</span>
+                    <h3>No Videos Yet</h3>
+                    <p>Be the first to add videos for Robert Johnson</p>
+                    <button class="btn-add"><i class="fa-solid fa-plus fa-sm"></i> Add Videos</button>
+                  </div>
+                </div>
+
+                <!-- FAMILY CONNECTIONS -->
+                <div class="tab-pane fade profile-tab-content" id="tab-connections" role="tabpanel" aria-labelledby="connections-tab" tabindex="0">
+                  <div class="row g-3" data-aos="fade-up">
+                    <div class="col-md-4">
+                      <a href="./member-full-profile.html" class="conn-card">
+                        <div class="conn-av violet">RJ</div>
+                        <p class="conn-name">Robert Johnson</p>
+                        <p class="conn-role">Grandfather</p>
+                      </a>
+                    </div>
+                    <div class="col-md-4">
+                      <a href="./member-full-profile.html" class="conn-card">
+                        <div class="conn-av violet">DJ</div>
+                        <p class="conn-name">Dorothy Johnson</p>
+                        <p class="conn-role">Grandmother</p>
+                      </a>
+                    </div>
+                    <div class="col-md-4">
+                      <a href="./member-full-profile.html" class="conn-card">
+                        <div class="conn-av blue">SJ</div>
+                        <p class="conn-name">Sarah Johnson</p>
+                        <p class="conn-role">Mother</p>
+                      </a>
+                    </div>
+                    <div class="col-md-4">
+                      <a href="./member-full-profile.html" class="conn-card">
+                        <div class="conn-av blue">MJ</div>
+                        <p class="conn-name">Michael Johnson</p>
+                        <p class="conn-role">Father</p>
+                      </a>
+                    </div>
+                    <div class="col-md-4">
+                      <a href="./member-full-profile.html" class="conn-card">
+                        <div class="conn-av blue">JJ</div>
+                        <p class="conn-name">James Johnson</p>
+                        <p class="conn-role">Uncle</p>
+                      </a>
+                    </div>
+                    <div class="col-md-4">
+                      <a href="./member-full-profile.html" class="conn-card">
+                        <div class="conn-av blue">LC</div>
+                        <p class="conn-name">Lisa Chen</p>
+                        <p class="conn-role">Aunt</p>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- EVENTS -->
+                <div class="tab-pane fade profile-tab-content" id="tab-events" role="tabpanel" aria-labelledby="events-tab" tabindex="0">
+                  <div class="empty-state" data-aos="fade-up">
+                    <span class="es-emoji">📅</span>
+                    <h3>No Events Yet</h3>
+                    <p>Be the first to add events for Robert Johnson</p>
+                    <button class="btn-add"><i class="fa-solid fa-plus fa-sm"></i> Add Events</button>
+                  </div>
+                </div>
+              </div>
+            </div><!-- /profile-body -->
+          </main>
+      </div><!-- /main-wrapper -->
+  </div>
+
+  <!-- FAMILY PHOTO GALLERY -->
+  <div class="gallery-lightbox" id="familyPhotoLightbox" aria-hidden="true">
+    <div class="gallery-lightbox-backdrop" data-lightbox-backdrop></div>
+    <div class="gallery-lightbox-panel" role="dialog" aria-modal="true" aria-label="Family photos gallery">
+      <button type="button" class="gallery-lightbox-close" data-lightbox-close aria-label="Close gallery">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <button type="button" class="gallery-lightbox-nav prev" data-lightbox-prev aria-label="Previous photo">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <figure class="gallery-lightbox-figure">
+        <img class="gallery-lightbox-image" src="" alt="">
+      </figure>
+      <button type="button" class="gallery-lightbox-nav next" data-lightbox-next aria-label="Next photo">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+     SCRIPTS
+  ═══════════════════════════════════ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="./assets/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Family Feed</title>
+
+    <link rel="icon" type="image/x-icon" href="./assets/img/fab-icon.ico">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <link href="./assets/style.css" rel="stylesheet">
+
+    <style>
+
+    </style>
+</head>
+
+<body class="settings-page">
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="sidebar-brand-icon"><i class="fa-solid fa-tree"></i></div>
+            <span class="sidebar-brand-text">Family Legacy</span>
+            <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Collapse">
+                <i class="fa-solid fa-chevron-left fa-sm"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a class="nav-item-custom" href="./index.html">
+                <i class="fa-solid fa-table-cells-large"></i>
+                <span>Dashboard</span>
+            </a>
+            <a class="nav-item-custom" href="./family-tree.html">
+                <i class="fa-solid fa-code-branch"></i>
+                <span>Family Tree</span>
+            </a>
+            <a class="nav-item-custom" href="./feed.html">
+                <i class="fa-regular fa-newspaper"></i>
+                <span>Family Feed</span>
+            </a>
+            <a class="nav-item-custom" href="./members.html">
+                <i class="fa-solid fa-users"></i>
+                <span>Family Members</span>
+            </a>
+            <a class="nav-item-custom" href="./messages.html">
+                <i class="fa-regular fa-comment-dots"></i>
+                <span>Messages</span>
+                <span class="nav-badge">3</span>
+            </a>
+            <a class="nav-item-custom" href="./notifications.html">
+                <i class="fa-regular fa-bell"></i>
+                <span>Notifications</span>
+                <span class="nav-badge">5</span>
+            </a>
+            <a class="nav-item-custom active" href="./settings.html">
+                <i class="fa-solid fa-gear"></i>
+                <span>Profile Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-user">
+            <div class="sidebar-user-inner">
+                <div class="user-avatar"><img src="https://randomuser.me/api/portraits/women/44.jpg"
+                        alt="Sarah Johnson"></div>
+                <div style="flex:1;overflow:hidden;">
+                    <p class="user-name">Sarah Johnson</p>
+                    <p class="user-email">sarah@familylegacy.com</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main-wrapper" id="mainWrapper">
+        <header class="topbar">
+            <button class="d-lg-none topbar-bell" id="sidebarToggle" style="color:#1a1a2e;">
+                <i class="fa-solid fa-bars fa-lg"></i>
+            </button>
+
+            <div class="topbar-search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" class="topbar-search" placeholder="Search family members, memories...">
+            </div>
+
+            <div class="topbar-right">
+                <button class="btn-add-memory">
+                    <i class="fa-solid fa-plus fa-sm"></i>
+                    <span>Add Memory</span>
+                </button>
+                <a href="./notifications.html" class="topbar-bell text-decoration-none">
+                    <i class="fa-regular fa-bell" style="font-size:18px;"></i>
+                    <span class="bell-dot"></span>
+                </a>
+                <a href="./settings.html" class="topbar-avatar text-decoration-none"><img
+                        src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson"></a>
+            </div>
+        </header>
+
+        <main class="main-content p-0">
+            <div class="settings-page p-0">
+                <div class="settings-inner">
+
+                    <!-- Page heading -->
+                    <div class="mb-4">
+                        <h1 class="page-title">Profile Settings</h1>
+                        <p class="page-sub">Manage your profile information</p>
+                    </div>
+
+                    <!-- Settings card -->
+                    <div class="settings-card">
+                        <h2 class="card-title">Profile Settings</h2>
+
+                        <!-- Avatar row -->
+                        <div class="d-flex align-items-center gap-4 mb-4">
+                            <div class="avatar-wrap">
+                                <div class="avatar-circle-lg">SJ</div>
+                                <button class="avatar-edit-btn" title="Change photo">
+                                    <i class="fa-solid fa-camera"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <p class="avatar-name">Sarah Johnson</p>
+                                <p class="avatar-email">sarah@familylegacy.com</p>
+                                <button class="btn-change-photo">
+                                    <i class="fa-solid fa-camera" style="font-size:.7rem;"></i>
+                                    Change Photo
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Form grid -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-sm-6">
+                                <label class="field-label">Full Name</label>
+                                <input class="field-input" type="text" value="Sarah Johnson">
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <label class="field-label">Email</label>
+                                <input class="field-input" type="email" value="sarah@familylegacy.com">
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <label class="field-label">Location</label>
+                                <input class="field-input" type="text" value="Austin, Texas">
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <label class="field-label">Member Since</label>
+                                <input class="field-input" type="date" value="2024-01-15">
+                            </div>
+                        </div>
+
+                        <!-- Biography -->
+                        <div class="mb-4">
+                            <label class="field-label">Biography</label>
+                            <textarea class="field-input"
+                                rows="3">Keeper of the Johnson family stories. Grandmother of 4, mother of 3.</textarea>
+                        </div>
+
+                        <!-- Save button -->
+                        <button class="btn-save">
+                            <i class="fa-solid fa-floppy-disk" style="font-size:.85rem;"></i>
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <script src="./assets/app.js"></script>
+</body>
+
+</html>

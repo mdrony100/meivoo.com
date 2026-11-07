@@ -1,0 +1,439 @@
+@extends('layouts.user')
+@section('title', $legacyName->name . ' - Legacy')
+
+@push('styles')
+    <style>
+        /* =========================================
+       Legacy Detail Page
+    ========================================= */
+
+        .legacy-show-page {
+            padding: 35px 15px;
+            /* background: #f7f9fc; */
+            min-height: 100vh;
+        }
+
+        /* .legacy-detail-card {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(31, 41, 55, 0.10);
+            border: 1px solid #edf0f5;
+        } */
+
+        /* Header */
+        .legacy-detail-header {
+            position: relative;
+            text-align: center;
+            padding: 42px 30px 48px;
+            background: linear-gradient(135deg, #eef4ff 0%, #ffffff 60%, #f8f1ff 100%);
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .legacy-back-btn {
+            position: absolute;
+            left: 25px;
+            top: 25px;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 9px 16px;
+            border-radius: 10px;
+
+            color: #4f46e5;
+            background: #ffffff;
+            border: 1px solid #dfe4f1;
+
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+
+            transition: all 0.25s ease;
+        }
+
+        .legacy-back-btn:hover {
+            color: #ffffff;
+            background: #4f46e5;
+            border-color: #4f46e5;
+            transform: translateX(-3px);
+        }
+
+        .legacy-header-icon {
+            width: 72px;
+            height: 72px;
+            margin: 15px auto 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            color: #ffffff;
+            font-size: 30px;
+
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            box-shadow: 0 12px 25px rgba(99, 102, 241, 0.25);
+        }
+
+        .legacy-label {
+            display: block;
+            margin-bottom: 8px;
+
+            color: #6366f1;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .legacy-detail-header h1 {
+            margin: 0;
+
+            color: #1f2937;
+            font-size: 38px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .legacy-subtitle {
+            max-width: 550px;
+            margin: 12px auto 0;
+
+            color: #6b7280;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* Body */
+        .legacy-detail-body {
+            padding: 35px;
+        }
+
+        /* Information Grid */
+        .legacy-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 38px;
+        }
+
+        .legacy-info-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            padding: 18px;
+
+            background: #fafbff;
+            border: 1px solid #edf0f6;
+            border-radius: 16px;
+
+            transition: all 0.25s ease;
+        }
+
+        .legacy-info-item:hover {
+            border-color: #cfd5ff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.08);
+        }
+
+        .legacy-info-icon {
+            flex-shrink: 0;
+
+            width: 45px;
+            height: 45px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            color: #6366f1;
+            background: #eef0ff;
+
+            font-size: 18px;
+        }
+
+        .legacy-info-item span {
+            display: block;
+            margin-bottom: 4px;
+
+            color: #8a91a3;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+        }
+
+        .legacy-info-item strong {
+            display: block;
+
+            color: #252b3a;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        /* Content Sections */
+        .legacy-content-section {
+            margin-top: 28px;
+        }
+
+        .legacy-section-heading {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            margin-bottom: 14px;
+        }
+
+        .section-icon {
+            width: 44px;
+            height: 44px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            color: #ffffff;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+
+            font-size: 17px;
+        }
+
+        .legacy-section-heading span {
+            display: block;
+
+            color: #8b93a7;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .legacy-section-heading h3 {
+            margin: 3px 0 0;
+
+            color: #252b3a;
+            font-size: 20px;
+            font-weight: 750;
+        }
+
+        .legacy-content-box {
+            position: relative;
+
+            padding: 22px 25px;
+
+            background: #fafbff;
+            border-left: 4px solid #6366f1;
+            border-radius: 0 14px 14px 0;
+        }
+
+        .legacy-content-box p {
+            margin: 0;
+
+            color: #5f6675;
+            font-size: 15px;
+            line-height: 1.9;
+            white-space: pre-line;
+        }
+
+        .story-box {
+            background: linear-gradient(135deg,
+                    #fafbff 0%,
+                    #f8f5ff 100%);
+        }
+
+        /* Footer */
+        .legacy-detail-footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+
+            padding: 20px 25px;
+
+            color: #8b93a7;
+            background: #fafbff;
+            border-top: 1px solid #edf0f5;
+
+            font-size: 13px;
+            font-style: italic;
+        }
+
+        .legacy-detail-footer i {
+            color: #a78bfa;
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+
+            .legacy-show-page {
+                padding: 20px 10px;
+            }
+
+            .legacy-detail-header {
+                padding: 70px 20px 35px;
+            }
+
+            .legacy-back-btn {
+                left: 15px;
+                top: 15px;
+            }
+
+            .legacy-back-btn span {
+                display: none;
+            }
+
+            .legacy-detail-header h1 {
+                font-size: 30px;
+            }
+
+            .legacy-detail-body {
+                padding: 22px 18px;
+            }
+
+            .legacy-info-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 28px;
+            }
+
+            .legacy-content-box {
+                padding: 18px;
+            }
+
+            .legacy-detail-footer {
+                text-align: center;
+                line-height: 1.6;
+            }
+        }
+    </style>
+@endpush
+
+@section('content')
+    <main class="main-content">
+        <div class="legacy-show-page">
+            <div class="legacy-detail-card">
+
+                {{-- Header --}}
+                <div class="legacy-detail-header">
+                    <a href="{{ route('user.legacy-names') }}" class="legacy-back-btn">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Back to Legacy Names</span>
+                    </a>
+
+                    <div class="legacy-header-icon">
+                        <i class="fa-solid fa-feather-pointed"></i>
+                    </div>
+
+                    <span class="legacy-label">A Family Legacy</span>
+
+                    <h1>{{ $legacyName->name }}</h1>
+
+                    <p class="legacy-subtitle">
+                        A name with a story, a meaning, and a place in your family history.
+                    </p>
+                </div>
+
+                {{-- Body --}}
+                <div class="legacy-detail-body">
+
+                    {{-- Basic Information --}}
+                    <div class="legacy-info-grid">
+
+                        <div class="legacy-info-item">
+                            <div class="legacy-info-icon">
+                                <i class="fa-solid fa-gift"></i>
+                            </div>
+                            <div>
+                                <span>Gift Name</span>
+                                <strong>{{ $legacyName->name }}</strong>
+                            </div>
+                        </div>
+
+                        @if ($legacyName->who_gave_this_name)
+                            <div class="legacy-info-item">
+                                <div class="legacy-info-icon">
+                                    <i class="fa-solid fa-user-plus"></i>
+                                </div>
+                                <div>
+                                    <span>Given By</span>
+                                    <strong>{{ $legacyName->who_gave_this_name }}</strong>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($legacyName->family_generation)
+                            <div class="legacy-info-item">
+                                <div class="legacy-info-icon">
+                                    <i class="fa-solid fa-people-group"></i>
+                                </div>
+                                <div>
+                                    <span>Family Generation</span>
+                                    <strong>{{ $legacyName->family_generation }}</strong>
+                                </div>
+                            </div>
+                        @endif
+
+                    </div>
+
+                    {{-- Meaning --}}
+                    @if ($legacyName->meaning)
+                        <div class="legacy-content-section">
+                            <div class="legacy-section-heading">
+                                <div class="section-icon">
+                                    <i class="fa-solid fa-book-open"></i>
+                                </div>
+                                <div>
+                                    <span>Meaning</span>
+                                    <h3>The Meaning Behind the Name</h3>
+                                </div>
+                            </div>
+
+                            <div class="legacy-content-box">
+                                <p>{{ $legacyName->meaning }}</p>
+                            </div>
+                        </div>
+                    @endif
+
+                    {{-- Story --}}
+                    @if ($legacyName->story_behind_the_name)
+                        <div class="legacy-content-section">
+                            <div class="legacy-section-heading">
+                                <div class="section-icon">
+                                    <i class="fa-solid fa-heart"></i>
+                                </div>
+                                <div>
+                                    <span>Family Story</span>
+                                    <h3>Story Behind the Name</h3>
+                                </div>
+                            </div>
+
+                            <div class="legacy-content-box story-box">
+                                <p>{{ $legacyName->story_behind_the_name }}</p>
+                            </div>
+                        </div>
+                    @endif
+
+                </div>
+
+                {{-- Footer --}}
+                <div class="legacy-detail-footer">
+                    <i class="fa-solid fa-quote-left"></i>
+                    <span>Every name carries a story. Every story becomes a legacy.</span>
+                    <i class="fa-solid fa-quote-right"></i>
+                </div>
+
+            </div>
+        </div>
+    </main>
+@endsection

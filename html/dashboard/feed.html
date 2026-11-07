@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegacyTree - Family Feed</title>
+
+  <link rel="icon" type="image/x-icon" href="./assets/img/fab-icon.ico">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+  <link href="./assets/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon"><i class="fa-solid fa-tree"></i></div>
+      <span class="sidebar-brand-text">Family Legacy</span>
+      <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Collapse">
+        <i class="fa-solid fa-chevron-left fa-sm"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item-custom" href="./index.html">
+        <i class="fa-solid fa-table-cells-large"></i>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item-custom" href="./family-tree.html">
+        <i class="fa-solid fa-code-branch"></i>
+        <span>Family Tree</span>
+      </a>
+      <a class="nav-item-custom active" href="./feed.html">
+        <i class="fa-regular fa-newspaper"></i>
+        <span>Family Feed</span>
+      </a>
+      <a class="nav-item-custom" href="./members.html">
+        <i class="fa-solid fa-users"></i>
+        <span>Family Members</span>
+      </a>
+      <a class="nav-item-custom" href="./messages.html">
+        <i class="fa-regular fa-comment-dots"></i>
+        <span>Messages</span>
+        <span class="nav-badge">3</span>
+      </a>
+      <a class="nav-item-custom" href="./notifications.html">
+        <i class="fa-regular fa-bell"></i>
+        <span>Notifications</span>
+        <span class="nav-badge">5</span>
+      </a>
+      <a class="nav-item-custom" href="./settings.html">
+        <i class="fa-solid fa-gear"></i>
+        <span>Profile Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-inner">
+        <div class="user-avatar"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson"></div>
+        <div style="flex:1;overflow:hidden;">
+          <p class="user-name">Sarah Johnson</p>
+          <p class="user-email">sarah@familylegacy.com</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-wrapper" id="mainWrapper">
+    <header class="topbar">
+      <button class="d-lg-none topbar-bell" id="sidebarToggle" style="color:#1a1a2e;">
+        <i class="fa-solid fa-bars fa-lg"></i>
+      </button>
+
+      <div class="topbar-search-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" class="topbar-search" placeholder="Search family members, memories...">
+      </div>
+
+      <div class="topbar-right">
+        <button class="btn-add-memory">
+          <i class="fa-solid fa-plus fa-sm"></i>
+          <span>Add Memory</span>
+        </button>
+        <a href="./notifications.html" class="topbar-bell text-decoration-none">
+          <i class="fa-regular fa-bell" style="font-size:18px;"></i>
+          <span class="bell-dot"></span>
+        </a>
+        <a href="./settings.html" class="topbar-avatar text-decoration-none"><img
+            src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson"></a>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div style="max-width:1200px;margin:0 auto;">
+        <!-- Feed col -->
+        <div class="row g-3 g-lg-4 justify-content-center">
+          <div class="col-lg-8">
+            <div class="mb-4" data-aos="fade-up" data-aos-duration="500">
+              <h1 class="page-title">Family Feed</h1>
+              <p class="page-sub">Recent memories, updates, and conversations from the family.</p>
+            </div>
+
+            <div class="d-flex flex-column gap-3 gap-lg-4">
+
+              <!-- COMPOSE BOX -->
+              <div class="dash-card" data-aos="fade-up" data-aos-delay="0">
+                <div class="compose-box">
+                  <div class="compose-top">
+                    <div class="compose-avatar"><img src="https://randomuser.me/api/portraits/women/44.jpg"
+                        alt="Sarah Johnson"></div>
+                    <textarea class="compose-input" id="composeInput" placeholder="Share a family memory..."
+                      rows="1"></textarea>
+                  </div>
+                  <div class="compose-actions">
+                    <button class="compose-btn"><i class="fa-regular fa-image fa-sm"></i> Photo</button>
+                    <button class="compose-btn"><i class="fa-solid fa-microphone fa-sm"></i> Voice
+                      <span>Memory</span></button>
+                    <button class="btn-post">Post</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- POST 1 -->
+              <div class="post-card" data-aos="fade-up" data-aos-delay="60">
+                <div class="post-header">
+                  <div class="post-av"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma Johnson">
+                  </div>
+                  <div style="flex:1;min-width:0;">
+                    <p class="post-av-name">Emma Johnson</p>
+                    <p class="post-av-time">2 hours ago</p>
+                  </div>
+                  <button class="post-menu-btn"><i class="fa-solid fa-ellipsis fa-sm"></i></button>
+                </div>
+                <div class="post-body">
+                  Just found Grandpa Robert's old journal from 1965! His handwriting is beautiful. Going to scan and
+                  upload all the pages this weekend 📖✨
+                </div>
+                <div class="post-reactions">
+                  <div class="emojis"><span>❤️</span><span>😊</span><span>😮</span></div>
+                  <span class="count">20 reactions</span>
+                  <button class="comments-count btn-toggle-comments"
+                    style="background:none;border:none;cursor:pointer;padding:0;" data-target="comments-1">4
+                    comments</button>
+                </div>
+                <div class="post-actions-bar">
+                  <button class="post-action-btn btn-react-toggle" type="button"><i class="fa-regular fa-heart"></i>
+                    React</button>
+                  <button class="post-action-btn btn-toggle-comments" data-target="comments-1"><i
+                      class="fa-regular fa-comment fa-sm"></i> Comment</button>
+                  <button class="post-action-btn btn-share"><i class="fa-solid fa-share-nodes fa-sm"></i> Share</button>
+                </div>
+                <div class="comment-section" id="comments-1">
+                  <div class="comment-item">
+                    <div class="comment-av"><img src="https://randomuser.me/api/portraits/women/65.jpg"
+                        alt="Dorothy Johnson"></div>
+                    <div style="flex:1;">
+                      <div class="comment-bubble">
+                        <p class="comment-name">Dorothy Johnson</p>
+                        <p class="comment-text">Oh my goodness! I remember him writing in that journal every evening
+                          after dinner. Please do upload it — I'd love to read every word! 💕</p>
+                      </div>
+                      <div class="comment-meta">
+                        <span class="comment-time">1h ago</span>
+                        <button class="comment-reply-btn btn-reply-toggle" type="button">Reply</button>
+                      </div>
+                      <div class="comment-replies">
+                        <div class="comment-item">
+                          <div class="comment-av" style="background:var(--gradient-blue);"><img
+                              src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma Johnson"></div>
+                          <div style="flex:1;">
+                            <div class="comment-bubble">
+                              <p class="comment-name">Emma Johnson</p>
+                              <p class="comment-text">Will do, Grandma! I'll have them ready by Sunday 🥰</p>
+                            </div>
+                            <div class="comment-meta">
+                              <span class="comment-time">45m ago</span>
+                              <button class="comment-reply-btn btn-reply-toggle" type="button">Reply</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="comment-item">
+                    <div class="comment-av" style="background:var(--gradient-blue);"><img
+                        src="https://randomuser.me/api/portraits/men/32.jpg" alt="Liam Johnson"></div>
+                    <div style="flex:1;">
+                      <div class="comment-bubble">
+                        <p class="comment-name">Liam Johnson</p>
+                        <p class="comment-text">That is so cool! 1965 — amazing piece of history right there. Can't wait
+                          to see the scans!</p>
+                      </div>
+                      <div class="comment-meta">
+                        <span class="comment-time">30m ago</span>
+                        <button class="comment-reply-btn btn-reply-toggle" type="button">Reply</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="comment-compose">
+                    <div class="comment-av"><img src="https://randomuser.me/api/portraits/women/44.jpg"
+                        alt="Sarah Johnson"></div>
+                    <input type="text" class="comment-input-field" placeholder="Write a comment...">
+                  </div>
+                  <div class="comment-reply-dock" aria-live="polite"></div>
+                </div>
+              </div>
+
+              <!-- POST 2 -->
+              <div class="post-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="post-header">
+                  <div class="post-av"><img src="https://randomuser.me/api/portraits/women/65.jpg"
+                      alt="Dorothy Johnson"></div>
+                  <div style="flex:1;min-width:0;">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                      <p class="post-av-name mb-0">Dorothy Johnson</p>
+                      <span class="post-milestone">✨ Milestone</span>
+                    </div>
+                    <p class="post-av-time">5 hours ago</p>
+                  </div>
+                  <button class="post-menu-btn"><i class="fa-solid fa-ellipsis fa-sm"></i></button>
+                </div>
+                <div class="post-body">
+                  Happy to share that our family tree now has 47 members! So grateful for everyone who helped fill in
+                  the branches. I remember when we barely knew our own cousins 💕
+                </div>
+                <div class="post-reactions">
+                  <div class="emojis"><span>❤️</span><span>😊</span><span>😮</span></div>
+                  <span class="count">48 reactions</span>
+                  <button class="comments-count btn-toggle-comments"
+                    style="background:none;border:none;cursor:pointer;padding:0;" data-target="comments-2">11
+                    comments</button>
+                </div>
+                <div class="post-actions-bar">
+                  <button class="post-action-btn btn-react-toggle" type="button"><i class="fa-regular fa-heart"></i>
+                    React</button>
+                  <button class="post-action-btn btn-toggle-comments" data-target="comments-2"><i
+                      class="fa-regular fa-comment fa-sm"></i> Comment</button>
+                  <button class="post-action-btn btn-share"><i class="fa-solid fa-share-nodes fa-sm"></i> Share</button>
+                </div>
+                <div class="comment-section" id="comments-2">
+                  <div class="comment-item">
+                    <div class="comment-av" style="background:var(--gradient-blue);"><img
+                        src="https://randomuser.me/api/portraits/men/32.jpg" alt="Liam Johnson"></div>
+                    <div style="flex:1;">
+                      <div class="comment-bubble">
+                        <p class="comment-name">Liam Johnson</p>
+                        <p class="comment-text">47 members and still growing! So proud of this family 🌳</p>
+                      </div>
+                      <div class="comment-meta">
+                        <span class="comment-time">4h ago</span>
+                        <button class="comment-reply-btn btn-reply-toggle" type="button">Reply</button>
+                      </div>
+                      <div class="comment-replies">
+                        <div class="comment-item">
+                          <div class="comment-av"><img src="https://randomuser.me/api/portraits/women/65.jpg"
+                              alt="Dorothy Johnson"></div>
+                          <div style="flex:1;">
+                            <div class="comment-bubble">
+                              <p class="comment-name">Dorothy Johnson</p>
+                              <p class="comment-text">Thank you Liam! Your help tracking down the cousins was invaluable
+                                💖</p>
+                            </div>
+                            <div class="comment-meta">
+                              <span class="comment-time">3h ago</span>
+                              <button class="comment-reply-btn btn-reply-toggle" type="button">Reply</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="comment-item">
+                    <div class="comment-av"><img src="https://randomuser.me/api/portraits/women/44.jpg"
+                        alt="Sarah Johnson"></div>
+                    <div style="flex:1;">
+                      <div class="comment-bubble">
+                        <p class="comment-name">Sarah Johnson</p>
+                        <p class="comment-text">This is so beautiful! From barely knowing cousins to 47 strong 😭❤️</p>
+                      </div>
+                      <div class="comment-meta">
+                        <span class="comment-time">2h ago</span>
+                        <button class="comment-reply-btn btn-reply-toggle" type="button">Reply</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="comment-compose">
+                    <div class="comment-av"><img src="https://randomuser.me/api/portraits/women/44.jpg"
+                        alt="Sarah Johnson"></div>
+                    <input type="text" class="comment-input-field" placeholder="Write a comment...">
+                  </div>
+                  <div class="comment-reply-dock" aria-live="polite"></div>
+                </div>
+              </div>
+
+              <!-- POST 3 (with photo) -->
+              <div class="post-card" data-aos="fade-up" data-aos-delay="140">
+                <div class="post-header">
+                  <div class="post-av"><img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Liam Johnson">
+                  </div>
+                  <div style="flex:1;min-width:0;">
+                    <p class="post-av-name">Liam Johnson</p>
+                    <p class="post-av-time">1 day ago</p>
+                  </div>
+                  <button class="post-menu-btn"><i class="fa-solid fa-ellipsis fa-sm"></i></button>
+                </div>
+                <div class="post-body">
+                  Restored this old photo of Great-Grandma using the AI tool. The colors are incredible — she had blue
+                  eyes! 😍
+                </div>
+                <div class="post-photo">
+                  <span>📸</span>
+                  <p>Restored Family Photo</p>
+                </div>
+                <div class="post-reactions">
+                  <div class="emojis"><span>❤️</span><span>😊</span><span>😮</span></div>
+                  <span class="count">64 reactions</span>
+                  <button class="comments-count btn-toggle-comments"
+                    style="background:none;border:none;cursor:pointer;padding:0;" data-target="comments-3">15
+                    comments</button>
+                </div>
+                <div class="post-actions-bar">
+                  <button class="post-action-btn btn-react-toggle" type="button"><i class="fa-regular fa-heart"></i>
+                    React</button>
+                  <button class="post-action-btn btn-toggle-comments" data-target="comments-3"><i
+                      class="fa-regular fa-comment fa-sm"></i> Comment</button>
+                  <button class="post-action-btn btn-share"><i class="fa-solid fa-share-nodes fa-sm"></i> Share</button>
+                </div>
+                <div class="comment-section" id="comments-3">
+                  <div class="comment-item">
+                    <div class="comment-av"><img src="https://randomuser.me/api/portraits/women/65.jpg"
+                        alt="Dorothy Johnson"></div>
+                    <div style="flex:1;">
+                      <div class="comment-bubble">
+                        <p class="comment-name">Dorothy Johnson</p>
+                        <p class="comment-text">I'm crying! She was so beautiful. Those blue eyes definitely passed down
+                          — Emma has them too! 💙</p>
+                      </div>
+                      <div class="comment-meta">
+                        <span class="comment-time">23h ago</span>
+                        <button class="comment-reply-btn btn-reply-toggle" type="button">Reply</button>
+                      </div>
+                      <div class="comment-replies">
+                        <div class="comment-item">
+                          <div class="comment-av" style="background:var(--gradient-blue);"><img
+                              src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma Johnson"></div>
+                          <div style="flex:1;">
+                            <div class="comment-bubble">
+                              <p class="comment-name">Emma Johnson</p>
+                              <p class="comment-text">That means so much! Liam the AI restoration is absolutely magical
+                                🤩</p>
+                            </div>
+                            <div class="comment-meta">
+                              <span class="comment-time">22h ago</span>
+                              <button class="comment-reply-btn btn-reply-toggle" type="button">Reply</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="comment-item">
+                    <div class="comment-av"><img src="https://randomuser.me/api/portraits/women/44.jpg"
+                        alt="Sarah Johnson"></div>
+                    <div style="flex:1;">
+                      <div class="comment-bubble">
+                        <p class="comment-name">Sarah Johnson</p>
+                        <p class="comment-text">Liam this is incredible work! Which AI tool did you use exactly?</p>
+                      </div>
+                      <div class="comment-meta">
+                        <span class="comment-time">20h ago</span>
+                        <button class="comment-reply-btn btn-reply-toggle" type="button">Reply</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="comment-compose">
+                    <div class="comment-av"><img src="https://randomuser.me/api/portraits/women/44.jpg"
+                        alt="Sarah Johnson"></div>
+                    <input type="text" class="comment-input-field" placeholder="Write a comment...">
+                  </div>
+                  <div class="comment-reply-dock" aria-live="polite"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="./assets/app.js"></script>
+
+</body>
+
+</html>

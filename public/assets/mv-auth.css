@@ -1,0 +1,202 @@
+/* Split-screen auth layout (register + any page that opts in with .has-visual) */
+
+.signup-page.has-visual {
+    background: var(--mv-canvas, #f7f6fb);
+}
+
+@media (min-width: 992px) {
+    .signup-page.has-visual {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 100vh;
+        align-items: stretch;
+    }
+
+    .signup-page.has-visual .signup-shell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 32px 24px;
+    }
+
+    .signup-page.has-visual .signup-shell .container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+.mv-auth-visual {
+    position: relative;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: center;
+    padding: 56px;
+    color: #fff;
+    background:
+        radial-gradient(120% 90% at 15% 10%, rgba(168, 85, 247, .55), transparent 60%),
+        radial-gradient(100% 80% at 85% 85%, rgba(59, 130, 246, .45), transparent 62%),
+        linear-gradient(155deg, #2a1358 0%, #4c1d95 45%, #1e1b4b 100%);
+}
+
+.mv-auth-visual::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+    background-size: 46px 46px;
+    mask-image: radial-gradient(80% 70% at 50% 40%, #000 30%, transparent 100%);
+    pointer-events: none;
+}
+
+.mv-auth-visual-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 460px;
+}
+
+.mv-auth-brand {
+    display: inline-flex;
+    margin-bottom: 40px;
+    text-decoration: none;
+}
+
+.mv-auth-brand img {
+    filter: brightness(0) invert(1);
+    opacity: .95;
+}
+
+.mv-auth-headline {
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-size: clamp(28px, 2.6vw, 40px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -.02em;
+    margin: 0 0 16px;
+}
+
+.mv-auth-sub {
+    font-size: 16px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, .78);
+    margin: 0 0 32px;
+}
+
+.mv-auth-points {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px;
+    display: grid;
+    gap: 14px;
+}
+
+.mv-auth-points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    color: rgba(255, 255, 255, .9);
+}
+
+.mv-auth-dot {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .16);
+    position: relative;
+}
+
+.mv-auth-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #c4b5fd;
+}
+
+.mv-auth-proof {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, .16);
+}
+
+.mv-auth-avatars {
+    display: flex;
+}
+
+.mv-auth-avatars span {
+    width: 34px;
+    height: 34px;
+    margin-left: -10px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ede9fe;
+    background: linear-gradient(140deg, #7c3aed, #4f46e5);
+    border: 2px solid rgba(255, 255, 255, .85);
+}
+
+.mv-auth-avatars span:first-child {
+    margin-left: 0;
+}
+
+.mv-auth-proof p {
+    margin: 0;
+    font-size: 13.5px;
+    color: rgba(255, 255, 255, .72);
+}
+
+/* keep the signup card visually matched to the login card */
+.signup-card {
+    border-radius: 20px;
+    border: 1px solid rgba(23, 24, 38, .08);
+    box-shadow: 0 24px 60px -28px rgba(76, 29, 149, .35);
+    background: #fff;
+}
+
+.signup-card .form-control,
+.signup-card .form-select {
+    border-radius: 12px;
+    border: 1px solid #e4e1f0;
+    padding: 11px 14px;
+    font-size: 15px;
+}
+
+.signup-card .form-control:focus,
+.signup-card .form-select:focus {
+    border-color: #a78bfa;
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, .14);
+}
+
+.signup-card .btn-primary,
+.signup-card button[type="submit"] {
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mv-auth-visual * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* give the register card a comfortable width inside the split layout */
+@media (min-width: 992px) {
+    .signup-page.has-visual .signup-shell .col-12 {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 480px;
+    }
+}

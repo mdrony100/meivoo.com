@@ -1,0 +1,963 @@
+@extends('layouts.user')
+@section('title', 'Members - Family Feed')
+@section('body_class', 'members-page')
+@push('styles')
+    <style>
+        :root {
+            --gen1-bg: #eeedfe;
+            --gen1-fg: #3c3489;
+            --gen2-bg: #e1f5ee;
+            --gen2-fg: #085041;
+            --gen3-bg: #faece7;
+            --gen3-fg: #712b13;
+            --gen4-bg: #faeeda;
+            --gen4-fg: #633806;
+        }
+
+        .members-table thead th {
+            background: #f8f9fb;
+            font-size: 11.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: #6c757d;
+            border-bottom: 1px solid #e9ecef;
+            padding: 10px 16px;
+        }
+
+        .members-table tbody td {
+            padding: 12px 16px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f3f7;
+            font-size: 14px;
+        }
+
+        .members-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .members-table tbody tr:hover {
+            background: #fafbff;
+        }
+
+        /* Avatar */
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .member-name {
+            font-weight: 600;
+            color: #1a1d23;
+            font-size: 13.5px;
+            margin-bottom: 2px;
+        }
+
+        .member-meta {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        /* Gen badges */
+        .gen-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .gen-1 {
+            background: var(--gen1-bg);
+            color: var(--gen1-fg);
+        }
+
+        .gen-2 {
+            background: var(--gen2-bg);
+            color: var(--gen2-fg);
+        }
+
+        .gen-3 {
+            background: var(--gen3-bg);
+            color: var(--gen3-fg);
+        }
+
+        .gen-4 {
+            background: var(--gen4-bg);
+            color: var(--gen4-fg);
+        }
+
+        /* Relation badges */
+        .badge-spouse {
+            background: #e6f1fb;
+            color: #0c447c;
+            font-size: 14px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .badge-children {
+            background: #eaf3de;
+            color: #27500a;
+            font-size: 14px;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-weight: 500;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .badge-unmarried {
+            background: #f1efe8;
+            color: #5f5e5a;
+            font-size: 14px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-weight: 500;
+        }
+
+        /* Action buttons */
+        .action-btn {
+            font-size: 12.5px;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 500;
+            border-width: 1px;
+            transition: all .12s;
+        }
+
+        /* Tree view */
+        .tree-section {
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .tree-gen-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            color: #adb5bd;
+            margin-bottom: 12px;
+        }
+
+        .tree-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 0;
+        }
+
+        .tree-connector {
+            height: 36px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .tree-connector-line {
+            width: 1px;
+            height: 100%;
+            background: #dee2e6;
+        }
+
+        .tree-node {
+            border-radius: 10px;
+            border: 1.5px solid;
+            padding: 10px 14px;
+            min-width: 130px;
+            max-width: 150px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform .12s, box-shadow .12s;
+            position: relative;
+        }
+
+        .tree-node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .1);
+        }
+
+        .tree-node .node-name {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .tree-node .node-rel {
+            font-size: 10px;
+            opacity: .7;
+        }
+
+        .tree-node .node-occ {
+            font-size: 10px;
+            margin-top: 4px;
+            opacity: .65;
+        }
+
+        .tree-node-1 {
+            background: var(--gen1-bg);
+            border-color: var(--gen1-fg);
+            color: var(--gen1-fg);
+        }
+
+        .tree-node-2 {
+            background: var(--gen2-bg);
+            border-color: var(--gen2-fg);
+            color: var(--gen2-fg);
+        }
+
+        .tree-node-3 {
+            background: var(--gen3-bg);
+            border-color: var(--gen3-fg);
+            color: var(--gen3-fg);
+        }
+
+        .tree-node-4 {
+            background: var(--gen4-bg);
+            border-color: var(--gen4-fg);
+            color: var(--gen4-fg);
+        }
+
+        .children-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .av-1 {
+            background: var(--gen1-bg);
+            color: var(--gen1-fg);
+        }
+
+        .av-2 {
+            background: var(--gen2-bg);
+            color: var(--gen2-fg);
+        }
+
+        .av-3 {
+            background: var(--gen3-bg);
+            color: var(--gen3-fg);
+        }
+
+        .av-4 {
+            background: var(--gen4-bg);
+            color: var(--gen4-fg);
+        }
+    </style>
+@endpush
+@section('content')
+    <main class="main-content">
+        <!-- Feed col -->
+        <div class="row g-3 g-lg-4 justify-content-center">
+            <div class="col-lg-12">
+                <!-- Page header -->
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4" data-aos="fade-right"
+                    data-aos-duration="400">
+                    <div>
+                        <h1 class="page-title">
+                            <i class="fa-solid fa-users fa-lg"></i>
+                            Family Members
+                        </h1>
+                    </div>
+                    {{-- @dd($familyExsit) --}}
+                    <div class="">
+                        @if (!empty($familyExsit))
+                            {{-- <a href="{{ route('user.member.create') }}" class="btn-add-member text-decoration-none">Add Member</a> --}}
+                        @else
+                            <button type="button" class="btn-add-member" data-bs-toggle="modal"
+                                data-bs-target="#createFamilyModal">
+                                Create Family
+                            </button>
+                        @endif
+                    </div>
+                </div>
+                <div class="">
+
+                    <!-- Stats Row -->
+                    <div class="row g-2 g-sm-3 mb-4">
+                        {{-- Total Members --}}
+                        <div class="col-6 col-lg-3">
+                            <div class="stat-card d-flex align-items-center p-3 p-md-4">
+                                <div class="stat-icon me-2 me-sm-3 flex-shrink-0" style="background:#eef0fd">
+                                    <i class="fa-solid fa-users" style="color:#4e6ef2"></i>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <div class="stat-label text-truncate">Total Members</div>
+                                    <div class="stat-val">{{ $totalMembers ?? 0 }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Married Couples --}}
+                        <div class="col-6 col-lg-3">
+                            <div class="stat-card d-flex align-items-center p-3 p-md-4">
+                                <div class="stat-icon me-2 me-sm-3 flex-shrink-0" style="background:#e1f5ee">
+                                    <i class="fa-solid fa-heart" style="color:#0f6e56"></i>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <div class="stat-label text-truncate">Married Couples</div>
+                                    <div class="stat-val">{{ $marriedCouples ?? 0 }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Children --}}
+                        <div class="col-6 col-lg-3">
+                            <div class="stat-card d-flex align-items-center p-3 p-md-4">
+                                <div class="stat-icon me-2 me-sm-3 flex-shrink-0" style="background:#faece7">
+                                    <i class="fa-solid fa-child" style="color:#993c1d"></i>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <div class="stat-label text-truncate">Children</div>
+                                    <div class="stat-val">{{ $childrenCount ?? 0 }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Passed Away --}}
+                        <div class="col-6 col-lg-3">
+                            <div class="stat-card d-flex align-items-center p-3 p-md-4">
+                                <div class="stat-icon me-2 me-sm-3 flex-shrink-0" style="background:#f1f5f9">
+                                    <i class="fa-solid fa-monument" style="color:#475569"></i>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <div class="stat-label text-truncate">Passed Away</div>
+                                    <div class="stat-val">{{ $passedAwayCount ?? 0 }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="card border-0 rounded-4">
+                            <div class="table-responsive p-3" style="min-height: 400px;">
+                                <table class="table members-table mb-0" id="dataTables">
+                                    <thead>
+                                        <tr>
+                                            <th>Member</th>
+                                            <th>Email</th>
+                                            <th width="10%">Birth Date</th>
+                                            <th>Occupation</th>
+                                            <th width="16%">Spouse</th>
+                                            <th width="13%">Children</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($members as $member)
+                                            @php
+                                                $displayName =
+                                                    $member->full_name ?:
+                                                    $member->name ?:
+                                                    optional($member->user)->name ?:
+                                                    'Unnamed Member';
+                                                $nameParts = preg_split('/\s+/', trim($displayName)) ?: [];
+                                                $initials = '';
+                                                foreach (array_slice(array_filter($nameParts), 0, 2) as $part) {
+                                                    $initials .= strtoupper(substr($part, 0, 1));
+                                                }
+                                                $initials = $initials ?: 'M';
+                                                $generation = max(1, (int) ($member->generation ?? 1));
+                                                $genClass = 'gen-' . min($generation, 4);
+                                                $avatarClass = 'av-' . min($generation, 4);
+                                                $genderLabel = $member->gender
+                                                    ? ucfirst($member->gender)
+                                                    : 'Not specified';
+                                                $genderIcon = $member->gender === 'female' ? 'fa-venus' : 'fa-mars';
+                                                $birthDate = $member->birth_date
+                                                    ? \Carbon\Carbon::parse($member->birth_date)->format('d M Y')
+                                                    : '-';
+                                                $occupation = $member->profession ?: ($member->occupation ?: '-');
+                                                $spouse = $member->spouses->first();
+                                                $spouseName = $spouse
+                                                    ? ($spouse->full_name ?:
+                                                    $spouse->name ?:
+                                                    optional($spouse->user)->name ?:
+                                                    'Unknown')
+                                                    : null;
+                                                $spouseCount = count($member->spouses ?? []);
+                                                $hasFather = !empty($member->has_father);
+                                                $hasMother = !empty($member->has_mother);
+                                                $hasSpouse = !empty($member->has_spouse);
+                                                $hasHusband = !empty($member->has_husband);
+                                                $canAddSpouse = !empty($member->can_add_spouse);
+                                                $canAddChild = !empty($member->can_add_child);
+                                                $childHint =
+                                                    $member->gender &&
+                                                    !in_array($member->gender, ['male', 'female'], true)
+                                                        ? 'Set this member gender first.'
+                                                        : 'Add a spouse first to add a child.';
+                                            @endphp
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        @if ($member->user?->image)
+                                                            <div class="member-avatar">
+                                                                <img src="{{ asset($member->user?->image) }}" width="40"
+                                                                    height="40" class="rounded-pill" alt="">
+                                                            </div>
+                                                        @else
+                                                            <div class="member-avatar {{ $avatarClass }}">
+                                                                {{ $initials }}</div>
+                                                        @endif
+                                                        <div>
+                                                            <div class="member-name">{{ $displayName }}</div>
+                                                            <div class="member-meta">
+                                                                <i
+                                                                    class="fa-solid {{ $genderIcon }} fa-xs me-1"></i>{{ $genderLabel }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>{{ $member->user?->email }}</td>
+                                                <td>{{ $birthDate }}</td>
+                                                <td>{{ $occupation }}</td>
+                                                <td>
+                                                    @if ($spouseName)
+                                                        <span class="badge-spouse">
+                                                            <i class="fa-solid fa-heart fa-xs me-1"></i>{{ $spouseName }}
+                                                        </span>
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
+
+                                                <td>
+                                                    @if (($member->children_count ?? 0) > 0)
+                                                        <span class="badge-children">
+                                                            <i
+                                                                class="fa-solid fa-children fa-xs me-1"></i>{{ $member->children_count }}
+                                                            Children
+                                                        </span>
+                                                    @else
+                                                        -
+                                                    @endif
+
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn" type="button" data-bs-toggle="dropdown"
+                                                            aria-expanded="false" data-bs-auto-close="outside">
+                                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                        </button>
+
+                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                            <li>
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('user.family-tree', $member->id) }}">
+                                                                    <i class="fa-solid fa-sitemap me-2 text-primary"></i>
+                                                                    View Tree
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('user.member.edit', $member->id) }}">
+                                                                    <i
+                                                                        class="fa-solid fa-pen-to-square me-2 text-secondary"></i>
+                                                                    Edit Member
+                                                                </a>
+                                                            </li>
+
+                                                            @if ($member->can_add_father)
+                                                                <li>
+                                                                    <a class="dropdown-item"
+                                                                        href="{{ route('user.member.create', ['relation_type' => 'father', 'related_member_id' => $member->id]) }}">
+                                                                        <i class="fa-solid fa-person me-2 text-info"></i>
+                                                                        Add Father
+                                                                    </a>
+                                                                </li>
+                                                            @else
+                                                                <li>
+                                                                    <span class="dropdown-item text-muted"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="right"
+                                                                        title="Parent already exists.">
+                                                                        <i class="fa-solid fa-person me-2"></i> Add
+                                                                        Father
+                                                                    </span>
+                                                                </li>
+                                                            @endif
+
+                                                            @if ($member->can_add_mother)
+                                                                <li>
+                                                                    <a class="dropdown-item"
+                                                                        href="{{ route('user.member.create', ['relation_type' => 'mother', 'related_member_id' => $member->id]) }}">
+                                                                        <i
+                                                                            class="fa-solid fa-person-dress me-2 text-danger"></i>
+                                                                        Add Mother
+                                                                    </a>
+                                                                </li>
+                                                            @else
+                                                                <li>
+                                                                    <span class="dropdown-item text-muted"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="right"
+                                                                        title="Parent already exists.">
+                                                                        <i class="fa-solid fa-person-dress me-2"></i>
+                                                                        Add Mother
+                                                                    </span>
+                                                                </li>
+                                                            @endif
+
+                                                            @if ($canAddSpouse)
+                                                                <li>
+                                                                    <a class="dropdown-item"
+                                                                        href="{{ route('user.member.create', ['relation_type' => 'spouse', 'related_member_id' => $member->id]) }}">
+                                                                        <i class="fa-solid fa-heart me-2 text-success"></i>
+                                                                        Add Spouse
+                                                                    </a>
+                                                                </li>
+                                                            @else
+                                                                <li>
+                                                                    <span class="dropdown-item text-muted"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="right"
+                                                                        title="{{ $hasHusband ? 'This female member already has a husband.' : 'Maximum 2 spouses reached.' }}">
+                                                                        <i class="fa-solid fa-heart me-2"></i>
+                                                                        Add Spouse
+                                                                    </span>
+                                                                </li>
+                                                            @endif
+
+                                                            @if ($member->can_add_child)
+                                                                <li>
+                                                                    <a class="dropdown-item"
+                                                                        href="{{ route('user.member.create', ['relation_type' => 'child', 'related_member_id' => $member->id]) }}">
+                                                                        <i
+                                                                            class="fa-solid fa-child-reaching me-2 text-warning"></i>
+                                                                        Add Child
+                                                                    </a>
+                                                                </li>
+                                                            @else
+                                                                <li>
+                                                                    <span class="dropdown-item text-muted"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="right"
+                                                                        title="{{ $childHint }}">
+                                                                        <i class="fa-solid fa-child-reaching me-2"></i>
+                                                                        Add Child
+                                                                    </span>
+                                                                </li>
+                                                            @endif
+
+
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="7" class="text-center py-5 text-muted">No family
+                                                    members found yet.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="relationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form method="POST" class="modal-content" id="relationForm">
+                @csrf
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="relationModalTitle">Add Relation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="text-muted mb-3">
+                        Add relation for <strong id="relationMemberName">this member</strong>
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="form-label">Relation Type</label>
+                        <select name="relation_type" id="relationType" class="form-select" required>
+                            <option value="">Select relation</option>
+                            <option value="father">Father</option>
+                            <option value="mother">Mother</option>
+                            <option value="spouse">Spouse</option>
+                            <option value="child">Child</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Related Member</label>
+                        <select name="related_member_id" id="relatedMemberId" class="form-select" required>
+                            <option value="">Select member</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="relationSubmitBtn">Save Relation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="relationManagerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Relation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-3">
+                        Select a relation for <strong id="relationManagerMemberName">this member</strong> to edit.
+                    </p>
+                    <div id="relationManagerList" class="table-responsive"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createFamilyModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <form method="POST" action="{{ route('user.storeFamily') }}" class="modal-content">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Family</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label">Family Name</label>
+                    <input type="text" name="name" class="form-control" value="" required>
+                    <div class="form-text mt-2">
+                        This only appears once for users who do not yet belong to any family.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Family</button>
+                </div>
+            </form>
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
+    @php
+        $familyMembersData = ($familyMembers ?? collect())
+            ->map(function ($familyMember) {
+                return [
+                    'id' => $familyMember->id,
+                    'name' =>
+                        $familyMember->full_name ?:
+                        $familyMember->name ?:
+                        optional($familyMember->user)->name ?:
+                        'Unnamed Member',
+                ];
+            })
+            ->values();
+
+        $relationMemberMap = ($familyMembers ?? collect())
+            ->mapWithKeys(function ($familyMember) {
+                return [
+                    $familyMember->id => [
+                        'name' =>
+                            $familyMember->full_name ?:
+                            $familyMember->name ?:
+                            optional($familyMember->user)->name ?:
+                            'Unnamed Member',
+                        'route' => route('user.member.relation.store', $familyMember->id),
+                    ],
+                ];
+            })
+            ->all();
+
+        $relationsData = ($relationships ?? collect())
+            ->map(function ($relationship) {
+                $memberName =
+                    $relationship->member?->full_name ?:
+                    $relationship->member?->name ?:
+                    optional($relationship->member?->user)->name ?:
+                    'Unnamed Member';
+
+                $relatedName =
+                    $relationship->relatedMember?->full_name ?:
+                    $relationship->relatedMember?->name ?:
+                    optional($relationship->relatedMember?->user)->name ?:
+                    'Unnamed Member';
+
+                return [
+                    'id' => $relationship->id,
+                    'member_id' => $relationship->member_id ?? $relationship->person_id,
+                    'related_member_id' => $relationship->related_member_id ?? $relationship->related_person_id,
+                    'relation_type' => $relationship->relation_type ?? $relationship->relationship_type,
+                    'member_name' => $memberName,
+                    'related_member_name' => $relatedName,
+                    'update_route' => route('user.member.relation.update', $relationship->id),
+                    'destroy_route' => route('user.member.relation.destroy', $relationship->id),
+                ];
+            })
+            ->values();
+    @endphp
+
+    <script>
+        const csrfToken = @json(csrf_token());
+        const familyMembersData = @json($familyMembersData);
+        const relationMemberMap = @json($relationMemberMap);
+        const relationsData = @json($relationsData);
+        const relationsByMember = relationsData.reduce((carry, relation) => {
+            const key = String(relation.member_id);
+            if (!carry[key]) {
+                carry[key] = [];
+            }
+            carry[key].push(relation);
+            return carry;
+        }, {});
+
+        const oldRelationMemberId = @json(old('related_member_id'));
+        const oldRelationType = @json(old('relation_type'));
+        const openRelationMemberId = @json(session('open_relation_modal'));
+        const openEditRelationId = @json(session('open_edit_relation'));
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function humanizeRelationType(value) {
+            return String(value || '')
+                .replace(/_/g, ' ')
+                .replace(/\b\w/g, function(char) {
+                    return char.toUpperCase();
+                });
+        }
+
+        function populateRelatedMembers(currentMemberId, selectedMemberId = null) {
+            const select = document.getElementById('relatedMemberId');
+            if (!select) return;
+
+            select.innerHTML = '<option value="">Select member</option>';
+
+            familyMembersData.forEach(function(member) {
+                if (String(member.id) === String(currentMemberId)) {
+                    return;
+                }
+
+                const option = document.createElement('option');
+                option.value = member.id;
+                option.textContent = member.name;
+
+                if (selectedMemberId && String(selectedMemberId) === String(member.id)) {
+                    option.selected = true;
+                }
+
+                select.appendChild(option);
+            });
+        }
+
+        function openRelationModal(button, presetRelationType = null) {
+            const memberId = button.dataset.memberId;
+            const memberName = button.dataset.memberName;
+            const route = button.dataset.memberRoute;
+
+            const form = document.getElementById('relationForm');
+            const relationMemberName = document.getElementById('relationMemberName');
+            const relationType = document.getElementById('relationType');
+            const relationModalTitle = document.getElementById('relationModalTitle');
+            const relationSubmitBtn = document.getElementById('relationSubmitBtn');
+
+            if (form) {
+                form.action = route;
+                form.querySelector('input[name="_method"]')?.remove();
+            }
+
+            if (relationMemberName) {
+                relationMemberName.textContent = memberName;
+            }
+
+            if (relationModalTitle) {
+                relationModalTitle.textContent = 'Add Relation';
+            }
+
+            if (relationSubmitBtn) {
+                relationSubmitBtn.textContent = 'Save Relation';
+            }
+
+            populateRelatedMembers(memberId, oldRelationMemberId);
+
+            if (relationType) {
+                relationType.value = presetRelationType || oldRelationType || '';
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('relationModal'));
+            modal.show();
+        }
+
+        function openQuickRelationModal(button) {
+            openRelationModal(button, button.dataset.relationType || null);
+        }
+
+        function openRelationEditModal(relationId) {
+            const relation = relationsData.find(item => String(item.id) === String(relationId));
+            if (!relation) return;
+
+            bootstrap.Modal.getInstance(document.getElementById('relationManagerModal'))?.hide();
+
+            const form = document.getElementById('relationForm');
+            const relationMemberName = document.getElementById('relationMemberName');
+            const relationType = document.getElementById('relationType');
+            const relationModalTitle = document.getElementById('relationModalTitle');
+            const relationSubmitBtn = document.getElementById('relationSubmitBtn');
+
+            if (form) {
+                form.action = relation.update_route;
+
+                if (!form.querySelector('input[name="_method"]')) {
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'PUT';
+                    form.appendChild(methodInput);
+                } else {
+                    form.querySelector('input[name="_method"]').value = 'PUT';
+                }
+            }
+
+            if (relationMemberName) {
+                relationMemberName.textContent = relation.member_name;
+            }
+
+            if (relationModalTitle) {
+                relationModalTitle.textContent = 'Edit Relation';
+            }
+
+            if (relationSubmitBtn) {
+                relationSubmitBtn.textContent = 'Update Relation';
+            }
+
+            populateRelatedMembers(relation.member_id, relation.related_member_id);
+
+            if (relationType) {
+                relationType.value = relation.relation_type || '';
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('relationModal'));
+            modal.show();
+        }
+
+        function openRelationManager(button) {
+            const memberId = button.dataset.memberId;
+            const memberName = button.dataset.memberName;
+            const managerName = document.getElementById('relationManagerMemberName');
+            const managerList = document.getElementById('relationManagerList');
+
+            if (managerName) {
+                managerName.textContent = memberName;
+            }
+
+            const items = relationsByMember[String(memberId)] || [];
+
+            if (!items.length) {
+                managerList.innerHTML = '<div class="alert alert-light mb-0">No relations found for this member.</div>';
+            } else {
+                const rows = items.map(relation => `
+                    <tr>
+                        <td>${escapeHtml(humanizeRelationType(relation.relation_type))}</td>
+                        <td>${escapeHtml(relation.related_member_name)}</td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-outline-primary" onclick="openRelationEditModal(${relation.id})">
+                                    Edit
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" onclick="deleteRelation('${relation.destroy_route}')">
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+
+                managerList.innerHTML = `
+                    <table class="table table-sm align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Related Member</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                `;
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('relationManagerModal'));
+            modal.show();
+        }
+
+        function deleteRelation(actionUrl) {
+            if (!actionUrl) return;
+
+            if (!confirm('Are you sure you want to delete this relation?')) {
+                return;
+            }
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = actionUrl;
+
+            const tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = '_token';
+            tokenInput.value = csrfToken;
+            form.appendChild(tokenInput);
+
+            const methodInput = document.createElement('input');
+            methodInput.type = 'hidden';
+            methodInput.name = '_method';
+            methodInput.value = 'DELETE';
+            form.appendChild(methodInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(element) {
+                new bootstrap.Tooltip(element);
+            });
+
+            if (openRelationMemberId && relationMemberMap[openRelationMemberId]) {
+                openRelationModal({
+                    dataset: {
+                        memberId: openRelationMemberId,
+                        memberName: relationMemberMap[openRelationMemberId].name,
+                        memberRoute: relationMemberMap[openRelationMemberId].route,
+                    }
+                });
+            }
+
+            if (openEditRelationId) {
+                openRelationEditModal(openEditRelationId);
+            }
+        });
+    </script>
+@endpush

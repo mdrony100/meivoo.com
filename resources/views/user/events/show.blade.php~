@@ -1,0 +1,457 @@
+@extends('layouts.user')
+@section('title', $event->title . ' - Event Details')
+
+@push('styles')
+    <style>
+        .event-show-page {
+            padding: 20px;
+        }
+
+        .event-header-card {
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .event-cover-show {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+
+        .event-content {
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .event-title-show {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0 0 12px 0;
+            color: #1f2937;
+        }
+
+        .event-type-badge-show {
+            display: inline-block;
+            background: #f3f4f6;
+            color: #374151;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .event-meta-show {
+            display: flex;
+            gap: 24px;
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .event-description {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #4b5563;
+            margin-bottom: 24px;
+        }
+
+        .event-actions-show {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .btn-event-action {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-rsvp-going {
+            background: #10b981;
+            border: none;
+            color: #fff;
+        }
+
+        .btn-rsvp-going:hover {
+            background: #059669;
+        }
+
+        .btn-rsvp-maybe {
+            background: #f59e0b;
+            border: none;
+            color: #fff;
+        }
+
+        .btn-rsvp-maybe:hover {
+            background: #d97706;
+        }
+
+        .btn-rsvp-no {
+            background: #ef4444;
+            border: none;
+            color: #fff;
+        }
+
+        .btn-rsvp-no:hover {
+            background: #dc2626;
+        }
+
+        .attendances-section {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 24px;
+        }
+
+        .attendances-section h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0 0 16px 0;
+        }
+
+        .attendance-counts {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .attendance-count {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+
+        .count-badge {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .count-going { background: #10b981; color: #fff; }
+        .count-maybe { background: #f59e0b; color: #fff; }
+        .count-no { background: #ef4444; color: #fff; }
+
+        .attendance-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .attendance-group-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        .attendance-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .attendance-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            background: #f9fafb;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .attendance-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .attendance-avatar img {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .attendance-avatar initials {
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .no-attendees {
+            text-align: center;
+            padding: 24px;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .event-cover-show {
+                height: 200px;
+            }
+        }
+    </style>
+@endpush
+
+@section('content')
+    <main class="main-content">
+        <div class="event-show-page">
+            @if ($event->cover_image)
+                <img src="{{ asset($event->cover_image) }}" alt="{{ $event->title }}" class="event-cover-show">
+            @else
+                <div class="event-cover-show" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);"></div>
+            @endif
+
+            <div class="event-content">
+                <a href="{{ route('user.events') }}" class="btn btn-outline-primary btn-event-action mb-3">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Back
+                </a>
+                <h1 class="event-title-show">{{ $event->title }}</h1>
+
+                <span class="event-type-badge-show">
+                    {{ ucwords(str_replace('_', ' ', $event->type)) }}
+                </span>
+
+                <div class="event-meta-show">
+                    <span class="meta-item">
+                        <i class="fa-regular fa-calendar"></i>
+                        {{ $event->event_date->format('M d, Y \a\t g:i A') }}
+                    </span>
+                    @if ($event->location)
+                        <span class="meta-item">
+                            <i class="fa-solid fa-location-dot"></i>
+                            {{ $event->location }}
+                        </span>
+                    @endif
+                    @if ($event->creator && $event->creator->id !== auth()->id())
+                        <span class="meta-item">
+                            <i class="fa-solid fa-user"></i>
+                            Created by {{ $event->creator->name }}
+                        </span>
+                    @endif
+                </div>
+
+                @if ($event->description)
+                    <div class="event-description">
+                        {{ $event->description }}
+                    </div>
+                @endif
+
+                <div class="event-actions-show">
+                    @php
+                        $currentUserAttendance = $event->attendances->firstWhere('user_id', auth()->id());
+                        $currentUserStatus = $currentUserAttendance ? $currentUserAttendance->status : null;
+                    @endphp
+
+                    @if ($currentUserStatus)
+                        <span class="badge bg-light text-dark me-2">Your status:
+                            @if ($currentUserStatus === 'going')
+                                <span class="text-success"><i class="fa-solid fa-user-plus me-1"></i> Going</span>
+                            @elseif ($currentUserStatus === 'maybe')
+                                <span class="text-warning"><i class="fa-solid fa-question-circle me-1"></i> Maybe</span>
+                            @elseif ($currentUserStatus === 'no')
+                                <span class="text-danger"><i class="fa-solid fa-user-minus me-1"></i> No</span>
+                            @endif
+                        </span>
+                    @endif
+
+                    @if (Auth::id() !== $event->creator_user_id)
+                        <form action="{{ route('user.events.rsvp', $event->id) }}" method="POST" class="d-inline" onsubmit="return handleRsvp(event, 'going', '{{ $currentUserStatus === 'going' ? 'already' : '' }}')">
+                            @csrf
+                            <input type="hidden" name="status" value="going">
+                            <button type="submit" class="btn btn-rsvp-going btn-event-action {{ $currentUserStatus === 'going' ? 'disabled' : '' }}" {{ $currentUserStatus === 'going' ? 'disabled' : '' }}>
+                                <i class="fa-solid fa-user-plus me-1"></i> Going
+                            </button>
+                        </form>
+
+                        <form action="{{ route('user.events.rsvp', $event->id) }}" method="POST" class="d-inline" onsubmit="return handleRsvp(event, 'maybe', '{{ $currentUserStatus === 'maybe' ? 'already' : '' }}')">
+                            @csrf
+                            <input type="hidden" name="status" value="maybe">
+                            <button type="submit" class="btn btn-rsvp-maybe btn-event-action {{ $currentUserStatus === 'maybe' ? 'disabled' : '' }}" {{ $currentUserStatus === 'maybe' ? 'disabled' : '' }}>
+                                <i class="fa-solid fa-question-circle me-1"></i> Maybe
+                            </button>
+                        </form>
+
+                        <form action="{{ route('user.events.rsvp', $event->id) }}" method="POST" class="d-inline" onsubmit="return handleRsvp(event, 'no', '{{ $currentUserStatus === 'no' ? 'already' : '' }}')">
+                            @csrf
+                            <input type="hidden" name="status" value="no">
+                            <button type="submit" class="btn btn-rsvp-no btn-event-action {{ $currentUserStatus === 'no' ? 'disabled' : '' }}" {{ $currentUserStatus === 'no' ? 'disabled' : '' }}>
+                                <i class="fa-solid fa-user-minus me-1"></i> No
+                            </button>
+                        </form>
+                    @endif
+
+                    @if ($event->creator && $event->creator->id === auth()->id())
+                        <a href="{{ route('user.events.edit', $event->id) }}" class="btn btn-outline-secondary btn-event-action">
+                            <i class="fa-solid fa-pen me-1"></i> Edit
+                        </a>
+                        <form action="{{ route('user.events.destroy', $event->id) }}" method="POST" class="d-inline"
+                            onsubmit="return confirm('Are you sure you want to delete this event?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-outline-danger btn-event-action text-danger">
+                                <i class="fa-solid fa-trash me-1"></i> Delete
+                            </button>
+                        </form>
+                    @endif
+                </div>
+
+                    <div class="attendances-section">
+                        <h4 class="attendance-section-title">Who's Attending</h4>
+
+                        <div class="attendance-counts">
+                            <span class="attendance-count">
+                                <span class="count-badge count-going">{{ $event->attendances->where('status', 'going')->count() }}</span>
+                                <span>Going</span>
+                            </span>
+                            <span class="attendance-count">
+                                <span class="count-badge count-maybe">{{ $event->attendances->where('status', 'maybe')->count() }}</span>
+                                <span>Maybe</span>
+                            </span>
+                            <span class="attendance-count">
+                                <span class="count-badge count-no">{{ $event->attendances->where('status', 'no')->count() }}</span>
+                                <span>No</span>
+                            </span>
+                        </div>
+
+                        @php
+                            $goingUsers = $event->attendances->where('status', 'going');
+                            $maybeUsers = $event->attendances->where('status', 'maybe');
+                            $noUsers = $event->attendances->where('status', 'no');
+                        @endphp
+
+                        @if ($goingUsers->isNotEmpty())
+                            <h5 class="attendance-group-title">Going</h5>
+                            <div class="attendance-list">
+                                <div class="attendance-items">
+                                    @foreach ($goingUsers as $attendance)
+                                        <span class="attendance-user">
+                                            @if ($attendance->user->image)
+                                                <div class="attendance-avatar">
+                                                    <img src="{{ asset($attendance->user->image) }}" alt="{{ $attendance->user->name }}">
+                                                </div>
+                                            @else
+                                                <div class="attendance-avatar initials">
+                                                    {{ substr($attendance->user->name, 0, 1) }}
+                                                </div>
+                                            @endif
+                                            {{ $attendance->user->name }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($maybeUsers->isNotEmpty())
+                            <h5 class="attendance-group-title">Maybe</h5>
+                            <div class="attendance-list">
+                                <div class="attendance-items">
+                                    @foreach ($maybeUsers as $attendance)
+                                        <span class="attendance-user">
+                                            @if ($attendance->user->image)
+                                                <div class="attendance-avatar">
+                                                    <img src="{{ asset($attendance->user->image) }}" alt="{{ $attendance->user->name }}">
+                                                </div>
+                                            @else
+                                                <div class="attendance-avatar initials">
+                                                    {{ substr($attendance->user->name, 0, 1) }}
+                                                </div>
+                                            @endif
+                                            {{ $attendance->user->name }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($noUsers->isNotEmpty())
+                            <h5 class="attendance-group-title">Can't Attend</h5>
+                            <div class="attendance-list">
+                                <div class="attendance-items">
+                                    @foreach ($noUsers as $attendance)
+                                        <span class="attendance-user">
+                                            @if ($attendance->user->image)
+                                                <div class="attendance-avatar">
+                                                    <img src="{{ asset($attendance->user->image) }}" alt="{{ $attendance->user->name }}">
+                                                </div>
+                                            @else
+                                                <div class="attendance-avatar initials">
+                                                    {{ substr($attendance->user->name, 0, 1) }}
+                                                </div>
+                                            @endif
+                                            {{ $attendance->user->name }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($goingUsers->isEmpty() && $maybeUsers->isEmpty() && $noUsers->isEmpty())
+                            <div class="no-attendees">
+                                <i class="fa-solid fa-user-minus fa-2x mb-2 opacity-50"></i>
+                                <p>No one has responded yet.</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+@endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function handleRsvp(event, status, alreadySubmitted) {
+            if (alreadySubmitted === 'already') {
+                event.preventDefault();
+                Swal.fire({
+                    title: 'Already Submitted',
+                    text: 'You already submitted "' + status.charAt(0).toUpperCase() + status.slice(1) + '". Changing your RSVP will update your previous status.',
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#7c3aed',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonText: 'Yes, Change It'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        event.target.submit();
+                    }
+                });
+                return false;
+            }
+            return true;
+        }
+    </script>
+@endpush

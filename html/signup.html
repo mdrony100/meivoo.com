@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up || LegacyTree</title>
+  <meta name="description" content="Create your private family portal and start preserving your family heritage together.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="./assets/images/fab-icon.ico">
+  
+  <!-- Bootstrap v5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome v6 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  
+  <!-- AOS (Animate On Scroll) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+  <!-- Custom Styles -->
+  <link href="./assets/style.css" rel="stylesheet">
+</head>
+<body>
+
+  <div class="signup-page">
+    <main class="signup-shell">
+      <div class="container py-4 py-lg-5">
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-7 col-xl-6 col-xxl-5">
+            <div class="signup-header text-center mb-3 mb-md-4" data-aos="fade-up">
+              <a class="signup-brand justify-content-center mb-4 text-decoration-none" href="./index.html">
+                <span class="signup-brand-mark"><i class="fa-solid fa-tree"></i></span>
+                <span class="signup-brand-text">Family Legacy</span>
+              </a>
+
+              <h1 class="signup-title">Start Your Journey</h1>
+              <p class="signup-subtitle mt-2 mb-0">Join 50,000+ families preserving their heritage</p>
+            </div>
+
+            <div class="signup-card" data-aos="fade-up" data-aos-delay="80">
+              <div class="signup-card-body">
+                <form action="./dashboard" method="get">
+                  <div class="mb-3">
+                    <label for="signupName" class="form-label signup-form-label">Full Name</label>
+                    <input type="text" id="signupName" name="name" class="form-control signup-input" placeholder="Sarah Johnson" autocomplete="name">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="signupEmail" class="form-label signup-form-label">Email Address</label>
+                    <input type="email" id="signupEmail" name="email" class="form-control signup-input" placeholder="sarah@example.com" autocomplete="email">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="signupPassword" class="form-label signup-form-label">Password</label>
+                    <div class="signup-password-wrap">
+                      <input type="password" id="signupPassword" name="password" class="form-control signup-input" placeholder="Create a strong password" autocomplete="new-password">
+                      <button type="button" class="signup-password-toggle" data-password-toggle="signupPassword" aria-label="Toggle password visibility">
+                        <i class="fa-regular fa-eye"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="mb-0">
+                    <label for="signupConfirmPassword" class="form-label signup-form-label">Confirm Password</label>
+                    <div class="signup-password-wrap">
+                      <input type="password" id="signupConfirmPassword" name="confirm_password" class="form-control signup-input" placeholder="Repeat your password" autocomplete="new-password">
+                      <button type="button" class="signup-password-toggle" data-password-toggle="signupConfirmPassword" aria-label="Toggle confirm password visibility">
+                        <i class="fa-regular fa-eye"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="signup-footer-row d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center justify-content-between gap-3 mt-4">
+                    <div class="text-center text-sm-start">
+                      <!-- <p class="mb-0 text-muted small">Already have an account?</p> -->
+                      <a href="./login.html" class="mb-0 text-muted small">Already have an account?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-signup-primary px-4">
+                      Create Account
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+     SCRIPTS
+  ═══════════════════════════════════════════ -->
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <!-- Before/After Slider -->
+  <script src="./assets/plugin/jquery.event.move.js"></script>
+  <script src="./assets/plugin/jquery.twentytwenty.js"></script>
+  <!-- Bootstrap 5 -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- AOS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <!-- Custom JS -->
+  <script src="./assets/app.js"></script>
+  
+  <script>
+    document.querySelectorAll('[data-password-toggle]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var targetId = this.getAttribute('data-password-toggle');
+        var input = document.getElementById(targetId);
+        var icon = this.querySelector('i');
+        var isPassword = input.type === 'password';
+
+        input.type = isPassword ? 'text' : 'password';
+        icon.className = isPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,429 @@
+@extends('layouts.user')
+@section('title', 'Messages - Family Feed')
+@section('body_class', 'messages-page')
+@push('styles')
+    <style>
+        #messages-page {
+            display: flex;
+            height: calc(100vh - 60px);
+            position: relative;
+        }
+
+        #conv-sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            border-right: 1px solid #eee;
+            overflow-y: auto;
+        }
+
+        #chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .chat-back-btn {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        /* ---------- MOBILE ---------- */
+        @media (max-width:768px) {
+
+            #conv-sidebar {
+                display: block;
+            }
+
+            #chat-area {
+                display: none;
+            }
+
+            #messages-page #conv-sidebar {
+                display: block !important;
+            }
+
+            #messages-page.chat-open #conv-sidebar {
+                display: none !important;
+            }
+
+            #messages-page.chat-open #chat-area {
+                display: flex;
+            }
+        }
+    </style>
+@endpush
+
+@section('content')
+    <main class="main-content p-0">
+        <div id="messages-page" class="{{ Request::get('user') ? 'chat-open' : '' }}">
+            <div id="conv-sidebar">
+                <div class="conv-header">
+                    <h2>Family Members</h2>
+                    <div class="search-wrap">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input class="conv-search" type="search" placeholder="Search users..." id="conversationSearch">
+                    </div>
+                </div>
+
+                <div class="conv-list" id="conversationList">
+                    @forelse ($contacts as $contact)
+                        @php
+                            $contactInitials = collect(preg_split('/\s+/', trim($contact->name)) ?: [])
+                                ->filter()
+                                ->take(2)
+                                ->map(fn($part) => strtoupper(substr($part, 0, 1)))
+                                ->implode('');
+                        @endphp
+                        <a class="conv-item {{ $activeContact && $activeContact->id === $contact->id ? 'active' : '' }}"
+                            href="{{ route('user.messages', ['user' => $contact->id]) }}" data-conv-item
+                            data-search="{{ strtolower($contact->name . ' ' . ($contact->preview_text ?? '')) }}">
+                            <div class="conv-avatar">
+                                <div class="avatar-circle">
+                                    @if ($contact->image)
+                                        <img src="{{ asset($contact->image) }}" width="40" height="40"
+                                            class="rounded-pill" alt="">
+                                    @else
+                                        {{ $contactInitials }}
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="conv-meta">
+                                <div class="conv-row">
+                                    <p class="conv-name">{{ $contact->name }}</p>
+                                    <span
+                                        class="conv-time">{{ $contact->last_message_at?->diffForHumans() ?? 'Now' }}</span>
+                                </div>
+                                <p class="conv-preview">{{ $contact->preview_text ?? 'No messages yet' }}</p>
+                            </div>
+                            @if (($contact->unread_count ?? 0) > 0 && !($activeContact && $activeContact->id === $contact->id))
+                                <span class="unread-badge">{{ $contact->unread_count }}</span>
+                            @endif
+                        </a>
+                    @empty
+                        <div class="p-3">
+                            <div class="rounded-4 border bg-white p-3">
+                                <p class="mb-1 fw-semibold small">No family member found</p>
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+            @if (Request::get('user'))
+                <div id="chat-area">
+                    <div class="chat-header">
+                        <button class="chat-back-btn d-block d-lg-none" type="button" onclick="goBackToList()"
+                            title="Back to users">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+
+                        <div class="avatar-circle" id="chatAvatar">
+                            @if ($contact->image)
+                                <img src="{{ asset($contact->image) }}" width="40" height="40" class="rounded-pill"
+                                    alt="">
+                            @else
+                                {{ $contactInitials }}
+                            @endif
+                        </div>
+                        <div class="chat-header-info">
+                            <p class="chat-header-name" id="chatName">
+                                {{ $activeContact ? $activeContact->name : 'Messages' }}
+                            </p>
+                        </div>
+                    </div>
+
+                    @if ($activeContact)
+                        <div class="chat-messages" id="chatMessages"
+                            data-conversation-id="{{ $activeConversation?->id ?? '' }}"
+                            data-user-id="{{ $activeContact->id }}"
+                            data-last-message-id="{{ (int) ($activeMessages->last()->id ?? 0) }}">
+                            @forelse ($activeMessages as $message)
+                                @php
+                                    $isMine = (int) $message->sender_user_id === (int) auth()->id();
+                                    $senderName = $message->sender->name ?? 'User';
+                                    $senderInitials = collect(preg_split('/\s+/', trim($senderName)) ?: [])
+                                        ->filter()
+                                        ->take(2)
+                                        ->map(fn($part) => strtoupper(substr($part, 0, 1)))
+                                        ->implode('');
+                                @endphp
+
+                                <div class="msg-row {{ $isMine ? 'sent' : 'received' }}"
+                                    data-message-id="{{ $message->id }}">
+                                    @unless ($isMine)
+                                        <div class="avatar-circle sm flex-shrink-0"
+                                            style="align-self:flex-start;margin-top:4px;">
+                                            {{ $senderInitials ?: 'ME' }}
+                                        </div>
+                                    @endunless
+
+                                    <div class="msg-bubble-wrap">
+                                        @unless ($isMine)
+                                            <p class="msg-sender-name">
+                                                {{ $senderName }}
+                                            </p>
+                                        @endunless
+
+                                        <div class="msg-bubble">
+                                            @if ($message->body)
+                                                <p class="mb-2">{{ $message->body }}</p>
+                                            @endif
+
+                                            @if ($message->attachment_path)
+                                                @php
+                                                    $attachmentUrl = asset($message->attachment_path);
+                                                @endphp
+
+                                                @if ($message->message_type === 'image')
+                                                    <a href="{{ $attachmentUrl }}" target="_blank" rel="noopener">
+                                                        <img src="{{ $attachmentUrl }}" alt="Message attachment"
+                                                            style="max-width:100%;border-radius:12px;">
+                                                    </a>
+                                                @elseif ($message->message_type === 'voice')
+                                                    <audio controls style="width:100%;">
+                                                        <source src="{{ $attachmentUrl }}">
+                                                    </audio>
+                                                @else
+                                                    <a href="{{ $attachmentUrl }}" target="_blank" rel="noopener">
+                                                        <i class="fa-solid fa-paperclip me-1"></i> Download attachment
+                                                    </a>
+                                                @endif
+                                            @endif
+                                        </div>
+                                        <span class="msg-time">{{ $message->created_at->format('h:i A') }}</span>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="p-4 text-center text-muted" id="emptyConversationState">
+                                    <p class="mb-1 fw-semibold">No messages yet</p>
+                                    <p class="mb-0">Send a message to start this chat.</p>
+                                </div>
+                            @endforelse
+                        </div>
+
+                        <div class="chat-input-bar">
+                            <form class="w-100" action="{{ route('user.messages.store') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                @if ($activeConversation)
+                                    <input type="hidden" name="conversation_id" value="{{ $activeConversation->id }}">
+                                @endif
+                                <input type="hidden" name="recipient_user_id" value="{{ $activeContact->id }}">
+                                <div class="input-wrap">
+                                    <input class="chat-input" type="text" name="message" placeholder="Type a message..."
+                                        id="msgInput" value="{{ old('message') }}" required>
+                                    <button class="send-btn" type="submit" title="Send">
+                                        <i class="fa-solid fa-paper-plane" style="font-size:.8rem;"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    @else
+                        <div class="chat-messages d-flex align-items-center justify-content-center" id="chatMessages">
+                            <div class="text-center px-4">
+                                <div class="avatar-circle mx-auto mb-3">ME</div>
+                                <h3 class="h5 fw-semibold mb-2">Pick a user</h3>
+                                <p class="mb-0 text-muted">Choose a user from the left to view and send messages.</p>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            @else
+                <div class="chat-messages d-flex align-items-center justify-content-center" id="chatMessages">
+                    <div class="text-center px-4">
+                        <h3 class="h5 fw-semibold mb-2">Pick a user</h3>
+                        <p class="mb-0 text-muted">Choose a user from the left to view and send messages.</p>
+                    </div>
+                </div>
+            @endif
+
+        </div>
+    </main>
+@endsection
+
+@push('scripts')
+    <script>
+        (function() {
+            const pollUrl = "{{ route('user.messages.poll') }}";
+            const searchInput = document.getElementById('conversationSearch');
+            const items = Array.from(document.querySelectorAll('[data-conv-item]'));
+            const chatMessages = document.getElementById('chatMessages');
+            const readCountValue = document.getElementById('readCountValue');
+            const unreadCountValue = document.getElementById('unreadCountValue');
+            let isPolling = false;
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.trim().toLowerCase();
+                    items.forEach(function(item) {
+                        const text = (item.dataset.search || '').toLowerCase();
+                        item.style.display = text.includes(query) ? '' : 'none';
+                    });
+                });
+            }
+
+            // user list item click -> mobile e chat area open
+            // items.forEach(function(item) {
+            //     item.addEventListener('click', function() {
+            //         const messagesPage = document.getElementById('messages-page');
+            //         if (messagesPage) {
+            //             messagesPage.classList.add('chat-open');
+            //         }
+            //     });
+            // });
+
+            if (chatMessages) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function escapeHtml(value) {
+                return String(value ?? '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function renderAttachment(message) {
+                if (!message.attachment_url) {
+                    return '';
+                }
+
+                const url = escapeHtml(message.attachment_url);
+
+                if (message.message_type === 'image') {
+                    return `<a href="${url}" target="_blank" rel="noopener"><img src="${url}" alt="Message attachment" style="max-width:100%;border-radius:12px;"></a>`;
+                }
+
+                if (message.message_type === 'voice') {
+                    return `<audio controls style="width:100%;"><source src="${url}"></audio>`;
+                }
+
+                return `<a href="${url}" target="_blank" rel="noopener"><i class="fa-solid fa-paperclip me-1"></i> Download attachment</a>`;
+            }
+
+            function renderMessage(message) {
+                const rowClass = message.is_mine ? 'sent' : 'received';
+                const avatar = message.is_mine ?
+                    '' :
+                    `<div class="avatar-circle sm flex-shrink-0" style="align-self:flex-start;margin-top:4px;">${escapeHtml(message.sender_initials || 'ME')}</div>`;
+                const sender = message.is_mine ?
+                    '' :
+                    `<p class="msg-sender-name">${escapeHtml(message.sender_name || 'User')}</p>`;
+                const body = message.body ?
+                    `<p class="mb-2">${escapeHtml(message.body)}</p>` :
+                    '';
+
+                return `
+                    <div class="msg-row ${rowClass}" data-message-id="${message.id}">
+                        ${avatar}
+                        <div class="msg-bubble-wrap">
+                            ${sender}
+                            <div class="msg-bubble">
+                                ${body}
+                                ${renderAttachment(message)}
+                            </div>
+                            <span class="msg-time">${escapeHtml(message.time || '')}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            async function pollNewMessages() {
+                if (!chatMessages || isPolling) {
+                    return;
+                }
+
+                const userId = chatMessages.dataset.userId;
+
+                if (!userId) {
+                    return;
+                }
+
+                isPolling = true;
+
+                try {
+                    const sinceId = Number(chatMessages.dataset.lastMessageId || '0');
+                    const url =
+                        `${pollUrl}?user_id=${encodeURIComponent(userId)}&since_id=${encodeURIComponent(sinceId)}`;
+                    const response = await fetch(url, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                    });
+
+                    if (!response.ok) {
+                        return;
+                    }
+
+                    const payload = await response.json();
+                    const messages = Array.isArray(payload.messages) ? payload.messages : [];
+
+                    if (!messages.length) {
+                        return;
+                    }
+
+                    const emptyState = document.getElementById('emptyConversationState');
+
+                    if (emptyState) {
+                        emptyState.remove();
+                    }
+
+                    messages.forEach(function(message) {
+                        chatMessages.insertAdjacentHTML('beforeend', renderMessage(message));
+                    });
+
+                    chatMessages.dataset.lastMessageId = String(payload.latest_id || messages[messages.length - 1]
+                        .id || sinceId);
+
+                    if (payload.conversation_id) {
+                        chatMessages.dataset.conversationId = String(payload.conversation_id);
+                    }
+
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                    if (readCountValue && typeof payload.read_count !== 'undefined') {
+                        readCountValue.textContent = String(payload.read_count);
+                    }
+
+                    if (unreadCountValue && typeof payload.unread_count !== 'undefined') {
+                        unreadCountValue.textContent = String(payload.unread_count);
+                    }
+                } catch (error) {
+                    // Polling is best-effort; ignore transient fetch issues.
+                } finally {
+                    isPolling = false;
+                }
+            }
+
+            if (chatMessages && chatMessages.dataset.userId) {
+                setInterval(pollNewMessages, 3000);
+            }
+        })();
+
+        function goBackToList() {
+            $('#messages-page').removeClass('chat-open');
+
+            // optional
+            history.pushState({}, '', '{{ route('user.messages') }}');
+        }
+    </script>
+@endpush

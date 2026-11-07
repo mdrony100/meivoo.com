@@ -1,0 +1,342 @@
+@extends('layouts.user')
+@section('title', 'Edit Event - LegacyTree')
+
+@push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .event-form-page {
+            padding: 20px;
+        }
+
+        .flatpickr-input {
+            cursor: pointer;
+        }
+
+        .event-form-card {
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .event-form-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .event-form-body {
+            padding: 20px;
+        }
+
+        .btn-add-member {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--gradient-purple);
+            color: #fff;
+            font-size: .82rem;
+            font-weight: 600;
+            padding: 9px 18px;
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 4px 14px rgba(124, 58, 237, .25);
+            cursor: pointer;
+            font-family: var(--font-body);
+            transition: opacity .2s;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+
+        .btn-add-member:hover {
+            opacity: .9;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .form-section h6 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #374151;
+            margin: 0 0 12px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+
+        .form-control.is-invalid,
+        .form-select.is-invalid {
+            border-color: #ef4444;
+        }
+
+        .invalid-feedback {
+            display: block;
+            margin-top: 4px;
+        }
+
+        .textarea-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn-submit {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .type-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .type-option:hover {
+            background: #f9fafb;
+        }
+
+        .type-option.selected {
+            border-color: #7c3aed;
+            background: rgba(124, 58, 237, 0.05);
+        }
+
+        .type-option input[type="radio"] {
+            display: none;
+        }
+
+        .type-option label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .type-option .type-name {
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .type-option .type-desc {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cover-preview {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .event-form-card {
+                margin: 0;
+            }
+        }
+    </style>
+@endpush
+
+@section('content')
+    <main class="main-content">
+        <div class="event-form-page">
+            <div class="event-form-card">
+                <form action="{{ route('user.events.update', $event->id) }}" method="POST" enctype="multipart/form-data"
+                    id="eventForm">
+                    @csrf
+
+                    <div class="event-form-header">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                            <div>
+                                <h3 class="mb-0">
+                                    {{-- <i class="fa-solid fa-pen fa-lg"></i> --}}
+                                    Edit Event
+                                </h3>
+                            </div>
+                            <div>
+                                <a href="{{ route('user.events') }}" class="btn-add-member text-decoration-none">Back</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="event-form-body">
+                        <div class="form-section">
+                            <h6>Event Type *</h6>
+                            <select name="type" id="type" class="form-control @error('type') is-invalid @enderror"
+                                required>
+                                <option value="">Select event type</option>
+                                @foreach (App\Models\Event::getTypes() as $type)
+                                    <option value="{{ $type }}"
+                                        {{ old('type', $event->type) === $type ? 'selected' : '' }}>
+                                        {{ ucwords(str_replace('_', ' ', $type)) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('type')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-section">
+                            <h6>Event Details</h6>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label for="title">Event Title *</label>
+                                    <input type="text" class="form-control @error('title') is-invalid @enderror"
+                                        id="title" name="title" value="{{ $event->title ?? old('title') }}" required
+                                        maxlength="255" placeholder="Enter event title">
+                                    @error('title')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="event_date">Event Date *</label>
+                                    <input type="text"
+                                        class="form-control js-date-picker @error('event_date') is-invalid @enderror"
+                                        id="event_date" name="event_date"
+                                        value="{{ $event->event_date ? $event->event_date->format('Y-m-d H:i') : old('event_date') }}"
+                                        required>
+                                    @error('event_date')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="location">Location</label>
+                                    <input type="text" class="form-control @error('location') is-invalid @enderror"
+                                        id="location" name="location" value="{{ $event->location ?? old('location') }}"
+                                        maxlength="500" placeholder="Enter location (optional)">
+                                    @error('location')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h6>Description</h6>
+                            <textarea class="form-control textarea-control @error('description') is-invalid @enderror" id="description"
+                                name="description" maxlength="5000" placeholder="Add details about this event...">{{ $event->description ?? old('description') }}</textarea>
+                            @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <small class="text-muted">Add a description, agenda, or notes for this event.</small>
+                        </div>
+
+                        <div class="form-section">
+                            <h6>Cover Image</h6>
+                            @if ($event->cover_image)
+                                <img src="{{ asset($event->cover_image) }}" alt="Cover" class="cover-preview mb-2"
+                                    id="cover_preview">
+                            @endif
+                            <input type="file" class="d-none" id="cover_image_input" name="cover_image" accept="image/*"
+                                onchange="previewCoverImage()">
+                            <label for="cover_image_input" class="form-control"
+                                style="cursor: pointer; text-align: center;">
+                                <i class="fa-solid fa-plus-circle fa-2x mb-2"></i>
+                                <div>
+                                    {{ $event->cover_image ? 'Click to replace cover image' : 'Click to upload cover image' }}
+                                </div>
+                                <small class="text-muted">JPG, PNG, WEBP max 4MB</small>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="p-20 border-top">
+                        <button type="submit" class="btn btn-primary btn-submit w-100">
+                            <i class="fa-solid fa-floppy-disk me-2"></i>Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+@endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function previewCoverImage() {
+            const input = document.getElementById('cover_image_input');
+            let preview = document.getElementById('cover_preview');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    if (preview) {
+                        preview.src = e.target.result;
+                        preview.classList.remove('d-none');
+                    } else {
+                        preview = document.createElement('img');
+                        preview.src = e.target.result;
+                        preview.className = 'cover-preview mb-2';
+                        preview.id = 'cover_preview';
+                        document.querySelector('[for="cover_image_input"]').before(preview);
+                    }
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        document.getElementById('cover_image_input').addEventListener('change', previewCoverImage);
+
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            const typeSelect = document.getElementById('type');
+
+            if (!typeSelect || !typeSelect.value) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Please select an event type',
+                    icon: 'warning',
+                    confirmButtonColor: '#7c3aed'
+                });
+            }
+        });
+
+        if (window.flatpickr) {
+            flatpickr('#event_date', {
+                enableTime: true,
+                dateFormat: 'Y-m-d H:i',
+                time_24hr: true,
+                minDate: 'today'
+            });
+        }
+    </script>
+@endpush

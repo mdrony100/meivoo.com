@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Members - Family Feed</title>
+
+  <link rel="icon" type="image/x-icon" href="./assets/img/fab-icon.ico">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+  <link href="./assets/style.css" rel="stylesheet">
+</head>
+
+<body class="members-page">
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon"><i class="fa-solid fa-tree"></i></div>
+      <span class="sidebar-brand-text">Family Legacy</span>
+      <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Collapse">
+        <i class="fa-solid fa-chevron-left fa-sm"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item-custom" href="./index.html">
+        <i class="fa-solid fa-table-cells-large"></i>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item-custom" href="./family-tree.html">
+        <i class="fa-solid fa-code-branch"></i>
+        <span>Family Tree</span>
+      </a>
+      <a class="nav-item-custom" href="./feed.html">
+        <i class="fa-regular fa-newspaper"></i>
+        <span>Family Feed</span>
+      </a>
+      <a class="nav-item-custom active" href="./members.html">
+        <i class="fa-solid fa-users"></i>
+        <span>Family Members</span>
+      </a>
+      <a class="nav-item-custom" href="./messages.html">
+        <i class="fa-regular fa-comment-dots"></i>
+        <span>Messages</span>
+        <span class="nav-badge">3</span>
+      </a>
+      <a class="nav-item-custom" href="./notifications.html">
+        <i class="fa-regular fa-bell"></i>
+        <span>Notifications</span>
+        <span class="nav-badge">5</span>
+      </a>
+      <a class="nav-item-custom" href="./settings.html">
+        <i class="fa-solid fa-gear"></i>
+        <span>Profile Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-inner">
+        <div class="user-avatar"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson"></div>
+        <div style="flex:1;overflow:hidden;">
+          <p class="user-name">Sarah Johnson</p>
+          <p class="user-email">sarah@familylegacy.com</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-wrapper" id="mainWrapper">
+    <header class="topbar">
+      <button class="d-lg-none topbar-bell" id="sidebarToggle" style="color:#1a1a2e;">
+        <i class="fa-solid fa-bars fa-lg"></i>
+      </button>
+
+      <div class="topbar-search-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" class="topbar-search" placeholder="Search family members, memories...">
+      </div>
+
+      <div class="topbar-right">
+        <button class="btn-add-memory">
+          <i class="fa-solid fa-plus fa-sm"></i>
+          <span>Add Memory</span>
+        </button>
+        <a href="./notifications.html" class="topbar-bell text-decoration-none">
+            <i class="fa-regular fa-bell" style="font-size:18px;"></i>
+            <span class="bell-dot"></span>
+        </a>
+        <a href="./settings.html" class="topbar-avatar text-decoration-none"><img
+            src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson"></a>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div style="max-width:1200px;margin:0 auto;">
+        <!-- Feed col -->
+        <div class="row g-3 g-lg-4 justify-content-center">
+          <div class="col-lg-12">
+            <!-- Page header -->
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4" data-aos="fade-right"
+              data-aos-duration="400">
+              <div>
+                <h1 class="page-title">
+                  <i class="fa-solid fa-users fa-lg"></i>
+                  Family Members
+                </h1>
+                <p class="page-sub">12 members across 4 generations</p>
+              </div>
+              <button class="btn-add-member" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+                <i class="fa-solid fa-plus fa-sm"></i> Add Member
+              </button>
+            </div>
+
+            <!-- Filter bar -->
+            <div class="filter-bar" data-aos="fade-up" data-aos-duration="400" data-aos-delay="60">
+              <div class="filter-search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" class="filter-search" id="memberSearch" placeholder="Search members...">
+              </div>
+              <div class="gen-filter-btns">
+                <button class="gen-btn active" data-gen="all">All</button>
+                <button class="gen-btn" data-gen="gen1">Gen 1</button>
+                <button class="gen-btn" data-gen="gen2">Gen 2</button>
+                <button class="gen-btn" data-gen="gen3">Gen 3</button>
+                <button class="gen-btn" data-gen="gen4">Gen 4</button>
+              </div>
+            </div>
+
+            <!-- Members grid -->
+            <div class="row g-3" id="membersGrid">
+
+              <!-- Gen 1 -->
+              <div data-aos="fade-up" data-aos-delay="0" data-gen="gen1" class="col-6 col-sm-4 col-md-3 col-xl-2 member-item">
+                <a href="./member-full-profile.html" class="member-card-link">
+                  <div class="member-card">
+                    <div class="member-av-wrap">
+                      <div class="member-av violet">RJ</div>
+                    </div>
+                    <p class="member-name">Robert Johnson</p>
+                    <span class="member-role-badge violet">Grandfather</span>
+                    <p class="member-year">1942 â€“ 2019</p>
+                  </div>
+                </a>
+              </div>
+
+              <div data-aos="fade-up" data-aos-delay="40" data-gen="gen1" class="col-6 col-sm-4 col-md-3 col-xl-2 member-item">
+                <a href="./member-full-profile.html" class="member-card-link">
+                  <div class="member-card">
+                    <div class="member-av-wrap">
+                      <div class="member-av violet">DJ</div>
+                      <span class="online-dot"></span>
+                    </div>
+                    <p class="member-name">Dorothy Johnson</p>
+                    <span class="member-role-badge violet">Grandmother</span>
+                    <p class="member-year">1945</p>
+                  </div>
+                </a>
+              </div>
+
+              <!-- Gen 2 -->
+              <div data-aos="fade-up" data-aos-delay="80" data-gen="gen2" class="col-6 col-sm-4 col-md-3 col-xl-2 member-item">
+                <a href="./member-full-profile.html" class="member-card-link">
+                  <div class="member-card">
+                    <div class="member-av-wrap">
+                      <div class="member-av blue">SJ</div>
+                      <span class="online-dot"></span>
+                    </div>
+                    <p class="member-name">Sarah Johnson</p>
+                    <span class="member-role-badge blue">Mother</span>
+                    <p class="member-year">1968</p>
+                  </div>
+                </a>
+              </div>
+
+              <div data-aos="fade-up" data-aos-delay="120" data-gen="gen2" class="col-6 col-sm-4 col-md-3 col-xl-2 member-item">
+                <a href="./member-full-profile.html" class="member-card-link">
+                  <div class="member-card">
+                    <div class="member-av-wrap">
+                      <div class="member-av blue">MJ</div>
+                    </div>
+                    <p class="member-name">Michael Johnson</p>
+                    <span class="member-role-badge blue">Father</span>
+                    <p class="member-year">1965</p>
+                  </div>
+                </a>
+              </div>
+
+              <div data-aos="fade-up" data-aos-delay="160" data-gen="gen2" class="col-6 col-sm-4 col-md-3 col-xl-2 member-item">
+                <a href="./member-full-profile.html" class="member-card-link">
+                  <div class="member-card">
+                    <div class="member-av-wrap">
+                      <div class="member-av blue">JJ</div>
+                      <span class="online-dot"></span>
+                    </div>
+                    <p class="member-name">James Johnson</p>
+                    <span class="member-role-badge blue">Uncle</span>
+                    <p class="member-year">1971</p>
+                  </div>
+                </a>
+              </div>
+
+              <div data-aos="fade-up" data-aos-delay="200" data-gen="gen2" class="col-6 col-sm-4 col-md-3 col-xl-2 member-item">
+                <a href="./member-full-profile.html" class="member-card-link">
+                  <div class="member-card">
+                    <div class="member-av-wrap">
+                      <div class="member-av blue">LC</div>
+                    </div>
+                    <p class="member-name">Lisa Chen</p>
+                    <span class="member-role-badge blue">Aunt</span>
+                    <p class="member-year">1973</p>
+                  </div>
+                </a>
+              </div>
+
+              <!-- Gen 3 -->
+              <div data-aos="fade-up" data-aos-delay="0" data-gen="gen3" class="col-6 col-sm-4 col-md-3 col-xl-2 member-item">
+                <a href="./member-full-profile.html" class="member-card-link">
+                  <div class="member-card">
+                    <div class="member-av-wrap">
+                      <div class="member-av pink">EJ</div>
+                      <span class="online-dot"></span>
+                    </div>
+                    <p class="member-name">Emma Johnson</p>
+                    <span class="member-role-badge pink">Daughter</span>
+                    <p class="member-year">1995</p>
+                  </div>
+                </a>
+              </div>
+
+              <div data-aos="fade-up" data-aos-delay="40" data-gen="gen3" class="col-6 col-sm-4 col-md-3 col-xl-2 member-item">
+                <a href="./member-full-profile.html" class="member-card-link">
+                  <div class="member-card">
+                    <div class="member-av-wrap">
+                      <div class="member-av pink">LJ</div>
+                    </div>
+                    <p class="member-name">Liam Johnson</p>
+                    <span class="member-role-badge pink">Son</span>
+                    <p class="member-year">1998</p>
+                  </div>
+                </a>
+              </div>
+
+              <div data-aos="fade-up" data-aos-delay="80" data-gen="gen3" class="col-6 col-sm-4 col-md-3 col-xl-2 member-item">
+                <a href="./member-full-profile.html" class="member-card-link">
+                  <div class="member-card">
+                    <div class="member-av-wrap">
+                      <div class="member-av pink">OJ</div>
+                      <span class="online-dot"></span>
+                    </div>
+                    <p class="member-name">Olivia Johnson</p>
+                    <span class="member-role-badge pink">Niece</span>
+                    <p class="member-year">2000</p>
+                  </div>
+                </a>
+              </div>
+
+              <div data-aos="fade-up" data-aos-delay="120" data-gen="gen3" class="col-6 col-sm-4 col-md-3 col-xl-2 member-item">
+                <a href="./member-full-profile.html" class="member-card-link">
+                  <div class="member-card">
+                    <div class="member-av-wrap">
+                      <div class="member-av pink">NC</div>
+                    </div>
+                    <p class="member-name">Noah Chen</p>
+                    <span class="member-role-badge pink">Nephew</span>
+                    <p class="member-year">2002</p>
+                  </div>
+                </a>
+              </div>
+
+              <!-- Gen 4 -->
+              <div data-aos="fade-up" data-aos-delay="0" data-gen="gen4" class="col-6 col-sm-4 col-md-3 col-xl-2 member-item">
+                <a href="./member-full-profile.html" class="member-card-link">
+                  <div class="member-card">
+                    <div class="member-av-wrap">
+                      <div class="member-av amber">SJ</div>
+                    </div>
+                    <p class="member-name">Sophia Johnson</p>
+                    <span class="member-role-badge amber">Granddaughter</span>
+                    <p class="member-year">2018</p>
+                  </div>
+                </a>
+              </div>
+
+              <div data-aos="fade-up" data-aos-delay="40" data-gen="gen4" class="col-6 col-sm-4 col-md-3 col-xl-2 member-item">
+                <a href="./member-full-profile.html" class="member-card-link">
+                  <div class="member-card">
+                    <div class="member-av-wrap">
+                      <div class="member-av amber">EJ</div>
+                    </div>
+                    <p class="member-name">Ethan Johnson</p>
+                    <span class="member-role-badge amber">Grandson</span>
+                    <p class="member-year">2020</p>
+                  </div>
+                </a>
+              </div>
+
+              <!-- Empty search state -->
+              <div class="empty-search col-12" id="emptySearch">
+                <span class="es-emoji">ðŸ”</span>
+                <h3>No members found</h3>
+                <p>Try a different name or clear the filter</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══════════════════════════════════
+    ADD MEMBER MODAL
+  ═══════════════════════════════════ -->
+  <div class="tree-page">
+    <div class="modal fade" id="addMemberModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered" style="max-width:440px;">
+        <div class="modal-content" style="border-radius:18px;border:none;box-shadow:0 20px 60px rgba(0,0,0,0.14);">
+          <div class="modal-header" style="border-bottom:1px solid var(--border);padding:20px 24px 16px;">
+            <h5 class="modal-title fw-bold" style="font-family:var(--font-heading);font-size:1.15rem;">
+              <i class="fa-solid fa-user-plus me-2" style="color:var(--primary);font-size:16px;"></i>Add Family Member
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" style="padding:22px 24px;">
+            <div class="row g-3 mb-3">
+              <div class="col-12">
+                <label class="form-label-custom">Full Name *</label>
+                <input type="text" class="form-control-custom" placeholder="e.g. John Johnson" required>
+              </div>
+              <div class="col-6">
+                <label class="form-label-custom">Role *</label>
+                <input type="text" class="form-control-custom" placeholder="e.g. Father" required>
+              </div>
+              <div class="col-6">
+                <label class="form-label-custom">Generation *</label>
+                <select class="form-control-custom" required>
+                  <option>Select...</option>
+                  <option>Generation 1</option>
+                  <option>Generation 2</option>
+                  <option>Generation 3</option>
+                  <option>Generation 4</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label-custom">Birth Year *</label>
+                <input type="text" class="form-control-custom" placeholder="e.g. 1980" required>
+              </div>
+              <div class="col-6">
+                <label class="form-label-custom">Death Year </label>
+                <input type="text" class="form-control-custom" placeholder="e.g. 1980">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" style="border-top:1px solid var(--border);padding:14px 24px;gap:8px;">
+            <button type="button" class="modal-btn secondary" data-bs-dismiss="modal" style="flex:0 0 auto;padding:9px 18px;">Cancel</button>
+            <button type="button" class="modal-btn primary" style="flex:0 0 auto;padding:9px 22px;">
+              <i class="fa-solid fa-plus fa-sm"></i> Add Member
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="./assets/app.js"></script>
+</body>
+
+<script>
+  /*  Members page  */
+    if ($('.members-page').length) {
+        var activeGen = 'all';
+
+        function applyMemberFilters() {
+            var q = $('#memberSearch').val().toLowerCase().trim();
+            var visible = 0;
+
+            $('.member-item').each(function () {
+                var $item = $(this);
+                var genMatch = activeGen === 'all' || $item.data('gen') === activeGen;
+                var nameText = $.trim($item.find('.member-name').text()).toLowerCase();
+                var roleText = $.trim($item.find('.member-role-badge').text()).toLowerCase();
+                var nameMatch = !q || nameText.indexOf(q) !== -1 || roleText.indexOf(q) !== -1;
+
+                if (genMatch && nameMatch) {
+                    $item.show();
+                    visible++;
+                } else {
+                    $item.hide();
+                }
+            });
+
+            $('#emptySearch').toggleClass('show', visible === 0);
+        }
+
+        $(document).on('click', '.members-page .gen-btn', function () {
+            $('.members-page .gen-btn').removeClass('active');
+            $(this).addClass('active');
+            activeGen = $(this).data('gen');
+            applyMemberFilters();
+        });
+
+        $(document).on('input', '#memberSearch', applyMemberFilters);
+        applyMemberFilters();
+    }
+</script>
+</html>

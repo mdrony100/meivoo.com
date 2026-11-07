@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - Family Feed</title>
+
+    <link rel="icon" type="image/x-icon" href="./assets/img/fab-icon.ico">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <link href="./assets/style.css" rel="stylesheet">
+
+    <style>
+    </style>
+</head>
+
+<body class="messages-page">
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="sidebar-brand-icon"><i class="fa-solid fa-tree"></i></div>
+            <span class="sidebar-brand-text">Family Legacy</span>
+            <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Collapse">
+                <i class="fa-solid fa-chevron-left fa-sm"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a class="nav-item-custom" href="./index.html">
+                <i class="fa-solid fa-table-cells-large"></i>
+                <span>Dashboard</span>
+            </a>
+            <a class="nav-item-custom" href="./family-tree.html">
+                <i class="fa-solid fa-code-branch"></i>
+                <span>Family Tree</span>
+            </a>
+            <a class="nav-item-custom" href="./feed.html">
+                <i class="fa-regular fa-newspaper"></i>
+                <span>Family Feed</span>
+            </a>
+            <a class="nav-item-custom" href="./members.html">
+                <i class="fa-solid fa-users"></i>
+                <span>Family Members</span>
+            </a>
+            <a class="nav-item-custom active" href="./messages.html">
+                <i class="fa-regular fa-comment-dots"></i>
+                <span>Messages</span>
+                <span class="nav-badge">3</span>
+            </a>
+            <a class="nav-item-custom" href="./notifications.html">
+                <i class="fa-regular fa-bell"></i>
+                <span>Notifications</span>
+                <span class="nav-badge">5</span>
+            </a>
+            <a class="nav-item-custom" href="./settings.html">
+                <i class="fa-solid fa-gear"></i>
+                <span>Profile Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-user">
+            <div class="sidebar-user-inner">
+                <div class="user-avatar"><img src="https://randomuser.me/api/portraits/women/44.jpg"
+                        alt="Sarah Johnson"></div>
+                <div style="flex:1;overflow:hidden;">
+                    <p class="user-name">Sarah Johnson</p>
+                    <p class="user-email">sarah@familylegacy.com</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main-wrapper" id="mainWrapper">
+        <header class="topbar">
+            <button class="d-lg-none topbar-bell" id="sidebarToggle" style="color:#1a1a2e;">
+                <i class="fa-solid fa-bars fa-lg"></i>
+            </button>
+
+            <div class="topbar-search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" class="topbar-search" placeholder="Search family members, memories...">
+            </div>
+
+            <div class="topbar-right">
+                <button class="btn-add-memory">
+                    <i class="fa-solid fa-plus fa-sm"></i>
+                    <span>Add Memory</span>
+                </button>
+                <a href="./notifications.html" class="topbar-bell text-decoration-none">
+                    <i class="fa-regular fa-bell" style="font-size:18px;"></i>
+                    <span class="bell-dot"></span>
+                </a>
+                <a href="./settings.html" class="topbar-avatar text-decoration-none"><img
+                        src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson"></a>
+            </div>
+        </header>
+
+        <main class="main-content p-0">
+            <div id="messages-page">
+
+                <!-- ══ LEFT: Conversation Sidebar ══ -->
+                <div id="conv-sidebar">
+                    <div class="conv-header">
+                        <h2>Messages</h2>
+                        <div class="search-wrap">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input class="conv-search" type="search" placeholder="Search conversations...">
+                        </div>
+                    </div>
+
+                    <div class="conv-list">
+
+                        <!-- Johnson Family Group -->
+                        <button class="conv-item" onclick="selectConv(this,'Johnson Family Group','JFG',false)">
+                            <div class="conv-avatar">
+                                <div class="avatar-circle">JF</div>
+                                <span class="online-badge"><i class="fa-solid fa-message"></i></span>
+                            </div>
+                            <div class="conv-meta">
+                                <div class="conv-row">
+                                    <p class="conv-name">Johnson Family Group</p>
+                                    <span class="conv-time">2m</span>
+                                </div>
+                                <p class="conv-preview">Did anyone find the old album?</p>
+                            </div>
+                            <span class="unread-badge">3</span>
+                        </button>
+
+                        <!-- Emma Johnson -->
+                        <button class="conv-item" onclick="selectConv(this,'Emma Johnson','EJ',true)">
+                            <div class="conv-avatar">
+                                <div class="avatar-circle">EJ</div>
+                            </div>
+                            <div class="conv-meta">
+                                <div class="conv-row">
+                                    <p class="conv-name">Emma Johnson</p>
+                                    <span class="conv-time">15m</span>
+                                </div>
+                                <p class="conv-preview">Yes! I scanned it last night 📸</p>
+                            </div>
+                        </button>
+
+                        <!-- Liam & Sarah -->
+                        <button class="conv-item" onclick="selectConv(this,'Liam &amp; Sarah','L&amp;S',false)">
+                            <div class="conv-avatar">
+                                <div class="avatar-circle">L&amp;</div>
+                                <span class="online-badge"><i class="fa-solid fa-message"></i></span>
+                            </div>
+                            <div class="conv-meta">
+                                <div class="conv-row">
+                                    <p class="conv-name">Liam &amp; Sarah</p>
+                                    <span class="conv-time">1h</span>
+                                </div>
+                                <p class="conv-preview">Looking forward to the reunion!</p>
+                            </div>
+                            <span class="unread-badge">1</span>
+                        </button>
+
+                        <!-- Dorothy Johnson -->
+                        <button class="conv-item" onclick="selectConv(this,'Dorothy Johnson','DJ',false)">
+                            <div class="conv-avatar">
+                                <div class="avatar-circle">DJ</div>
+                            </div>
+                            <div class="conv-meta">
+                                <div class="conv-row">
+                                    <p class="conv-name">Dorothy Johnson</p>
+                                    <span class="conv-time">3h</span>
+                                </div>
+                                <p class="conv-preview">I recorded another story for you 🎙️</p>
+                            </div>
+                        </button>
+
+                        <!-- James Johnson — default active -->
+                        <button class="conv-item active" onclick="selectConv(this,'James Johnson','JJ',true)">
+                            <div class="conv-avatar">
+                                <div class="avatar-circle">JJ</div>
+                            </div>
+                            <div class="conv-meta">
+                                <div class="conv-row">
+                                    <p class="conv-name">James Johnson</p>
+                                    <span class="conv-time">1d</span>
+                                </div>
+                                <p class="conv-preview">Found some documents in the attic</p>
+                            </div>
+                        </button>
+
+                    </div><!-- /conv-list -->
+                </div><!-- /conv-sidebar -->
+
+                <!-- ══ RIGHT: Chat Area ══ -->
+                <div id="chat-area">
+                    <div class="chat-header">
+                        <!-- Back button (mobile only) -->
+                        <button class="chat-back-btn" onclick="goBackToList()" title="Back to conversations">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+
+                        <div class="avatar-circle" id="chatAvatar">JJ</div>
+                        <div class="chat-header-info">
+                            <p class="chat-header-name" id="chatName">James Johnson</p>
+                            <p class="chat-header-status" id="chatStatus">Online</p>
+                        </div>
+                        <div class="d-flex align-items-center gap-1">
+                            <button class="chat-action-btn" title="Voice call"><i
+                                    class="fa-solid fa-phone"></i></button>
+                            <button class="chat-action-btn" title="Video call"><i
+                                    class="fa-solid fa-video"></i></button>
+                            <button class="chat-action-btn" title="More options"><i
+                                    class="fa-solid fa-ellipsis"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="msg-row received">
+                            <div class="avatar-circle sm flex-shrink-0" style="align-self:flex-start;margin-top:4px;">EJ
+                            </div>
+                            <div class="msg-bubble-wrap">
+                                <p class="msg-sender-name">Emma Johnson</p>
+                                <div class="msg-bubble">Hey Mom! Did you see the photo I uploaded?</div>
+                                <span class="msg-time">10:22 AM</span>
+                            </div>
+                        </div>
+
+                        <div class="msg-row sent">
+                            <div class="msg-bubble-wrap">
+                                <div class="msg-bubble">Yes!! It's absolutely beautiful! Where did you find it?</div>
+                                <span class="msg-time">10:24 AM</span>
+                            </div>
+                        </div>
+
+                        <div class="msg-row received">
+                            <div class="avatar-circle sm flex-shrink-0" style="align-self:flex-start;margin-top:4px;">EJ
+                            </div>
+                            <div class="msg-bubble-wrap">
+                                <p class="msg-sender-name">Emma Johnson</p>
+                                <div class="msg-bubble">I was going through Grandpa's old boxes and found a whole stack!
+                                    📦</div>
+                                <span class="msg-time">10:25 AM</span>
+                            </div>
+                        </div>
+
+                        <div class="msg-row sent">
+                            <div class="msg-bubble-wrap">
+                                <div class="msg-bubble">Oh my goodness. Can you bring them to the reunion? We should
+                                    scan them all!</div>
+                                <span class="msg-time">10:27 AM</span>
+                            </div>
+                        </div>
+
+                        <div class="msg-row received">
+                            <div class="avatar-circle sm flex-shrink-0" style="align-self:flex-start;margin-top:4px;">EJ
+                            </div>
+                            <div class="msg-bubble-wrap">
+                                <p class="msg-sender-name">Emma Johnson</p>
+                                <div class="msg-bubble">Absolutely! I was thinking the same thing 💕</div>
+                                <span class="msg-time">10:28 AM</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-bar">
+                        <div class="input-wrap">
+                            <button class="input-icon-btn" title="Emoji"><i
+                                    class="fa-regular fa-face-smile"></i></button>
+                            <input class="chat-input" type="text" placeholder="Type a message..." id="msgInput"
+                                onkeydown="handleEnter(event)">
+                            <button class="input-icon-btn" title="Attach file"><i
+                                    class="fa-solid fa-paperclip"></i></button>
+                            <button class="send-btn" onclick="sendMessage()" title="Send">
+                                <i class="fa-solid fa-paper-plane" style="font-size:.8rem;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <script src="./assets/app.js"></script>
+    <script>
+        const isMobile = () => window.innerWidth < 768;
+
+        /* ── Select conversation ── */
+        function selectConv(btn, name, initials, online) {
+            // Mark active
+            document.querySelectorAll('.conv-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Remove unread badge
+            const badge = btn.querySelector('.unread-badge');
+            if (badge) badge.remove();
+
+            // Update chat header
+            document.getElementById('chatName').textContent = name;
+            document.getElementById('chatAvatar').textContent = initials;
+            const statusEl = document.getElementById('chatStatus');
+            statusEl.textContent = online ? 'Online' : 'Last seen recently';
+            statusEl.style.color = online ? 'var(--accent)' : 'var(--muted)';
+
+            // Mobile: slide to chat
+            if (isMobile()) {
+                document.getElementById('conv-sidebar').classList.add('mobile-hidden');
+                document.getElementById('chat-area').classList.add('mobile-visible');
+                // scroll to bottom
+                setTimeout(() => {
+                    const msgs = document.getElementById('chatMessages');
+                    msgs.scrollTop = msgs.scrollHeight;
+                }, 300);
+            }
+        }
+
+        /* ── Back to list (mobile) ── */
+        function goBackToList() {
+            document.getElementById('conv-sidebar').classList.remove('mobile-hidden');
+            document.getElementById('chat-area').classList.remove('mobile-visible');
+        }
+
+        /* ── Auto-scroll on load ── */
+        window.addEventListener('load', () => {
+            document.getElementById('chatMessages').scrollTop = 9999;
+        });
+    </script>
+</body>
+
+</html>

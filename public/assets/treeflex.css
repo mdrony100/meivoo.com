@@ -1,0 +1,1140 @@
+.tf-tree {
+    font-size: 16px;
+    overflow: auto
+}
+
+.tf-tree * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0
+}
+
+.tf-tree ul {
+    display: inline-flex
+}
+
+.tf-tree li {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 0 1em;
+    position: relative
+}
+
+.tf-tree li ul {
+    margin: 2em 0;
+}
+
+.tf-tree li li:before {
+    border-top: .0625em solid #000;
+    content: "";
+    display: block;
+    height: .0625em;
+    left: -.03125em;
+    position: absolute;
+    top: -1.03125em;
+    width: 100%
+}
+
+.tf-tree li li:first-child:before {
+    left: calc(50% - .03125em);
+    max-width: calc(50% + .0625em)
+}
+
+.tf-tree li li:last-child:before {
+    left: auto;
+    max-width: calc(50% + .0625em);
+    right: calc(50% - .03125em)
+}
+
+.tf-tree li li:only-child:before {
+    display: none
+}
+
+.tf-tree li li:only-child>.tf-nc:before,
+.tf-tree li li:only-child>.tf-node-content:before {
+    height: 1.0625em;
+    top: -1.0625em
+}
+
+.tf-tree .tf-nc,
+.tf-tree .tf-node-content {
+    border: .0625em solid #000;
+    display: inline-block;
+    padding: .5em 1em;
+    position: relative
+}
+
+.tf-tree .tf-nc:before,
+.tf-tree .tf-node-content:before {
+    top: -1.03125em
+}
+
+.tf-tree .tf-nc:after,
+.tf-tree .tf-nc:before,
+.tf-tree .tf-node-content:after,
+.tf-tree .tf-node-content:before {
+    border-left: .0625em solid #000;
+    content: "";
+    display: block;
+    height: 1em;
+    left: calc(50% - .03125em);
+    position: absolute;
+    width: .0625em
+}
+
+.tf-tree .tf-nc:after,
+.tf-tree .tf-node-content:after {
+    top: calc(100% + .03125em)
+}
+
+.tf-tree .tf-nc:only-child:after,
+.tf-tree .tf-node-content:only-child:after,
+.tf-tree>ul>li>.tf-nc:before,
+.tf-tree>ul>li>.tf-node-content:before {
+    display: none
+}
+
+.tf-tree.tf-gap-sm li {
+    padding: 0 .6em
+}
+
+.tf-tree.tf-gap-sm li>.tf-nc:before,
+.tf-tree.tf-gap-sm li>.tf-node-content:before {
+    height: .6em;
+    top: -.6em
+}
+
+.tf-tree.tf-gap-sm li>.tf-nc:after,
+.tf-tree.tf-gap-sm li>.tf-node-content:after {
+    height: .6em
+}
+
+.tf-tree.tf-gap-sm li ul {
+    margin: 1.2em 0
+}
+
+.tf-tree.tf-gap-sm li li:before {
+    top: -.63125em
+}
+
+.tf-tree.tf-gap-sm li li:only-child>.tf-nc:before,
+.tf-tree.tf-gap-sm li li:only-child>.tf-node-content:before {
+    height: .6625em;
+    top: -.6625em
+}
+
+.tf-tree.tf-gap-lg li {
+    padding: 0 1.5em
+}
+
+.tf-tree.tf-gap-lg li>.tf-nc:before,
+.tf-tree.tf-gap-lg li>.tf-node-content:before {
+    height: 1.5em;
+    top: -1.5em
+}
+
+.tf-tree.tf-gap-lg li>.tf-nc:after,
+.tf-tree.tf-gap-lg li>.tf-node-content:after {
+    height: 1.5em
+}
+
+.tf-tree.tf-gap-lg li ul {
+    margin: 3em 0
+}
+
+.tf-tree.tf-gap-lg li li:before {
+    top: -1.53125em
+}
+
+.tf-tree.tf-gap-lg li li:only-child>.tf-nc:before,
+.tf-tree.tf-gap-lg li li:only-child>.tf-node-content:before {
+    height: 1.5625em;
+    top: -1.5625em
+}
+
+.tf-tree li.tf-dotted-children .tf-nc:after,
+.tf-tree li.tf-dotted-children .tf-nc:before,
+.tf-tree li.tf-dotted-children .tf-node-content:after,
+.tf-tree li.tf-dotted-children .tf-node-content:before {
+    border-left-style: dotted
+}
+
+.tf-tree li.tf-dotted-children li:before {
+    border-top-style: dotted
+}
+
+.tf-tree li.tf-dotted-children>.tf-nc:before,
+.tf-tree li.tf-dotted-children>.tf-node-content:before {
+    border-left-style: solid
+}
+
+.tf-tree li.tf-dashed-children .tf-nc:after,
+.tf-tree li.tf-dashed-children .tf-nc:before,
+.tf-tree li.tf-dashed-children .tf-node-content:after,
+.tf-tree li.tf-dashed-children .tf-node-content:before {
+    border-left-style: dashed
+}
+
+.tf-tree li.tf-dashed-children li:before {
+    border-top-style: dashed
+}
+
+.tf-tree li.tf-dashed-children>.tf-nc:before,
+.tf-tree li.tf-dashed-children>.tf-node-content:before {
+    border-left-style: solid
+}
+
+
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none !important;
+}
+
+li {
+    list-style: none !important;
+}
+
+.tf-tree .tf-nc:after,
+.tf-tree .tf-nc:before,
+.tf-tree .tf-node-content:after,
+.tf-tree .tf-node-content:before {
+    border-left: .0625em solid #d7d7d7;
+}
+
+.tf-tree li li:before {
+    border-top: .0625em solid #d7d7d7;
+}
+
+
+.tf-tree .tf-nc,
+.tf-tree .tf-node-content,
+.tf-tree .tf-nc,
+.tf-tree .tf-node-content {
+
+    border: .0625em solid #d7d7d7 !important;
+}
+
+.tf-tree .tf-nc,
+.tf-tree .tf-node-content {
+
+    border: 0 !important;
+}
+
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --dark-color: #2c3e50;
+    --danger-color: #e74c3c;
+    --bg-color: #f0f2f5;
+}
+
+body {
+    font-family: "Inter", serif;
+    background-color: #F8F7F4;
+    margin: 0;
+    user-select: none;
+    overflow-x: auto;
+    min-height: 100vh;
+}
+
+/* RTL specific */
+body[dir="rtl"] {
+    font-family: "Playfair Display", serif;
+}
+
+body[dir="rtl"] .tf-tree {
+    direction: ltr;
+}
+
+body[dir="rtl"] .offcanvas-header .btn-close {
+    margin-right: auto;
+    margin-left: initial;
+}
+
+.lang-toggle-btn,
+.float-btn,
+.show-legend-btn,
+.legend-toggle-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.lang-toggle-btn:hover,
+.float-btn:hover,
+.show-legend-btn:hover,
+.legend-toggle-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+}
+
+.lang-toggle-btn i {
+    font-size: 1.1em;
+}
+
+
+#tree-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: auto;
+    padding: 20px;
+}
+
+#tree-container {
+    position: relative;
+    width: 100%;
+    /* min-height: 100vh; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.top-controls {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+body[dir="rtl"] .top-controls {
+    left: auto;
+    right: 20px;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.tf-tree ul {
+    position: relative;
+    padding-top: 0;
+}
+
+.tf-tree li {
+    float: left;
+    text-align: center;
+    list-style-type: none;
+    position: relative;
+    padding: 0 10px;
+}
+
+.tf-tree .tf-nc {
+    padding: 0;
+}
+
+
+.husband-multiple-wives {
+    display: flex;
+    /* align-items: center; */
+    justify-content: center;
+    position: relative;
+    min-width: 300px;
+    background: white;
+    border-radius: 0;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 12px !important;
+}
+
+.wife-in-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    /* background: white; */
+    position: relative;
+}
+
+.husband-in-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    /* background: white; */
+    position: relative;
+}
+
+.couple-card-shared,
+.single-card {
+    background-color: #ffffff;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 0;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s;
+    position: relative;
+    min-width: max-content;
+    border-radius: 12px;
+}
+
+.couple-card-shared.group-clickable {
+    background: #fffaea;
+}
+
+.husband-multiple-wives.group-clickable {
+    background: #fffaea;
+}
+
+/* Couple card specific */
+.couple-card-shared {
+    display: flex;
+    /* align-items: center; */
+    gap: 5px;
+    min-height: 80px;
+    position: relative;
+    z-index: 99;
+}
+
+/* .couple-card-shared .person {
+                                                                                                                                                                                            position: relative;
+                                                                                                                                                                                        } */
+
+body[dir="rtl"] .couple-card-shared {
+    flex-direction: row-reverse;
+}
+
+.single-card {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width: 120px;
+}
+
+.couple-marriage-connector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    min-width: 30px;
+    height: 30px;
+    position: relative;
+    margin-top: 14px;
+    border-radius: 50px;
+}
+
+.multiple-wives-connector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    min-width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    margin-top: 17px;
+    border-radius: 50px;
+}
+
+.profile-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.profile-info {
+    text-align: center;
+    margin-top: 8px;
+    white-space: nowrap;
+}
+
+.profile-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 2px;
+    line-height: 1.2;
+    display: block;
+    cursor: pointer;
+    transition: color 0.2s;
+    max-width: 140px;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.profile-name:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.age-range {
+    font-size: 10px;
+    color: #7d7d7d;
+    display: block;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    line-height: 2px;
+    margin-top: 8px
+}
+
+.view-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--primary-color);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s ease-out;
+    cursor: pointer;
+    border: none;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+body[dir="rtl"] .view-btn {
+    right: auto;
+    left: -8px;
+}
+
+.couple-card-shared:hover .view-btn,
+.single-card:hover .view-btn,
+.husband-multiple-wives:hover .view-btn {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.view-btn:hover {
+    background: var(--dark-color);
+    transform: scale(1.1) !important;
+}
+
+
+body[dir="rtl"] .modal .btn-close {
+    position: absolute;
+    left: 20px;
+}
+
+.member-modal .modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-bottom: 0;
+    padding: 1.5rem;
+}
+
+body[dir="rtl"] .member-modal .modal-header {
+    text-align: right;
+}
+
+.member-modal .modal-content {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: none;
+}
+
+.member-modal .modal-body {
+    padding: 2rem;
+}
+
+.modal-profile-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    background: white;
+    position: relative;
+    z-index: 2;
+}
+
+.member-stats {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 10px;
+    padding: 0.8rem;
+    max-width: fit-content;
+}
+
+.stat-item {
+    padding: 10px;
+    text-align: left !important;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-top: 0;
+    line-height: 1;
+}
+
+#modal-status::after {
+    content: ' →';
+}
+
+.member-bio {
+    background: #f8f9fa;
+    border-left: 4px solid #3498db;
+    padding: 1.2rem;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    line-height: 1.6;
+    text-align: left;
+}
+
+body[dir="rtl"] .member-bio {
+    border-left: none;
+    border-right: 4px solid #3498db;
+    border-radius: 8px 0 0 8px;
+    text-align: right;
+}
+
+.relation-badge {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Marital status colors */
+.marital-current {
+    color: #27ae60;
+}
+
+.marital-divorced {
+    color: #e74c3c;
+}
+
+.marital-deceased {
+    color: #7f8c8d;
+}
+
+/* ========================= ========================= */
+.legend-container {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 1000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body[dir="rtl"] .legend-container {
+    left: auto;
+    right: 30px;
+}
+
+.legend-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    width: 350px;
+    max-height: 500px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e0e0e0;
+}
+
+.legend-card.hidden {
+    display: none !important;
+}
+
+.show-legend-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 1000;
+}
+
+body[dir="rtl"] .show-legend-btn {
+    left: auto;
+    right: 30px;
+}
+
+.show-legend-btn.hidden {
+    display: none;
+}
+
+/* Legend header */
+.legend-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.legend-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.legend-close {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 5px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.legend-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Legend body */
+.legend-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+    max-height: 400px;
+}
+
+.legend-section {
+    margin-bottom: 20px;
+}
+
+.legend-section:last-child {
+    margin-bottom: 0;
+}
+
+.legend-subtitle {
+    color: #2c3e50;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Legend items */
+.legend-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.legend-item:hover {
+    background-color: #f8f9fa;
+}
+
+.legend-item:last-child {
+    margin-bottom: 0;
+}
+
+.legend-emoji {
+    font-size: 1.5rem;
+    min-width: 40px;
+    text-align: center;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.legend-icon {
+    font-size: 1.2rem;
+    color: #3498db;
+    min-width: 40px;
+    text-align: center;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body[dir="rtl"] .legend-emoji,
+body[dir="rtl"] .legend-icon {
+    margin-right: 0;
+    margin-left: 12px;
+}
+
+.legend-content {
+    flex: 1;
+}
+
+.legend-label {
+    color: #2c3e50;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.legend-desc {
+    color: #7f8c8d;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+body[dir="rtl"] .legend-desc {
+    text-align: right;
+}
+
+/* Legend footer */
+.legend-footer {
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.legend-toggle-btn {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body[dir="rtl"] .legend-toggle-btn i {
+    margin-right: 0 !important;
+    margin-left: 5px;
+}
+
+/* =========================
+                                                                                                                                                                                                                                                                                                                               RESPONSIVE ADJUSTMENTS
+                                                                                                                                                                                                                                                                                                                            ========================= */
+@media (max-width: 768px) {
+
+    .legend-container,
+    .show-legend-btn {
+        left: 15px;
+        bottom: 15px;
+    }
+
+    body[dir="rtl"] .legend-container,
+    body[dir="rtl"] .show-legend-btn {
+        right: 15px;
+    }
+
+    .legend-card {
+        width: 300px;
+        max-height: 450px;
+    }
+
+    .show-legend-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .legend-card {
+        width: 280px;
+    }
+
+    .legend-body {
+        padding: 15px;
+    }
+}
+
+
+.main-child {}
+
+
+
+/* For husband in multiple wives layout */
+.husband-in-group.main-child::after {
+    top: -5px;
+    right: -5px;
+}
+
+/* For person in couple card */
+.couple-card-shared .person.male.main-child::after,
+.couple-card-shared .person.female.main-child::after {
+    top: -5px;
+    right: -5px;
+}
+
+body[dir="rtl"] .couple-card-shared .person.male.main-child::after,
+body[dir="rtl"] .couple-card-shared .person.female.main-child::after {
+    right: auto;
+    left: -5px;
+}
+
+
+/* View Next Generation Button */
+.btn-view-next-gen {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin: 20px auto;
+    display: block;
+}
+
+.btn-view-next-gen:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+    color: white;
+}
+
+/* Focus member highlight */
+.focus-member {
+    border: 3px solid #3498db !important;
+    box-shadow: 0 0 20px rgba(52, 152, 219, 0.3) !important;
+}
+
+/* Warning message */
+.warning-message {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e74c3c;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    z-index: 2000;
+    animation: fadeInOut 3s ease-in-out;
+    box-shadow: 0 5px 20px rgba(231, 76, 60, 0.3);
+    font-weight: 600;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+
+    10% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+}
+
+/* Next generation button container */
+.next-gen-container {
+    text-align: center;
+    margin: 30px 0;
+    width: 100%;
+}
+
+/* Loading indicator */
+.loading-indicator {
+    text-align: center;
+    padding: 20px;
+    color: #3498db;
+    font-weight: 600;
+}
+
+/* Clickable name */
+.profile-name.clickable {
+    color: #000000;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.profile-name.clickable:hover {
+    text-decoration: underline;
+}
+
+/* Group clickable area */
+.group-clickable {
+    cursor: all-scroll;
+}
+
+.profession {
+    font-size: 12px;
+    font-weight: 500;
+    color: #7d7d7d;
+}
+
+
+/* Default connector style */
+.multiple-wives-connector {
+    font-size: 24px;
+    color: #000;
+}
+
+/* If any wife has Present, highlight the connector */
+.wife-in-group .age-range {
+    position: relative;
+}
+
+/* Add icon overlay when present */
+.wife-in-group .age-range::after {
+    content: "💞";
+    position: absolute;
+    right: -40px;
+    top: -5px;
+    display: none;
+}
+
+/* show only when present */
+.wife-in-group .age-range:after {
+    display: none;
+}
+
+.wife-in-group .age-range:contains("Present")::after {
+    display: block;
+}
+
+.main-badge {
+    position: absolute;
+    top: -7px;
+    left: -2px;
+    right: 0;
+    background: #fff;
+    width: 25px;
+    height: 25px;
+    border-radius: 50px;
+    border: 1px solid #ddd;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #202020;
+}
+
+.warning-message {
+    z-index: 99999;
+}
+
+@media screen and (max-width:575px) {
+    .warning-message {
+        font-size: 13px;
+        width: 84%;
+        margin: auto;
+    }
+}
+
+#tree-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 100svh;
+}
+
+#family-tree {
+    min-width: max-content;
+    cursor: grab;
+    padding: 20px;
+    text-align: center;
+    height: 100svh;
+}
+
+.main-wrapper {   
+    padding-top: 64px;
+    overflow-x: auto !important;
+    height: 100px;
+}
+
+.tree-children.collapsed {
+    display: none;
+}
+
+.toggle-btn {
+    cursor: pointer;
+    margin-left: 6px;
+    font-size: 14px;
+    color: #0d6efd;
+}
+
+.person {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.famous_false ul {
+    display: none;
+}
+
+.view-children-btn {
+    width: 62px;
+    position: absolute;
+    bottom: -61px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: none;
+    z-index: 1;
+    padding: 10px 0px;
+    margin: auto;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.single-card button.view-btn {
+    top: 4px;
+    right: 13px;
+}
+
+#pageLoader {
+    position: fixed;
+    inset: 0;
+    background: rgb(255 255 255 / 83%);
+    font-weight: bold;
+    z-index: 9999;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-badge img {
+    width: 100%;
+    border-radius: 50px;
+}

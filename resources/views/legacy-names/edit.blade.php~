@@ -1,0 +1,82 @@
+@extends('layouts.user')
+@section('title', 'Edit Legacy Name - LegacyTree')
+
+@push('styles')
+    <style>
+        .legacy-form-page { padding: 20px; }
+        .legacy-form-card { border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .legacy-form-header { padding: 20px; border-bottom: 1px solid #e5e7eb; }
+        .legacy-form-body { padding: 20px; }
+        .form-section { margin-bottom: 20px; }
+        .form-section h6 { font-size: 0.9rem; font-weight: 600; color: #374151; margin: 0 0 12px 0; }
+        .form-control { border-radius: 8px; padding: 10px 14px; border: 1px solid #d1d5db; }
+        .btn-submit { background: #7c3aed; border: none; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+        .btn-submit:hover { background: #6d28d9; }
+    </style>
+@endpush
+
+@section('content')
+    <main class="main-content">
+        <div class="legacy-form-page">
+            <div class="legacy-form-card">
+                <form action="{{ route('user.legacy-names.update', $legacyName) }}" method="POST">
+                    @csrf
+                    <div class="legacy-form-header">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+                            <h3 class="page-title mb-0"><i class="fa-solid fa-pen fa-lg"></i> Edit Legacy Name</h3>
+                            <a href="{{ route('user.legacy-names.show', $legacyName) }}" class="btn btn-outline-secondary btn-event-action">
+                                <i class="fa-solid fa-arrow-left me-1"></i> Back
+                            </a>
+                        </div>
+                    </div>
+                    <div class="legacy-form-body">
+                        <div class="form-section">
+                            <h6>Name</h6>
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                value="{{ $legacyName->name ?? old('name') }}" required maxlength="255">
+                            @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="form-section">
+                            <h6>Name Meaning</h6>
+                            <textarea name="meaning" class="form-control @error('meaning') is-invalid @enderror"
+                                maxlength="1000" placeholder="What does this name mean?">{{ $legacyName->meaning ?? old('meaning') }}</textarea>
+                            @error('meaning')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="form-section">
+                            <h6>Story Behind the Name</h6>
+                            <textarea name="story_behind_the_name" class="form-control @error('story_behind_the_name') is-invalid @enderror"
+                                maxlength="3000" placeholder="Share the story or history behind this name...">{{ $legacyName->story_behind_the_name ?? old('story_behind_the_name') }}</textarea>
+                            @error('story_behind_the_name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="form-section">
+                            <h6>Who Gave This Name</h6>
+                            <input type="text" name="who_gave_this_name" class="form-control @error('who_gave_this_name') is-invalid @enderror"
+                                value="{{ $legacyName->who_gave_this_name ?? old('who_gave_this_name') }}" maxlength="255">
+                            @error('who_gave_this_name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="form-section">
+                            <h6>Family Generation</h6>
+                            <select name="family_generation" class="form-control @error('family_generation') is-invalid @enderror">
+                                <option value="">Select generation</option>
+                                <option value="Grandparent" {{ ($legacyName->family_generation ?? old('family_generation')) === 'Grandparent' ? 'selected' : '' }}>Grandparent</option>
+                                <option value="Parent" {{ ($legacyName->family_generation ?? old('family_generation')) === 'Parent' ? 'selected' : '' }}>Parent</option>
+                                <option value="Elder" {{ ($legacyName->family_generation ?? old('family_generation')) === 'Elder' ? 'selected' : '' }}>Elder</option>
+                            </select>
+                            @error('family_generation')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="p-20 border-top">
+                            <button type="submit" class="btn btn-primary btn-submit w-100">
+                                <i class="fa-solid fa-floppy-disk me-2"></i>Save Legacy Name
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+@endsection

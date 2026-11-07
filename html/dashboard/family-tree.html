@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegacyTree - Family Tree</title>
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <!-- AOS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="./assets/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="tree-page">
+      <!-- Sidebar Overlay -->
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- ═══════════════════════════════════
+        SIDEBAR
+      ═══════════════════════════════════ -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+          <div class="sidebar-brand-icon"><i class="fa-solid fa-tree"></i></div>
+          <span class="brand-text">Family Legacy</span>
+          <button class="sidebar-collapse-btn" id="sidebarCollapseBtn">
+            <i class="fa-solid fa-chevron-left fa-sm"></i>
+          </button>
+        </div>
+        <nav class="sidebar-nav">
+          <a class="nav-item-custom" href="./index.html"><i
+              class="fa-solid fa-table-cells-large"></i><span>Dashboard</span></a>
+          <a class="nav-item-custom active" href="./family-tree.html"><i class="fa-solid fa-code-branch"></i><span>Family
+              Tree</span></a>
+          <a class="nav-item-custom" href="./feed.html"><i class="fa-regular fa-newspaper"></i><span>Family Feed</span></a>
+          <a class="nav-item-custom" href="./members.html"><i class="fa-solid fa-users"></i><span>Family Members</span></a>
+          <a class="nav-item-custom" href="./messages.html"><i
+              class="fa-regular fa-comment-dots"></i><span>Messages</span><span class="nav-badge">3</span></a>
+          <a class="nav-item-custom" href="./notifications.html"><i
+              class="fa-regular fa-bell"></i><span>Notifications</span><span class="nav-badge">5</span></a>
+          <a class="nav-item-custom" href="./settings.html"><i class="fa-solid fa-gear"></i><span>Profile
+              Settings</span></a>
+        </nav>
+        <div class="sidebar-user">
+          <div class="sidebar-user-inner">
+            <div class="user-avatar">SJ</div>
+            <div style="flex:1;overflow:hidden;">
+              <p class="user-name">Sarah Johnson</p>
+              <p class="user-email">sarah@familylegacy.com</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ═══════════════════════════════════
+        MAIN WRAPPER
+      ═══════════════════════════════════ -->
+      <div class="main-wrapper" id="mainWrapper">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+          <button class="d-lg-none topbar-bell" id="sidebarToggle" style="color:#1a1a2e;">
+            <i class="fa-solid fa-bars fa-lg"></i>
+          </button>
+          <div class="topbar-search-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" class="topbar-search" placeholder="Search family members, memories...">
+          </div>
+          <div class="topbar-right">
+            <button class="btn-add-memory">
+              <i class="fa-solid fa-plus fa-sm"></i>
+              <span>Add Memory</span>
+            </button>
+            <a href="./notifications.html" class="topbar-bell text-decoration-none">
+                <i class="fa-regular fa-bell" style="font-size:18px;"></i>
+                <span class="bell-dot"></span>
+            </a>
+            <a href="./settings.html" class="topbar-avatar text-decoration-none">SJ</a>
+          </div>
+        </header>
+
+        <!-- PAGE HEADER -->
+        <div class="page-header" data-aos="fade-down" data-aos-duration="400">
+          <div>
+            <h1 class="page-title">
+              <i class="fa-solid fa-code-branch"></i>
+              Family Tree
+            </h1>
+            <p class="page-sub">12 members across 4 generations</p>
+          </div>
+          <div class="header-actions">
+            <div class="header-search-wrap">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" class="header-search" id="memberSearch" placeholder="Search members...">
+            </div>
+            <button class="btn-add-member" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+              <i class="fa-solid fa-plus fa-sm"></i> Add Member
+            </button>
+          </div>
+        </div>
+
+        <!-- TREE CANVAS -->
+        <div class="tree-canvas-wrap" id="treeCanvasWrap">
+          <div class="tree-inner" id="treeInner">
+
+            <!-- ── GENERATION 1 ── -->
+            <div class="gen-row">
+              <div class="nodes-row">
+                <div class="node-col" data-aos="zoom-in" data-aos-delay="0" role="button" tabindex="0"
+                  aria-controls="memberOffcanvas" data-bs-toggle="offcanvas" data-bs-target="#memberOffcanvas">
+                  <div class="member-card gen-1">
+                    <div class="member-av gen-1">
+                      <img src="https://randomuser.me/api/portraits/men/21.jpg" alt="Robert Johnson">
+                    </div>
+                    <p class="member-name">Robert Johnson</p>
+                    <p class="member-year">1942 – 2019</p>
+                    <span class="member-role gen-1">Grandfather</span>
+                  </div>
+                </div>
+                <div class="node-col" data-aos="zoom-in" data-aos-delay="80" role="button" tabindex="0"
+                  aria-controls="memberOffcanvas" data-bs-toggle="offcanvas" data-bs-target="#memberOffcanvas">
+                  <div class="member-card gen-1">
+                    <div class="member-av gen-1">
+                      <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Dorothy Johnson">
+                      <span class="online-dot"></span>
+                    </div>
+                    <p class="member-name">Dorothy Johnson</p>
+                    <p class="member-year">1945</p>
+                    <span class="member-role gen-1">Grandmother</span>
+                  </div>
+                </div>
+              </div>
+              <div class="gen-badge-row"><span class="gen-badge gen-1">Generation 1</span></div>
+            </div>
+
+            <!-- Connector G1→G2 -->
+            <div class="gen-row">
+              <div class="v-line-down"></div>
+              <div class="h-bar-wrap">
+                <div class="h-bar" style="width:544px;"></div>
+              </div>
+            </div>
+
+            <!-- ── GENERATION 2 ── -->
+            <div class="gen-row">
+              <div class="nodes-row">
+                <div class="node-col" data-aos="zoom-in" data-aos-delay="0" role="button" tabindex="0"
+                  aria-controls="memberOffcanvas" data-bs-toggle="offcanvas" data-bs-target="#memberOffcanvas">
+                  <div class="v-stub"></div>
+                  <div class="member-card gen-2">
+                    <div class="member-av gen-2">
+                      <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson">
+                      <span class="online-dot"></span>
+                    </div>
+                    <p class="member-name">Sarah Johnson</p>
+                    <p class="member-year">1968</p>
+                    <span class="member-role gen-2">Mother</span>
+                  </div>
+                </div>
+                <div class="node-col" data-aos="zoom-in" data-aos-delay="70" role="button" tabindex="0"
+                  aria-controls="memberOffcanvas" data-bs-toggle="offcanvas" data-bs-target="#memberOffcanvas">
+                  <div class="v-stub"></div>
+                  <div class="member-card gen-2">
+                    <div class="member-av gen-2"><img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Michael Johnson"></div>
+                    <p class="member-name">Michael Johnson</p>
+                    <p class="member-year">1965</p>
+                    <span class="member-role gen-2">Father</span>
+                  </div>
+                </div>
+                <div class="node-col" data-aos="zoom-in" data-aos-delay="140" role="button" tabindex="0"
+                  aria-controls="memberOffcanvas" data-bs-toggle="offcanvas" data-bs-target="#memberOffcanvas">
+                  <div class="v-stub"></div>
+                  <div class="member-card gen-2">
+                    <div class="member-av gen-2">
+                      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="James Johnson">
+                      <span class="online-dot"></span>
+                    </div>
+                    <p class="member-name">James Johnson</p>
+                    <p class="member-year">1971</p>
+                    <span class="member-role gen-2">Uncle</span>
+                  </div>
+                </div>
+                <div class="node-col" data-aos="zoom-in" data-aos-delay="210" role="button" tabindex="0"
+                  aria-controls="memberOffcanvas" data-bs-toggle="offcanvas" data-bs-target="#memberOffcanvas">
+                  <div class="v-stub"></div>
+                  <div class="member-card gen-2">
+                    <div class="member-av gen-2"><i class="fa-solid fa-user"></i></div>
+                    <p class="member-name">Lisa Chen</p>
+                    <p class="member-year">1973</p>
+                    <span class="member-role gen-2">Aunt</span>
+                  </div>
+                </div>
+              </div>
+              <div class="gen-badge-row"><span class="gen-badge gen-2">Generation 2</span></div>
+            </div>
+
+            <!-- Connector G2→G3 -->
+            <div class="gen-row">
+              <div class="v-line-down"></div>
+              <div class="h-bar-wrap">
+                <div class="h-bar" style="width:544px;"></div>
+              </div>
+            </div>
+
+            <!-- ── GENERATION 3 ── -->
+            <div class="gen-row">
+              <div class="nodes-row">
+                <div class="node-col" data-aos="zoom-in" data-aos-delay="0" role="button" tabindex="0"
+                  aria-controls="memberOffcanvas" data-bs-toggle="offcanvas" data-bs-target="#memberOffcanvas">
+                  <div class="v-stub"></div>
+                  <div class="member-card gen-3">
+                    <div class="member-av gen-3">
+                      <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma Johnson">
+                      <span class="online-dot"></span>
+                    </div>
+                    <p class="member-name">Emma Johnson</p>
+                    <p class="member-year">1995</p>
+                    <span class="member-role gen-3">Daughter</span>
+                  </div>
+                </div>
+                <div class="node-col" data-aos="zoom-in" data-aos-delay="70" role="button" tabindex="0"
+                  aria-controls="memberOffcanvas" data-bs-toggle="offcanvas" data-bs-target="#memberOffcanvas">
+                  <div class="v-stub"></div>
+                  <div class="member-card gen-3">
+                    <div class="member-av gen-3"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Liam Johnson"></div>
+                    <p class="member-name">Liam Johnson</p>
+                    <p class="member-year">1998</p>
+                    <span class="member-role gen-3">Son</span>
+                  </div>
+                </div>
+                <div class="node-col" data-aos="zoom-in" data-aos-delay="140" role="button" tabindex="0"
+                  aria-controls="memberOffcanvas" data-bs-toggle="offcanvas" data-bs-target="#memberOffcanvas">
+                  <div class="v-stub"></div>
+                  <div class="member-card gen-3">
+                    <div class="member-av gen-3">
+                      <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Olivia Johnson">
+                      <span class="online-dot"></span>
+                    </div>
+                    <p class="member-name">Olivia Johnson</p>
+                    <p class="member-year">2000</p>
+                    <span class="member-role gen-3">Niece</span>
+                  </div>
+                </div>
+                <div class="node-col" data-aos="zoom-in" data-aos-delay="210" role="button" tabindex="0"
+                  aria-controls="memberOffcanvas" data-bs-toggle="offcanvas" data-bs-target="#memberOffcanvas">
+                  <div class="v-stub"></div>
+                  <div class="member-card gen-3">
+                    <div class="member-av gen-3"><img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Noah Chen"></div>
+                    <p class="member-name">Noah Chen</p>
+                    <p class="member-year">2002</p>
+                    <span class="member-role gen-3">Nephew</span>
+                  </div>
+                </div>
+              </div>
+              <div class="gen-badge-row"><span class="gen-badge gen-3">Generation 3</span></div>
+            </div>
+
+            <!-- Connector G3→G4 -->
+            <div class="gen-row">
+              <div class="v-line-down"></div>
+              <div class="h-bar-wrap">
+                <div class="h-bar" style="width:272px;"></div>
+              </div>
+            </div>
+
+            <!-- ── GENERATION 4 ── -->
+            <div class="gen-row">
+              <div class="nodes-row">
+                <div class="node-col" data-aos="zoom-in" data-aos-delay="0" role="button" tabindex="0"
+                  aria-controls="memberOffcanvas" data-bs-toggle="offcanvas" data-bs-target="#memberOffcanvas">
+                  <div class="v-stub"></div>
+                  <div class="member-card gen-4">
+                    <div class="member-av gen-4"><img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Sophia Johnson"></div>
+                    <p class="member-name">Sophia Johnson</p>
+                    <p class="member-year">2018</p>
+                    <span class="member-role gen-4">Granddaughter</span>
+                  </div>
+                </div>
+                <div class="node-col" data-aos="zoom-in" data-aos-delay="80" role="button" tabindex="0"
+                  aria-controls="memberOffcanvas" data-bs-toggle="offcanvas" data-bs-target="#memberOffcanvas">
+                  <div class="v-stub"></div>
+                  <div class="member-card gen-4">
+                    <div class="member-av gen-4"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Ethan Johnson"></div>
+                    <p class="member-name">Ethan Johnson</p>
+                    <p class="member-year">2020</p>
+                    <span class="member-role gen-4">Grandson</span>
+                  </div>
+                </div>
+              </div>
+              <div class="gen-badge-row"><span class="gen-badge gen-4">Generation 4</span></div>
+            </div>
+          </div><!-- /tree-inner -->
+
+          <!-- Legend -->
+           <!-- data-aos="fade-up" data-aos-delay="300" -->
+          <div class="tree-legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#7c3aed;"></div> Gen 1 – Grandparents
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#3b82f6;"></div> Gen 2 – Parents
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#f472b6;"></div> Gen 3 – Children
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#f59e0b;"></div> Gen 4 – Grandchildren
+            </div>
+          </div>
+        </div><!-- /tree-canvas-wrap -->
+      </div><!-- /main-wrapper -->
+
+      <!-- ═══════════════════════════════════
+        MEMBER DETAIL OFFCANVAS
+      ═══════════════════════════════════ -->
+      <div class="offcanvas offcanvas-end member-offcanvas" tabindex="-1" id="memberOffcanvas" style="width:320px;">
+        <div class="offcanvas-header">
+          <h6 class="offcanvas-title fw-bold" style="font-family:var(--font-heading);">Family Profile</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body gen-1">
+          <div class="basic-info  text-center mb-2">
+            <div class="modal-av">
+              <img src="https://randomuser.me/api/portraits/men/21.jpg" alt="Robert Johnson" class="img-fluid">
+            </div>
+            <p class="modal-name">Robert Johnson</p>
+            <span class="modal-role-badge">Grandfather</span>
+          </div>
+
+          <div class="modal-info-rows">
+            <div class="modal-info-row">
+              <div class="d-flex justify-content-between align-items-center w-100">
+                <p class="modal-info-label">Born</p>
+                <p class="modal-info-val">1942</p>
+              </div>
+            </div>
+            <div class="modal-info-row">
+              <div class="d-flex justify-content-between align-items-center w-100">
+                <p class="modal-info-label">Passed</p>
+                <p class="modal-info-val">2019</p>
+              </div>
+            </div>
+            <div class="modal-info-row">
+              <div class="d-flex justify-content-between align-items-center w-100">
+                <p class="modal-info-label">Generation</p>
+                <p class="modal-info-val">1</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-actions border-top pt-4 mt-4 d-flex justify-content-center gap-3">
+            <a href="./member-full-profile.html" class="modal-btn primary text-decoration-none"><i class="fa-solid fa-user"></i> Full Profile</a>
+            <button class="modal-btn secondary" data-bs-toggle="modal" data-bs-target="#editMemberModal"><i class="fa-solid fa-user-pen"></i> Edit Profile</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+        ADD MEMBER MODAL
+      ═══════════════════════════════════ -->
+      <div class="modal fade" id="addMemberModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" style="max-width:440px;">
+          <div class="modal-content" style="border-radius:18px;border:none;box-shadow:0 20px 60px rgba(0,0,0,0.14);">
+            <div class="modal-header" style="border-bottom:1px solid var(--border);padding:20px 24px 16px;">
+              <h5 class="modal-title fw-bold" style="font-family:var(--font-heading);font-size:1.15rem;">
+                <i class="fa-solid fa-user-plus me-2" style="color:var(--primary);font-size:16px;"></i>Add Family Member
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="padding:22px 24px;">
+              <div class="row g-3 mb-3">
+                <div class="col-12">
+                  <label class="form-label-custom">Full Name *</label>
+                  <input type="text" class="form-control-custom" placeholder="e.g. John Johnson" required>
+                </div>
+                <div class="col-6">
+                  <label class="form-label-custom">Role *</label>
+                  <input type="text" class="form-control-custom" placeholder="e.g. Father" required>
+                </div>
+                <div class="col-6">
+                  <label class="form-label-custom">Generation *</label>
+                  <select class="form-control-custom" required>
+                    <option>Select...</option>
+                    <option>Generation 1</option>
+                    <option>Generation 2</option>
+                    <option>Generation 3</option>
+                    <option>Generation 4</option>
+                  </select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label-custom">Birth Year *</label>
+                  <input type="text" class="form-control-custom" placeholder="e.g. 1980" required>
+                </div>
+                <div class="col-6">
+                  <label class="form-label-custom">Death Year </label>
+                  <input type="text" class="form-control-custom" placeholder="e.g. 1980">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" style="border-top:1px solid var(--border);padding:14px 24px;gap:8px;">
+              <button type="button" class="modal-btn secondary" data-bs-dismiss="modal" style="flex:0 0 auto;padding:9px 18px;">Cancel</button>
+              <button type="button" class="modal-btn primary" style="flex:0 0 auto;padding:9px 22px;">
+                <i class="fa-solid fa-plus fa-sm"></i> Add Member
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════
+        EDIT MEMBER MODAL
+      ═══════════════════════════════════ -->
+      <div class="modal fade" id="editMemberModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" style="max-width:440px;">
+          <div class="modal-content" style="border-radius:18px;border:none;box-shadow:0 20px 60px rgba(0,0,0,0.14);">
+            <div class="modal-header" style="border-bottom:1px solid var(--border);padding:20px 24px 16px;">
+              <h5 class="modal-title fw-bold" style="font-family:var(--font-heading);font-size:1.15rem;">
+                <i class="fa-solid fa-user-edit me-2" style="color:var(--primary);font-size:16px;"></i>Edit Family Member
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="padding:22px 24px;">
+              <div class="row g-3 mb-3">
+                <div class="col-12">
+                  <label class="form-label-custom">Full Name *</label>
+                  <input type="text" class="form-control-custom" placeholder="e.g. John Johnson" value="Robert Johnson" required>
+                </div>
+                <div class="col-6">
+                  <label class="form-label-custom">Role *</label>
+                  <input type="text" class="form-control-custom" placeholder="e.g. Father" value="Grandfather" required>
+                </div>
+                <div class="col-6">
+                  <label class="form-label-custom">Generation *</label>
+                  <select class="form-control-custom" required>
+                    <option>Select...</option>
+                    <option selected>Generation 1</option>
+                    <option>Generation 2</option>
+                    <option>Generation 3</option>
+                    <option>Generation 4</option>
+                  </select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label-custom">Birth Year *</label>
+                  <input type="text" class="form-control-custom" placeholder="e.g. 1980" value="1980" required>
+                </div>
+                <div class="col-6">
+                  <label class="form-label-custom">Death Year </label>
+                  <input type="text" class="form-control-custom" placeholder="e.g. 1980" value="1980">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" style="border-top:1px solid var(--border);padding:14px 24px;gap:8px;">
+              <button type="button" class="modal-btn secondary" data-bs-dismiss="modal" style="flex:0 0 auto;padding:9px 18px;">Cancel</button>
+              <button type="button" class="modal-btn primary" style="flex:0 0 auto;padding:9px 22px;">
+                <i class="fa-solid fa-save fa-sm"></i> Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+     SCRIPTS
+  ═══════════════════════════════════ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="./assets/app.js"></script>
+
+</body>
+
+</html>

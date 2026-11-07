@@ -1,0 +1,1521 @@
+@extends('layouts.user')
+@section('title', 'LegacyTree - Family Feed')
+
+@section('meta')
+    <meta property="og:title" content="{{ $settings->seo_meta_title }}">
+    <meta property="og:description" content="{{ $settings->seo_meta_description }}">
+    <meta name="description" content="{{ $settings->seo_meta_description }}">
+    <meta name="keywords" content="{{ $settings->seo_keywords }}">
+@endsection
+
+@push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/css/lightgallery-bundle.min.css">
+    <style>
+        .reply-form-wrapper {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease-in-out;
+            visibility: hidden;
+        }
+
+        .reply-form-wrapper.is-open {
+            max-height: 100px;
+            opacity: 1;
+            visibility: visible;
+            margin-top: 10px;
+        }
+
+        .recording-panel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.10), rgba(248, 113, 113, 0.08));
+            border: 1px solid rgba(220, 38, 38, 0.16);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+        }
+
+        .recording-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .recording-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #dc2626;
+            color: #fff;
+            flex: 0 0 auto;
+            box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.35);
+            animation: pulseRed 1.6s infinite;
+        }
+
+        .recording-title {
+            margin: 0;
+            font-weight: 700;
+            color: #991b1b;
+            line-height: 1.2;
+        }
+
+        .recording-subtitle {
+            margin: 3px 0 0;
+            font-size: 0.86rem;
+            color: #b91c1c;
+        }
+
+        .recording-wave {
+            display: inline-flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 18px;
+            margin-left: 10px;
+        }
+
+        .recording-wave span {
+            width: 3px;
+            border-radius: 999px;
+            background: #dc2626;
+            animation: wavePulse 1s infinite ease-in-out;
+        }
+
+        .recording-wave span:nth-child(1) {
+            height: 6px;
+            animation-delay: 0s;
+        }
+
+        .recording-wave span:nth-child(2) {
+            height: 12px;
+            animation-delay: 0.12s;
+        }
+
+        .recording-wave span:nth-child(3) {
+            height: 16px;
+            animation-delay: 0.24s;
+        }
+
+        .recording-wave span:nth-child(4) {
+            height: 10px;
+            animation-delay: 0.36s;
+        }
+
+        .recording-wave span:nth-child(5) {
+            height: 14px;
+            animation-delay: 0.48s;
+        }
+
+        .recording-wave span:nth-child(6) {
+            height: 8px;
+            animation-delay: 0.60s;
+        }
+
+        .recording-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex: 0 0 auto;
+        }
+
+        .recording-cancel-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(220, 38, 38, 0.18);
+            background: #fff;
+            color: #b91c1c;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .recording-cancel-btn:hover {
+            background: rgba(220, 38, 38, 0.08);
+            border-color: rgba(220, 38, 38, 0.28);
+            color: #991b1b;
+        }
+
+        .recorded-preview-tools {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 12px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .recorded-preview-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .recorded-preview-info .name {
+            margin: 0;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .recorded-preview-info .meta {
+            margin: 2px 0 0;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .timeline-media-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .timeline-media-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .timeline-media-grid-1 {
+            grid-template-columns: 1fr;
+        }
+
+        .timeline-media-grid-2,
+        .timeline-media-grid-3,
+        .timeline-media-grid-4 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .timeline-media-item {
+            display: block;
+            overflow: hidden;
+            border-radius: 18px;
+            background: #f4f6fb;
+            position: relative;
+        }
+
+        .timeline-media-item img {
+            width: 100%;
+            display: block;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .timeline-media-grid-1 .timeline-media-item img {
+            aspect-ratio: 16 / 10;
+        }
+
+        .timeline-media-grid-3 .timeline-media-item:first-child {
+            grid-column: 1 / -1;
+        }
+
+        .timeline-media-grid-3 .timeline-media-item:first-child img {
+            aspect-ratio: 16 / 10;
+        }
+
+        .media-more-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.12), rgba(15, 23, 42, 0.72));
+            color: #fff;
+            font-size: clamp(1.4rem, 2vw, 2rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .media-more-overlay span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 76px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(6px);
+            font-size: 23px;
+            font-weight: 300;
+        }
+
+        .post-body {
+            margin-right: 10px;
+            padding-right: 4px;
+            margin-bottom: 14px;
+            color: #334155;
+            line-height: 1.8;
+            font-size: 0.98rem;
+        }
+
+        .post-media-shell {
+            padding: 17px;
+            margin-bottom: 14px;
+            border-radius: 18px;
+        }
+
+        @keyframes pulseRed {
+            0% {
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.38);
+            }
+
+            70% {
+                box-shadow: 0 0 0 12px rgba(220, 38, 38, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+            }
+        }
+
+        @keyframes wavePulse {
+
+            0%,
+            100% {
+                transform: scaleY(0.55);
+                opacity: 0.55;
+            }
+
+            50% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        @media screen and (max-width:768px) {
+            .recording-panel {
+                display: block;
+            }
+        }
+
+        .post-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .post-action-btn.liked {
+            color: #7c3aed;
+            font-weight: bold;
+        }
+
+        .post-action-btn.liked i {
+            color: #7c3aed;
+        }
+
+        .dropdown-item {
+            transition: all 0.3s ease;
+            color: #495057;
+        }
+
+        .dropdown-item:hover {
+            background-color: #7c3aed23 !important;
+            color: #7c3aed !important;
+        }
+
+        .dropdown-menu {
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .comment-wrapper {
+            transition: all 0.4s ease-in-out;
+            opacity: 1;
+            max-height: 1000px;
+            overflow: hidden;
+        }
+
+        .comment-wrapper.hidden-comment {
+            opacity: 0;
+            max-height: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .text-area {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .text-area.show-all {
+            -webkit-line-clamp: unset;
+        }
+    </style>
+@endpush
+
+@section('content')
+    @auth
+        <main class="main-content">
+            <div class="mb-4" data-aos="fade-up" data-aos-duration="500">
+                <h1 class="page-title">Family Feed</h1>
+                <p class="page-sub">Recent memories, updates, and conversations from the family.</p>
+            </div>
+
+            <div class="row">
+                {{-- <div class="col-xl-4">
+                    <div class="sticky-top" style="top:5rem; z-index: 1">
+                        <div class="dash-card mb-3" data-aos="fade-up" data-aos-delay="0">
+                            <form class="compose-box" id="feedComposeForm" action="{{ route('user.feed.posts.store') }}"
+                                method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="row mt-2">
+                                    <div class="col-auto">
+                                        <div class="compose-avatar">
+                                            <a href="{{ route('user.member.profile', auth()->user()->id) }}"
+                                                style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                                                @if (auth()->user()->image)
+                                                    <img src="{{ getPhoto(auth()->user()->image) }}" class="rounded-circle"
+                                                        width="50" height="50" alt="{{ auth()->user()->name }}">
+                                                @else
+                                                    <div class="user-avatar-placeholder fs-6">
+                                                        {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
+                                                    </div>
+                                                @endif
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col ps-0">
+                                        <div class="mb-2">
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm dropdown-toggle" type="button" id="privacyBtn"
+                                                    data-bs-toggle="dropdown" aria-expanded="false"
+                                                    style="border: 1px solid #cccbcb; color: #7c3aed; background-color: transparent; border-radius: 5px;">
+                                                    <i class="fa-solid fa-globe"></i> Public
+                                                </button>
+
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="javascript:void(0)"
+                                                            onclick="updatePrivacy('public', 'fa-solid fa-globe')"><i
+                                                                class="fa-solid fa-globe"></i> Public</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0)"
+                                                            onclick="updatePrivacy('private', 'fa-solid fa-lock')"><i
+                                                                class="fa-solid fa-lock"></i> Private</a></li>
+                                                </ul>
+
+                                                <input type="hidden" name="privacy" id="privacyValue" value="public">
+                                            </div>
+                                        </div>
+
+                                        <textarea class="form-control compose-input" id="composeInput" name="content"
+                                            placeholder="Write a note, or post a photo or voice memory..." rows="2">{{ old('content') }}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="compose-actions mt-3">
+                                    <label class="compose-btn mb-0" for="imagesInput">
+                                        <i class="fa-regular fa-image fa-sm"></i>
+                                        Photo
+                                    </label>
+                                    <input type="file" id="imagesInput" name="images[]" class="d-none" accept="image/*"
+                                        multiple>
+
+                                    <label class="compose-btn mb-0" for="audioInput">
+                                        <i class="fa-solid fa-microphone fa-sm"></i>
+                                        Voice <span>Memory</span>
+                                    </label>
+                                    <input type="file" id="audioInput" name="audio" class="d-none" accept="audio/*">
+
+                                    <button class="compose-btn mb-0" type="button" id="recordVoiceBtn">
+                                        <i class="fa-solid fa-circle-dot fa-sm"></i>
+                                        Record <span>Voice</span>
+                                    </button>
+
+                                    <button class="btn-post" type="submit"><i
+                                            class="fa-solid fa-paper-plane fa-sm me-1"></i>Post</button>
+                                </div>
+
+                                <div class="mt-2 d-flex flex-wrap align-items-center gap-2 small text-muted">
+                                    <span id="imagesSelectedText"></span>
+                                    <span id="audioSelectedText" class="ms-2"></span>
+                                </div>
+
+                                <input type="hidden" name="recorded_audio" id="recordedAudioInput">
+
+                                <div id="recordingPanel" class="recording-panel d-none mt-3">
+                                    <div class="recording-meta">
+                                        <div class="recording-badge">
+                                            <i class="fa-solid fa-microphone"></i>
+                                        </div>
+                                        <div class="min-w-0">
+                                            <p class="recording-title">Recording voice memory</p>
+                                            <p class="recording-subtitle" id="recordingStatusText">
+                                                Speak clearly. Press stop when you're done.
+                                                <span class="recording-wave">
+                                                    <span></span><span></span><span></span><span></span><span></span><span></span>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="recording-actions">
+                                        <button type="button" class="recording-cancel-btn" id="cancelRecordingBtn">
+                                            <i class="fa-regular fa-circle-xmark"></i>
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <audio id="audioPreview" class="mt-3 w-100 d-none" controls></audio>
+                                <div id="recordedPreviewTools" class="recorded-preview-tools d-none">
+                                    <div class="recorded-preview-info">
+                                        <div class="recording-badge" style="width:36px;height:36px;animation:none;">
+                                            <i class="fa-solid fa-headphones"></i>
+                                        </div>
+                                        <div>
+                                            <p class="name mb-0" id="recordedPreviewName">Recorded voice memory</p>
+                                            <p class="meta">Ready to post or discard.</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="recording-cancel-btn" id="discardRecordedBtn">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                        Discard
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="row row-cards mb-4">
+
+                            <div class="col-sm-6 mb-3" data-aos="fade-up" data-aos-delay="100">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <div class="h3 mb-0">{{ number_format($stats['posts']) }}</div>
+                                                <div class="text-secondary">Total Posts</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 mb-3" data-aos="fade-up" data-aos-delay="100">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <div class="h3 mb-0">{{ number_format($stats['photos']) }}</div>
+                                                <div class="text-secondary">Photos</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 mb-3" data-aos="fade-up" data-aos-delay="200">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <div class="h3 mb-0">{{ number_format($stats['reactions']) }}</div>
+                                                <div class="text-secondary">Reactions</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> --}}
+                <div class="col-xl-4">
+                    <div class="sticky-top" style="top:5rem; z-index: 1">
+                        <div class="dash-card mb-3" data-aos="fade-up" data-aos-delay="0">
+                            <form class="compose-box" id="feedComposeForm" action="{{ route('user.feed.posts.store') }}"
+                                method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="row mt-2">
+                                    <div class="col-auto">
+                                        <div class="compose-avatar">
+                                            <a href="{{ route('user.member.profile', auth()->user()->id) }}"
+                                                style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                                                @if (auth()->user()->image)
+                                                    <img src="{{ getPhoto(auth()->user()->image) }}" class="rounded-circle"
+                                                        width="50" height="50" alt="{{ auth()->user()->name }}">
+                                                @else
+                                                    <div class="user-avatar-placeholder fs-6">
+                                                        {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
+                                                    </div>
+                                                @endif
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col ps-0">
+                                        <div class="mb-2">
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm dropdown-toggle" type="button" id="privacyBtn"
+                                                    data-bs-toggle="dropdown" aria-expanded="false"
+                                                    style="border: 1px solid #cccbcb; color: #7c3aed; background-color: transparent; border-radius: 5px;">
+                                                    <i class="fa-solid fa-globe"></i> Public
+                                                </button>
+
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="javascript:void(0)"
+                                                            onclick="updatePrivacy('public', 'fa-solid fa-globe')"><i
+                                                                class="fa-solid fa-globe"></i> Public</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0)"
+                                                            onclick="updatePrivacy('private', 'fa-solid fa-lock')"><i
+                                                                class="fa-solid fa-lock"></i> Private</a></li>
+                                                </ul>
+
+                                                <input type="hidden" name="privacy" id="privacyValue" value="public">
+                                            </div>
+                                        </div>
+
+                                        <textarea class="form-control compose-input" id="composeInput" name="content"
+                                            placeholder="Write a note, or post a photo or voice memory..." rows="2">{{ old('content') }}</textarea>
+                                    </div>
+                                </div>
+
+                                {{-- Action Buttons with Bigger Icons --}}
+                                <div
+                                    class="compose-actions mt-3 d-flex align-items-center justify-content-between flex-nowrap gap-1">
+                                    <div class="d-flex align-items-center gap-1 flex-nowrap">
+                                        <label class="compose-btn mb-0 text-nowrap d-inline-flex align-items-center gap-1"
+                                            for="imagesInput" style="padding: 6px 10px;">
+                                            <i class="fa-regular fa-image fs-6"></i>
+                                            <span class="d-none d-sm-inline">Photo</span>
+                                        </label>
+                                        <input type="file" id="imagesInput" name="images[]" class="d-none" accept="image/*"
+                                            multiple>
+
+                                        <label class="compose-btn mb-0 text-nowrap d-inline-flex align-items-center gap-1"
+                                            for="audioInput" style="padding: 6px 10px;">
+                                            <i class="fa-solid fa-microphone fs-6"></i>
+                                            <span class="d-none d-sm-inline">Voice</span>
+                                        </label>
+                                        <input type="file" id="audioInput" name="audio" class="d-none" accept="audio/*">
+
+                                        <button class="compose-btn mb-0 text-nowrap d-inline-flex align-items-center gap-1"
+                                            type="button" id="recordVoiceBtn" style="padding: 6px 10px;">
+                                            <i class="fa-solid fa-circle-dot fs-6"></i>
+                                            <span class="d-none d-sm-inline">Record</span>
+                                        </button>
+                                    </div>
+
+                                    <button
+                                        class="btn-post mb-0 text-nowrap flex-shrink-0 d-inline-flex align-items-center gap-1"
+                                        type="submit">
+                                        <i class="fa-solid fa-paper-plane fs-6"></i>
+                                        <span>Post</span>
+                                    </button>
+                                </div>
+
+                                <div class="mt-2 d-flex flex-wrap align-items-center gap-2 small text-muted">
+                                    <span id="imagesSelectedText"></span>
+                                    <span id="audioSelectedText" class="ms-2"></span>
+                                </div>
+
+                                <input type="hidden" name="recorded_audio" id="recordedAudioInput">
+
+                                <div id="recordingPanel" class="recording-panel d-none mt-3">
+                                    <div class="recording-meta">
+                                        <div class="recording-badge">
+                                            <i class="fa-solid fa-microphone"></i>
+                                        </div>
+                                        <div class="min-w-0">
+                                            <p class="recording-title">Recording voice memory</p>
+                                            <p class="recording-subtitle" id="recordingStatusText">
+                                                Speak clearly. Press stop when you're done.
+                                                <span class="recording-wave">
+                                                    <span></span><span></span><span></span><span></span><span></span><span></span>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="recording-actions">
+                                        <button type="button" class="recording-cancel-btn" id="cancelRecordingBtn">
+                                            <i class="fa-regular fa-circle-xmark"></i>
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <audio id="audioPreview" class="mt-3 w-100 d-none" controls></audio>
+                                <div id="recordedPreviewTools" class="recorded-preview-tools d-none">
+                                    <div class="recorded-preview-info">
+                                        <div class="recording-badge" style="width:36px;height:36px;animation:none;">
+                                            <i class="fa-solid fa-headphones"></i>
+                                        </div>
+                                        <div>
+                                            <p class="name mb-0" id="recordedPreviewName">Recorded voice memory</p>
+                                            <p class="meta">Ready to post or discard.</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="recording-cancel-btn" id="discardRecordedBtn">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                        Discard
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="row row-cards mb-4">
+                            <div class="col-sm-6 mb-3" data-aos="fade-up" data-aos-delay="100">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <div class="h3 mb-0">{{ number_format($stats['posts']) }}</div>
+                                                <div class="text-secondary">Total Posts</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 mb-3" data-aos="fade-up" data-aos-delay="100">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <div class="h3 mb-0">{{ number_format($stats['photos']) }}</div>
+                                                <div class="text-secondary">Photos</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 mb-3" data-aos="fade-up" data-aos-delay="200">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <div class="h3 mb-0">{{ number_format($stats['reactions']) }}</div>
+                                                <div class="text-secondary">Reactions</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8">
+                    @forelse ($posts as $post)
+                        @include('user.partials.post')
+                    @empty
+                        <div class="dash-card text-center">
+                            <p class="mb-0 text-muted p-4">No posts yet. Share your first family update.</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </main>
+    @else
+        <div style="position: fixed; top: 20; left: 0; width: 100%; height: 100%; z-index: 999; background: #f8f9fa;">
+            <div class="hero-container" style="height: 100vh; display: flex; align-items: center; justify-content: center;">
+                <div class="hero-content text-center">
+                    <div class="mb-4">
+                        <i class="fa-solid fa-tree fa-5x" style="color: #7c3aed;"></i>
+                    </div>
+                    <h1 class="fw-bold mb-3" style="color: #1a1a2e;">Welcome to {{ $settings->site_name }}</h1>
+                    <p class="text-muted mb-5 lead">Your family memories, preserved for generations.</p>
+
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{{ route('login') }}" class="btn btn-lg px-5 text-white"
+                            style="background-color: #7c3aed; border-radius: 50px;">Get Started</a>
+                        <a href="{{ route('register') }}" class="btn btn-lg px-5 btn-outline-secondary"
+                            style="border-radius: 50px;">Create Account</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endauth
+
+
+    <div class="modal fade" id="viewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Share Post</h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="view-modal-content">
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/lightgallery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/thumbnail/lg-thumbnail.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/zoom/lg-zoom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     const composeInput = document.getElementById('composeInput');
+        //     const imagesInput = document.getElementById('imagesInput');
+        //     const audioInput = document.getElementById('audioInput');
+        //     const imagesSelectedText = document.getElementById('imagesSelectedText');
+        //     const audioSelectedText = document.getElementById('audioSelectedText');
+        //     const recordVoiceBtn = document.getElementById('recordVoiceBtn');
+        //     const recordingPanel = document.getElementById('recordingPanel');
+        //     const recordingStatusText = document.getElementById('recordingStatusText');
+        //     const audioPreview = document.getElementById('audioPreview');
+        //     const recordedAudioInput = document.getElementById('recordedAudioInput');
+        //     const recordedPreviewTools = document.getElementById('recordedPreviewTools');
+        //     const recordedPreviewName = document.getElementById('recordedPreviewName');
+        //     const cancelRecordingBtn = document.getElementById('cancelRecordingBtn');
+        //     const discardRecordedBtn = document.getElementById('discardRecordedBtn');
+        //     const feedComposeForm = document.getElementById('feedComposeForm');
+        //     const galleries = document.querySelectorAll('.js-lightgallery');
+
+        //     let mediaRecorder = null;
+        //     let recordingChunks = [];
+        //     let recordingStream = null;
+        //     let recordedAudioFile = null;
+        //     let recordedAudioUrl = null;
+        //     let submitAfterRecording = false;
+        //     let recordingCancelled = false;
+
+        //     function clearRecordedAudio() {
+        //         recordedAudioFile = null;
+        //         if (recordedAudioInput) {
+        //             recordedAudioInput.value = '';
+        //         }
+        //         if (audioInput) {
+        //             audioInput.value = '';
+        //         }
+        //         if (audioSelectedText) {
+        //             audioSelectedText.textContent = '';
+        //         }
+        //         if (audioPreview) {
+        //             audioPreview.classList.add('d-none');
+        //             audioPreview.removeAttribute('src');
+        //         }
+        //         if (recordedPreviewTools) {
+        //             recordedPreviewTools.classList.add('d-none');
+        //         }
+        //         if (recordedAudioUrl) {
+        //             URL.revokeObjectURL(recordedAudioUrl);
+        //             recordedAudioUrl = null;
+        //         }
+        //     }
+
+        //     function hideRecordingPanel() {
+        //         if (recordingPanel) {
+        //             recordingPanel.classList.add('d-none');
+        //         }
+        //         if (recordingStatusText) {
+        //             recordingStatusText.innerHTML =
+        //                 'Speak clearly. Press stop when you\'re done. <span class="recording-wave"><span></span><span></span><span></span><span></span><span></span><span></span></span>';
+        //         }
+        //     }
+
+        //     function showRecordingPanel() {
+        //         if (recordingPanel) {
+        //             recordingPanel.classList.remove('d-none');
+        //         }
+        //         if (recordingStatusText) {
+        //             recordingStatusText.innerHTML =
+        //                 'Recording in progress <span class="recording-wave"><span></span><span></span><span></span><span></span><span></span><span></span></span>';
+        //         }
+        //     }
+
+        //     if (composeInput) {
+        //         composeInput.addEventListener('input', function() {
+        //             this.style.height = 'auto';
+        //             this.style.height = this.scrollHeight + 'px';
+        //         });
+        //     }
+
+        //     if (imagesInput) {
+        //         imagesInput.addEventListener('change', function() {
+        //             const count = this.files ? this.files.length : 0;
+        //             imagesSelectedText.textContent = count ? count + ' image(s) selected' : '';
+        //         });
+        //     }
+
+        //     if (audioInput) {
+        //         audioInput.addEventListener('change', function() {
+        //             if (this.files && this.files[0]) {
+        //                 recordedAudioFile = null;
+        //                 if (recordedAudioInput) {
+        //                     recordedAudioInput.value = '';
+        //                 }
+        //                 if (recordedPreviewTools) {
+        //                     recordedPreviewTools.classList.remove('d-none');
+        //                 }
+        //                 if (recordedPreviewName) {
+        //                     recordedPreviewName.textContent = this.files[0].name;
+        //                 }
+        //                 audioSelectedText.textContent = this.files[0].name;
+        //                 if (audioPreview) {
+        //                     if (recordedAudioUrl) {
+        //                         URL.revokeObjectURL(recordedAudioUrl);
+        //                     }
+        //                     recordedAudioUrl = URL.createObjectURL(this.files[0]);
+        //                     audioPreview.src = recordedAudioUrl;
+        //                     audioPreview.classList.remove('d-none');
+        //                 }
+        //             } else {
+        //                 clearRecordedAudio();
+        //             }
+        //         });
+        //     }
+
+        //     if (recordVoiceBtn) {
+        //         if (!navigator.mediaDevices || !window.MediaRecorder) {
+        //             recordVoiceBtn.disabled = true;
+        //             recordVoiceBtn.title = 'Voice recording is not supported in this browser.';
+        //         } else {
+        //             recordVoiceBtn.addEventListener('click', async function() {
+        //                 if (mediaRecorder && mediaRecorder.state === 'recording') {
+        //                     mediaRecorder.stop();
+        //                     return;
+        //                 }
+
+        //                 try {
+        //                     recordingStream = await navigator.mediaDevices.getUserMedia({
+        //                         audio: true
+        //                     });
+        //                     recordingChunks = [];
+        //                     recordingCancelled = false;
+        //                     mediaRecorder = new MediaRecorder(recordingStream);
+
+        //                     mediaRecorder.ondataavailable = function(event) {
+        //                         if (event.data && event.data.size > 0) {
+        //                             recordingChunks.push(event.data);
+        //                         }
+        //                     };
+
+        //                     mediaRecorder.onstop = function() {
+        //                         if (recordingCancelled) {
+        //                             recordingCancelled = false;
+        //                             hideRecordingPanel();
+        //                             recordVoiceBtn.classList.remove('btn-danger');
+        //                             recordVoiceBtn.innerHTML =
+        //                                 '<i class="fa-solid fa-circle-dot fa-sm"></i> Record <span>Voice</span>';
+        //                             clearRecordedAudio();
+        //                             if (recordingStream) {
+        //                                 recordingStream.getTracks().forEach(track => track.stop());
+        //                                 recordingStream = null;
+        //                             }
+        //                             return;
+        //                         }
+
+        //                         const blob = new Blob(recordingChunks, {
+        //                             type: mediaRecorder.mimeType || 'audio/webm',
+        //                         });
+        //                         const fileName = `voice-memory-${Date.now()}.webm`;
+        //                         recordedAudioFile = new File([blob], fileName, {
+        //                             type: blob.type
+        //                         });
+        //                         const dataTransfer = new DataTransfer();
+        //                         dataTransfer.items.add(recordedAudioFile);
+        //                         if (audioInput) {
+        //                             audioInput.files = dataTransfer.files;
+        //                         }
+        //                         audioSelectedText.textContent = recordedAudioFile.name;
+
+        //                         if (audioPreview) {
+        //                             if (recordedAudioUrl) {
+        //                                 URL.revokeObjectURL(recordedAudioUrl);
+        //                             }
+        //                             recordedAudioUrl = URL.createObjectURL(blob);
+        //                             audioPreview.src = recordedAudioUrl;
+        //                             audioPreview.classList.remove('d-none');
+        //                         }
+
+        //                         if (recordedPreviewTools) {
+        //                             recordedPreviewTools.classList.remove('d-none');
+        //                         }
+        //                         if (recordedPreviewName) {
+        //                             recordedPreviewName.textContent = fileName;
+        //                         }
+
+        //                         if (recordedAudioInput) {
+        //                             const reader = new FileReader();
+        //                             reader.onloadend = function() {
+        //                                 recordedAudioInput.value = reader.result;
+        //                             };
+        //                             reader.readAsDataURL(blob);
+        //                         }
+
+        //                         hideRecordingPanel();
+        //                         recordVoiceBtn.classList.remove('btn-danger');
+        //                         recordVoiceBtn.innerHTML =
+        //                             '<i class="fa-solid fa-circle-dot fa-sm"></i> Record <span>Voice</span>';
+
+        //                         if (recordingStream) {
+        //                             recordingStream.getTracks().forEach(track => track.stop());
+        //                             recordingStream = null;
+        //                         }
+
+        //                         if (submitAfterRecording && feedComposeForm) {
+        //                             submitAfterRecording = false;
+        //                             feedComposeForm.submit();
+        //                         }
+        //                     };
+
+        //                     mediaRecorder.start();
+        //                     recordVoiceBtn.classList.add('btn-danger');
+        //                     recordVoiceBtn.innerHTML =
+        //                         '<i class="fa-solid fa-stop fa-sm"></i> Stop <span>Recording</span>';
+        //                     showRecordingPanel();
+        //                 } catch (error) {
+        //                     if (recordingStatusText) {
+        //                         recordingStatusText.textContent = 'Microphone access was denied.';
+        //                     }
+        //                     showRecordingPanel();
+        //                 }
+        //             });
+        //         }
+        //     }
+
+        //     if (cancelRecordingBtn) {
+        //         cancelRecordingBtn.addEventListener('click', function() {
+        //             submitAfterRecording = false;
+        //             recordingCancelled = true;
+
+        //             if (mediaRecorder && mediaRecorder.state === 'recording') {
+        //                 mediaRecorder.stop();
+        //                 return;
+        //             }
+
+        //             hideRecordingPanel();
+        //             recordVoiceBtn.classList.remove('btn-danger');
+        //             recordVoiceBtn.innerHTML =
+        //                 '<i class="fa-solid fa-circle-dot fa-sm"></i> Record <span>Voice</span>';
+        //             clearRecordedAudio();
+        //         });
+        //     }
+
+        //     if (discardRecordedBtn) {
+        //         discardRecordedBtn.addEventListener('click', function() {
+        //             clearRecordedAudio();
+        //         });
+        //     }
+
+        //     if (feedComposeForm) {
+        //         feedComposeForm.addEventListener('submit', function(event) {
+        //             if (mediaRecorder && mediaRecorder.state === 'recording') {
+        //                 event.preventDefault();
+        //                 submitAfterRecording = true;
+        //                 mediaRecorder.stop();
+        //                 return;
+        //             }
+
+        //             if (recordedAudioFile && audioInput && (!audioInput.files || !audioInput.files
+        //                     .length)) {
+        //                 const dataTransfer = new DataTransfer();
+        //                 dataTransfer.items.add(recordedAudioFile);
+        //                 audioInput.files = dataTransfer.files;
+        //             }
+
+        //             if (recordedAudioFile && recordedAudioInput && !recordedAudioInput.value) {
+        //                 const reader = new FileReader();
+        //                 reader.onloadend = function() {
+        //                     recordedAudioInput.value = reader.result;
+        //                     feedComposeForm.submit();
+        //                 };
+        //                 reader.readAsDataURL(recordedAudioFile);
+        //                 event.preventDefault();
+        //             }
+        //         });
+        //     }
+
+        //     galleries.forEach(function(gallery) {
+        //         const items = JSON.parse(gallery.dataset.galleryItems || '[]')
+        //             .filter(function(item) {
+        //                 return item && item.src;
+        //             });
+        //         const triggers = gallery.querySelectorAll('[data-gallery-index]');
+        //         let galleryInstance = null;
+
+        //         function destroyGalleryInstance() {
+        //             if (galleryInstance && typeof galleryInstance.destroy === 'function') {
+        //                 galleryInstance.destroy();
+        //             }
+        //             galleryInstance = null;
+        //         }
+
+        //         triggers.forEach(function(trigger) {
+        //             trigger.addEventListener('click', function(event) {
+        //                 event.preventDefault();
+
+        //                 const index = Number(this.dataset.galleryIndex || 0);
+
+        //                 destroyGalleryInstance();
+
+        //                 galleryInstance = lightGallery(gallery, {
+        //                     dynamic: true,
+        //                     dynamicEl: items,
+        //                     plugins: [lgZoom, lgThumbnail],
+        //                     speed: 300,
+        //                     download: false,
+        //                 });
+
+        //                 if (galleryInstance && typeof galleryInstance.openGallery ===
+        //                     'function') {
+        //                     galleryInstance.openGallery(index);
+        //                 }
+        //             });
+        //         });
+        //     });
+        // });
+        document.addEventListener('DOMContentLoaded', function() {
+            const composeInput = document.getElementById('composeInput');
+            const imagesInput = document.getElementById('imagesInput');
+            const audioInput = document.getElementById('audioInput');
+            const imagesSelectedText = document.getElementById('imagesSelectedText');
+            const audioSelectedText = document.getElementById('audioSelectedText');
+            const recordVoiceBtn = document.getElementById('recordVoiceBtn');
+            const recordingPanel = document.getElementById('recordingPanel');
+            const recordingStatusText = document.getElementById('recordingStatusText');
+            const audioPreview = document.getElementById('audioPreview');
+            const recordedAudioInput = document.getElementById('recordedAudioInput');
+            const recordedPreviewTools = document.getElementById('recordedPreviewTools');
+            const recordedPreviewName = document.getElementById('recordedPreviewName');
+            const cancelRecordingBtn = document.getElementById('cancelRecordingBtn');
+            const discardRecordedBtn = document.getElementById('discardRecordedBtn');
+            const feedComposeForm = document.getElementById('feedComposeForm');
+            const galleries = document.querySelectorAll('.js-lightgallery');
+
+            let mediaRecorder = null;
+            let recordingChunks = [];
+            let recordingStream = null;
+            let recordedAudioFile = null;
+            let recordedAudioUrl = null;
+            let submitAfterRecording = false;
+            let recordingCancelled = false;
+
+            // Helper HTML for button states with bigger icons (fs-6)
+            const RECORD_BTN_HTML =
+                '<i class="fa-solid fa-circle-dot fs-6"></i> Record <span class="d-none d-sm-inline">Voice</span>';
+            const STOP_BTN_HTML =
+                '<i class="fa-solid fa-stop fs-6"></i> Stop <span class="d-none d-sm-inline">Recording</span>';
+
+            function clearRecordedAudio() {
+                recordedAudioFile = null;
+                if (recordedAudioInput) {
+                    recordedAudioInput.value = '';
+                }
+                if (audioInput) {
+                    audioInput.value = '';
+                }
+                if (audioSelectedText) {
+                    audioSelectedText.textContent = '';
+                }
+                if (audioPreview) {
+                    audioPreview.classList.add('d-none');
+                    audioPreview.removeAttribute('src');
+                }
+                if (recordedPreviewTools) {
+                    recordedPreviewTools.classList.add('d-none');
+                }
+                if (recordedAudioUrl) {
+                    URL.revokeObjectURL(recordedAudioUrl);
+                    recordedAudioUrl = null;
+                }
+            }
+
+            function hideRecordingPanel() {
+                if (recordingPanel) {
+                    recordingPanel.classList.add('d-none');
+                }
+                if (recordingStatusText) {
+                    recordingStatusText.innerHTML =
+                        'Speak clearly. Press stop when you\'re done. <span class="recording-wave"><span></span><span></span><span></span><span></span><span></span><span></span></span>';
+                }
+            }
+
+            function showRecordingPanel() {
+                if (recordingPanel) {
+                    recordingPanel.classList.remove('d-none');
+                }
+                if (recordingStatusText) {
+                    recordingStatusText.innerHTML =
+                        'Recording in progress <span class="recording-wave"><span></span><span></span><span></span><span></span><span></span><span></span></span>';
+                }
+            }
+
+            if (composeInput) {
+                composeInput.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = this.scrollHeight + 'px';
+                });
+            }
+
+            if (imagesInput) {
+                imagesInput.addEventListener('change', function() {
+                    const count = this.files ? this.files.length : 0;
+                    imagesSelectedText.textContent = count ? count + ' image(s) selected' : '';
+                });
+            }
+
+            if (audioInput) {
+                audioInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        recordedAudioFile = null;
+                        if (recordedAudioInput) {
+                            recordedAudioInput.value = '';
+                        }
+                        if (recordedPreviewTools) {
+                            recordedPreviewTools.classList.remove('d-none');
+                        }
+                        if (recordedPreviewName) {
+                            recordedPreviewName.textContent = this.files[0].name;
+                        }
+                        audioSelectedText.textContent = this.files[0].name;
+                        if (audioPreview) {
+                            if (recordedAudioUrl) {
+                                URL.revokeObjectURL(recordedAudioUrl);
+                            }
+                            recordedAudioUrl = URL.createObjectURL(this.files[0]);
+                            audioPreview.src = recordedAudioUrl;
+                            audioPreview.classList.remove('d-none');
+                        }
+                    } else {
+                        clearRecordedAudio();
+                    }
+                });
+            }
+
+            if (recordVoiceBtn) {
+                if (!navigator.mediaDevices || !window.MediaRecorder) {
+                    recordVoiceBtn.disabled = true;
+                    recordVoiceBtn.title = 'Voice recording is not supported in this browser.';
+                } else {
+                    recordVoiceBtn.addEventListener('click', async function() {
+                        if (mediaRecorder && mediaRecorder.state === 'recording') {
+                            mediaRecorder.stop();
+                            return;
+                        }
+
+                        try {
+                            recordingStream = await navigator.mediaDevices.getUserMedia({
+                                audio: true
+                            });
+                            recordingChunks = [];
+                            recordingCancelled = false;
+                            mediaRecorder = new MediaRecorder(recordingStream);
+
+                            mediaRecorder.ondataavailable = function(event) {
+                                if (event.data && event.data.size > 0) {
+                                    recordingChunks.push(event.data);
+                                }
+                            };
+
+                            mediaRecorder.onstop = function() {
+                                if (recordingCancelled) {
+                                    recordingCancelled = false;
+                                    hideRecordingPanel();
+                                    recordVoiceBtn.classList.remove('btn-danger');
+                                    recordVoiceBtn.innerHTML = RECORD_BTN_HTML;
+                                    clearRecordedAudio();
+                                    if (recordingStream) {
+                                        recordingStream.getTracks().forEach(track => track.stop());
+                                        recordingStream = null;
+                                    }
+                                    return;
+                                }
+
+                                const blob = new Blob(recordingChunks, {
+                                    type: mediaRecorder.mimeType || 'audio/webm',
+                                });
+                                const fileName = `voice-memory-${Date.now()}.webm`;
+                                recordedAudioFile = new File([blob], fileName, {
+                                    type: blob.type
+                                });
+                                const dataTransfer = new DataTransfer();
+                                dataTransfer.items.add(recordedAudioFile);
+                                if (audioInput) {
+                                    audioInput.files = dataTransfer.files;
+                                }
+                                audioSelectedText.textContent = recordedAudioFile.name;
+
+                                if (audioPreview) {
+                                    if (recordedAudioUrl) {
+                                        URL.revokeObjectURL(recordedAudioUrl);
+                                    }
+                                    recordedAudioUrl = URL.createObjectURL(blob);
+                                    audioPreview.src = recordedAudioUrl;
+                                    audioPreview.classList.remove('d-none');
+                                }
+
+                                if (recordedPreviewTools) {
+                                    recordedPreviewTools.classList.remove('d-none');
+                                }
+                                if (recordedPreviewName) {
+                                    recordedPreviewName.textContent = fileName;
+                                }
+
+                                if (recordedAudioInput) {
+                                    const reader = new FileReader();
+                                    reader.onloadend = function() {
+                                        recordedAudioInput.value = reader.result;
+                                    };
+                                    reader.readAsDataURL(blob);
+                                }
+
+                                hideRecordingPanel();
+                                recordVoiceBtn.classList.remove('btn-danger');
+                                recordVoiceBtn.innerHTML = RECORD_BTN_HTML;
+
+                                if (recordingStream) {
+                                    recordingStream.getTracks().forEach(track => track.stop());
+                                    recordingStream = null;
+                                }
+
+                                if (submitAfterRecording && feedComposeForm) {
+                                    submitAfterRecording = false;
+                                    feedComposeForm.submit();
+                                }
+                            };
+
+                            mediaRecorder.start();
+                            recordVoiceBtn.classList.add('btn-danger');
+                            recordVoiceBtn.innerHTML = STOP_BTN_HTML;
+                            showRecordingPanel();
+                        } catch (error) {
+                            if (recordingStatusText) {
+                                recordingStatusText.textContent = 'Microphone access was denied.';
+                            }
+                            showRecordingPanel();
+                        }
+                    });
+                }
+            }
+
+            if (cancelRecordingBtn) {
+                cancelRecordingBtn.addEventListener('click', function() {
+                    submitAfterRecording = false;
+                    recordingCancelled = true;
+
+                    if (mediaRecorder && mediaRecorder.state === 'recording') {
+                        mediaRecorder.stop();
+                        return;
+                    }
+
+                    hideRecordingPanel();
+                    recordVoiceBtn.classList.remove('btn-danger');
+                    recordVoiceBtn.innerHTML = RECORD_BTN_HTML;
+                    clearRecordedAudio();
+                });
+            }
+
+            if (discardRecordedBtn) {
+                discardRecordedBtn.addEventListener('click', function() {
+                    clearRecordedAudio();
+                });
+            }
+
+            if (feedComposeForm) {
+                feedComposeForm.addEventListener('submit', function(event) {
+                    if (mediaRecorder && mediaRecorder.state === 'recording') {
+                        event.preventDefault();
+                        submitAfterRecording = true;
+                        mediaRecorder.stop();
+                        return;
+                    }
+
+                    if (recordedAudioFile && audioInput && (!audioInput.files || !audioInput.files
+                        .length)) {
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(recordedAudioFile);
+                        audioInput.files = dataTransfer.files;
+                    }
+
+                    if (recordedAudioFile && recordedAudioInput && !recordedAudioInput.value) {
+                        const reader = new FileReader();
+                        reader.onloadend = function() {
+                            recordedAudioInput.value = reader.result;
+                            feedComposeForm.submit();
+                        };
+                        reader.readAsDataURL(recordedAudioFile);
+                        event.preventDefault();
+                    }
+                });
+            }
+
+            galleries.forEach(function(gallery) {
+                const items = JSON.parse(gallery.dataset.galleryItems || '[]')
+                    .filter(function(item) {
+                        return item && item.src;
+                    });
+                const triggers = gallery.querySelectorAll('[data-gallery-index]');
+                let galleryInstance = null;
+
+                function destroyGalleryInstance() {
+                    if (galleryInstance && typeof galleryInstance.destroy === 'function') {
+                        galleryInstance.destroy();
+                    }
+                    galleryInstance = null;
+                }
+
+                triggers.forEach(function(trigger) {
+                    trigger.addEventListener('click', function(event) {
+                        event.preventDefault();
+
+                        const index = Number(this.dataset.galleryIndex || 0);
+
+                        destroyGalleryInstance();
+
+                        galleryInstance = lightGallery(gallery, {
+                            dynamic: true,
+                            dynamicEl: items,
+                            plugins: [lgZoom, lgThumbnail],
+                            speed: 300,
+                            download: false,
+                        });
+
+                        if (galleryInstance && typeof galleryInstance.openGallery ===
+                            'function') {
+                            galleryInstance.openGallery(index);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+        function toggleReplySmooth(formId) {
+            const formWrapper = document.getElementById(formId);
+
+            formWrapper.classList.toggle('is-open');
+
+            if (formWrapper.classList.contains('is-open')) {
+                setTimeout(() => {
+                    formWrapper.querySelector('input').focus();
+                }, 100);
+            }
+        }
+    </script>
+    <script>
+        function sharePost(url, title) {
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    url: url
+                }).then(() => {
+                    console.log('Thanks for sharing!');
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    alert("Link copied to clipboard!");
+                });
+            }
+        }
+    </script>
+    <script>
+        function updatePrivacy(value, iconClass) {
+            document.getElementById('privacyValue').value = value;
+
+            const button = document.getElementById('privacyBtn');
+            button.innerHTML = `<i class="${iconClass}"></i> ${value.charAt(0).toUpperCase() + value.slice(1)}`;
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.text-area').forEach(div => {
+                if (div.scrollHeight > 70) {
+                    div.nextElementSibling.style.display = 'block';
+                } else {
+                    div.nextElementSibling.style.display = 'none';
+                }
+            });
+        });
+
+        function toggleText(btn) {
+            let textDiv = btn.previousElementSibling;
+            textDiv.classList.toggle('show-all');
+            btn.innerText = textDiv.classList.contains('show-all') ? 'See less' : 'See more';
+        }
+    </script>
+    <script>
+        document.querySelectorAll('.toggle-comments').forEach(button => {
+            button.addEventListener('click', function() {
+                const postId = this.getAttribute('data-post-id');
+                const container = document.getElementById('comment-section-' + postId);
+                const hiddenComments = container.querySelectorAll('.hidden-comment');
+
+                if (hiddenComments.length > 0) {
+                    hiddenComments.forEach(el => el.classList.remove('hidden-comment'));
+                    this.innerText = 'View less comments';
+                } else {
+                    const allComments = container.querySelectorAll('.comment-wrapper');
+                    allComments.forEach((el, index) => {
+                        if (index >= 2) {
+                            el.classList.add('hidden-comment');
+                        }
+                    });
+                    this.innerText = 'View more comments';
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).on('click', '.view-btn', function() {
+            let url = $(this).data('url');
+            $.get(url, function(data) {
+                $('#view-modal-content').html(data);
+                $('#viewModal').modal('show');
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let postId = urlParams.get('view-memories');
+
+            @if (session('view-memories'))
+                postId = "{{ session('view-memories') }}";
+            @endif
+
+            if (postId) {
+                let url = "{{ route('user.posts.show', ':id') }}".replace(':id', postId);
+                $.get(url + '?action=share', function(data) {
+                    $('#view-modal-content').html(data);
+                    $('#viewModal').modal('show');
+                });
+            }
+
+            $('#viewModal').on('hidden.bs.modal', function() {
+                    @guest
+                    window.location.href = "{{ route('frontend.home') }}";
+                @endguest
+            });
+        });
+    </script>
+
+    <script>
+        function confirmDelete(postId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to delete this post?",
+                icon: 'warning',
+                width: 400,
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7c3aed',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + postId).submit();
+                }
+            })
+        }
+    </script>
+@endpush

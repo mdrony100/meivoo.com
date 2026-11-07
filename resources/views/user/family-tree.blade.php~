@@ -1,0 +1,285 @@
+@extends('layouts.user')
+@section('title', 'LegacyTree - Family Tree')
+@section('page_wrapper_class', 'tree-page')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/treeflex.css') }}">
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .main-content {
+            overflow: auto;
+        }
+
+        #family-tree {
+            min-width: max-content;
+        }
+
+        .offcanvas-body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .demo-tree-stage {
+            width: min(1180px, 100%);
+            margin: 0 auto;
+            padding: 24px 18px 30px;
+            border-radius: 30px;
+            /* background:
+                radial-gradient(circle at top, rgba(78, 110, 242, 0.08), transparent 38%),
+                linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08); */
+        }
+
+        .demo-family-row,
+        .demo-children-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .demo-family-row {
+            margin-bottom: 18px;
+        }
+
+        .demo-children-row {
+            margin-top: 18px;
+        }
+
+        .demo-family-node {
+            min-width: 160px;
+            max-width: 190px;
+            padding: 14px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+            text-align: center;
+        }
+
+        .demo-placeholder {
+            filter: blur(1.8px);
+            opacity: 0.62;
+        }
+
+        .demo-current-node {
+            border: 1px solid rgba(78, 110, 242, 0.16);
+            box-shadow: 0 16px 36px rgba(78, 110, 242, 0.12);
+        }
+
+        .demo-avatar {
+            width: 78px;
+            height: 78px;
+            margin: 0 auto 12px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.55rem;
+            font-weight: 800;
+            overflow: hidden;
+        }
+
+        .demo-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .demo-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .demo-meta {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .demo-connector {
+            width: 2px;
+            height: 46px;
+            background: rgba(148, 163, 184, 0.55);
+            margin: 0 auto;
+            border-radius: 999px;
+        }
+    </style>
+@endpush
+@section('content')
+    <main class="main-content p-0">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-12">
+                <div id="family-tree" class="ft-tree">
+                    @php
+                        $demoCurrentName = $current->user->name ?? 'You';
+                        $demoCurrentInitial = strtoupper(substr($demoCurrentName, 0, 1));
+                        $demoCurrentImage = $current->user?->image ? getPhoto($current->user->image) : null;
+                        $demoTopSlots = [
+                            ['label' => 'Father', 'initial' => 'F'],
+                            ['label' => 'Mother', 'initial' => 'M'],
+                        ];
+                        $demoMiddleSlots = [
+                            ['label' => 'Spouse', 'initial' => 'S'],
+                        ];
+                        $demoChildSlots = [
+                            ['label' => 'Child One', 'initial' => '1'],
+                            ['label' => 'Child Two', 'initial' => '2'],
+                            ['label' => 'Child Three', 'initial' => '3'],
+                            ['label' => 'Child Four', 'initial' => '4'],
+                            ['label' => 'Child Five', 'initial' => '5'],
+                            ['label' => 'Child Six', 'initial' => '6'],
+                            ['label' => 'Child Seven', 'initial' => '7'],
+                        ];
+                        $demoTopSlots = array_slice($demoTopSlots, 0, min(count($demoTopSlots), $demoPlaceholderCount));
+                        $remainingSlots = $demoPlaceholderCount - count($demoTopSlots);
+                        $demoMiddleSlots = array_slice($demoMiddleSlots, 0, min(count($demoMiddleSlots), $remainingSlots));
+                        $remainingSlots = max(0, $remainingSlots - count($demoMiddleSlots));
+                        $demoChildSlots = array_slice($demoChildSlots, 0, $remainingSlots);
+                    @endphp
+
+                    @if (! $showDemoTree)
+                        @if ($parentMember)
+                            <div class="go-up-wrapper mb-3">
+                                <a href="{{ route('user.family-tree', $parentMember->id) }}" class="btn-add-member go-up-btn"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="Go to {{ $parentMember->user->name }} Family">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="m18 15-6-6-6 6" />
+                                    </svg>
+                                </a>
+                            </div>
+                        @endif
+
+                        <ul class="tf-tree d-flex flex-column align-items-center">
+                            @include('user.partials.family_node', ['member' => $current])
+                        </ul>
+                    @else
+                        <div class="demo-tree-stage">
+                            <div class="demo-family-row">
+                                @foreach ($demoTopSlots as $slot)
+                                    <div class="demo-family-node demo-placeholder">
+                                        <div class="demo-avatar">
+                                            <span>{{ $slot['initial'] }}</span>
+                                        </div>
+                                        <div class="demo-name">{{ $slot['label'] }}</div>
+                                        <div class="demo-meta">Placeholder</div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="demo-connector"></div>
+
+                            <div class="demo-family-row">
+                                <div class="demo-family-node demo-current-node">
+                                    <div class="demo-avatar">
+                                        @if ($demoCurrentImage)
+                                            <img src="{{ $demoCurrentImage }}" alt="{{ $demoCurrentName }}">
+                                        @else
+                                            <span>{{ $demoCurrentInitial }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="demo-name">{{ $demoCurrentName }}</div>
+                                    <div class="demo-meta">Current member</div>
+                                </div>
+
+                                @foreach ($demoMiddleSlots as $slot)
+                                    <div class="demo-family-node demo-placeholder">
+                                        <div class="demo-avatar">
+                                            <span>{{ $slot['initial'] }}</span>
+                                        </div>
+                                        <div class="demo-name">{{ $slot['label'] }}</div>
+                                        <div class="demo-meta">Placeholder</div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            @if (count($demoChildSlots))
+                                <div class="demo-connector"></div>
+                                <div class="demo-children-row">
+                                    @foreach ($demoChildSlots as $slot)
+                                        <div class="demo-family-node demo-placeholder">
+                                            <div class="demo-avatar">
+                                                <span>{{ $slot['initial'] }}</span>
+                                            </div>
+                                            <div class="demo-name">{{ $slot['label'] }}</div>
+                                            <div class="demo-meta">Placeholder</div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {{-- OFFCANVAS --}}
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="memberOffcanvas" aria-labelledby="memberOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="memberOffcanvasLabel">Member Info</h5>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div id="memebrInfo"></div>
+        </div>
+    </div>
+
+@endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '.viewFamilyMemberInfo', function(noLoad) {
+                noLoad.preventDefault();
+                const id = $(this).data('id');
+                const container = $('#memebrInfo');
+                const offcanvasEl = document.getElementById('memberOffcanvas');
+                const bsOffcanvas = new bootstrap.Offcanvas(offcanvasEl);
+
+                bsOffcanvas.show();
+
+                container.html(
+                    '<div class="text-center py-5"><div class="spinner-border text-info" role="status"><span class="visually-hidden">Loading...</span></div></div>'
+                );
+
+                $.ajax({
+                    url: "{{ route('user.family-member.info', ':id') }}".replace(':id', id),
+                    type: 'GET',
+                    success: function(html) {
+                        container.html(html);
+                    },
+                    error: function() {
+                        container.html(`
+                            <div class="text-center text-danger py-5">
+                                <i class="fas fa-exclamation-circle fs-3 mb-2"></i>
+                                <p>Failed to load member info.</p>
+                            </div>
+                        `);
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+                new bootstrap.Tooltip(el);
+            });
+        });
+    </script>
+@endpush
